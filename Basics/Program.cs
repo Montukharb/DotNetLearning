@@ -55,7 +55,7 @@ namespace Learning.Basics
             t1.tester();
 
             dynamic user = "something data";
-            user = 1238;
+            user = 1234;
             Console.WriteLine(user);
 
             user = new  ExpandoObject();
