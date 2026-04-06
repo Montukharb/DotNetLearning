@@ -1,4 +1,7 @@
 ﻿
+using System.Drawing;
+using System.Dynamic;
+
 namespace Learning.Basics
 {
     class Program
@@ -48,24 +51,73 @@ namespace Learning.Basics
             // Print the result
             Console.WriteLine(lastName);
             Console.WriteLine(nameof(name));
-            Test t1 = new Test();
-        }
-        static Program()  //run when class loaded in one time did't run when object is created any time.
-        {
-            Console.WriteLine("static constructor called");
+            TestRunner t1 = new TestRunner(10, 20);
+            t1.tester();
+
+            dynamic user = "something data";
+            user = 1239;
+            Console.WriteLine(user);
+
+            user = new  ExpandoObject();
+
+            user.FirstName = "John";
+            user.LastName = "Don";
+            user.age = 40;
+
+            Console.WriteLine($"First name = {user.FirstName} \nLastName = {user.LastName}\nAge = {user.age}");
+            DateTime date = DateTime.Now;
+            Console.WriteLine(date);
+            date = new(1999,1,24);
+
+            Console.WriteLine(date);
+            Point d = new(10,20);
+
+            Console.WriteLine(d);
+
+            //string inp = TryParse(Console.ReadLine());
+            Write("Enter number: ");
+            string input = ReadLine();
+            int num;
+            bool success = int.TryParse(input, out num);
+
+            if(success)
+            {
+                WriteLine($"no : {num}");
+            }
+            else
+            {
+                WriteLine($"wrong input expected numberic value your input = {input}");
+            }
+
+            var internalobj = new Sample2(100){ userName = "montu kharb" };
         }
 
-        public Program(int a, int b)
-        {
-            Console.WriteLine($"Sum = {a + b}");
-        }
+
+      
     }
 
     internal class Sample2
     {
+        void GetValue(out int x)
+        {
+            x = 10; // compulsory assign
+        }
+
+      
+        public Sample2(int a)
+        {
+            int num = 20;
+            GetValue(out num);
+
+            Console.WriteLine(num); // 10
+            WriteLine($"Constructor value = {a}");
+        }
+        public required string userName{ get; set; }
         static Sample2()
         {
             Console.WriteLine("Run when class loaded one time");
         }
+
+
     }
 }
