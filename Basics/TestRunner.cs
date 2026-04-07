@@ -8,10 +8,13 @@ namespace Basics.Test
     {
         int a, b;
 
+        //NameSpaceTesting n1 = new NameSpaceTesting();
+        
         public TestRunner(int x, int y)
         {
             a = x;
             b = y;
+            WriteLine(NameSpaceTesting.ink);
         }
 
         public  void tester()
@@ -99,6 +102,7 @@ namespace Basics.Test
             object pi = 3.14f;
             pi = "name";
             Console.WriteLine(pi);
+            
         }
     }
 }

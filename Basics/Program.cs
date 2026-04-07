@@ -1,6 +1,9 @@
 ﻿
+using Basics.OOPS;
 using System.Drawing;
 using System.Dynamic;
+using System.Reflection.Emit;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Learning.Basics
 {
@@ -8,6 +11,15 @@ namespace Learning.Basics
     {
         public static void Main(string[] args)
         {
+            //create object Testing class
+            A ok = new A();
+            //ok.met(); //due to private access modifier did't called
+
+            //create object operatio class
+            Operation objOp = new Operation();
+           
+
+
             decimal balance = 10.55m;
             Console.WriteLine(balance);
             //bool label = default;
@@ -90,10 +102,116 @@ namespace Learning.Basics
             }
 
             var internalobj = new Sample2(100){ userName = "montu kharb" };
+
+            //int result = internalobj.sum(out int a, out int b);
+
+            internalobj.sum(out int a, out int b);
+            Console.WriteLine("a = "+a + " b = " + b);
+            //Console.WriteLine("Return value = " + result);
+
+            WriteLine(internalobj.sum2(10, 20,out string userName, out int age));
+            WriteLine($"user name = {userName} \nUser age = {age}");
+
+            Type datatype = typeof(int);
+            WriteLine("data type check = " + datatype);
+            Type typ = internalobj.GetType();
+            WriteLine(typ);
+
+            int? numb = null;
+            string userName3 = "vishal";
+            var str = userName3 ?? "sample";
+            WriteLine(str);
+
+
+            string? myname = null;
+            int? pow = null;
+            WriteLine(pow);
+
+            
+
+            WriteLine(myname);
+
+
+
+            Program.count();
+            int left = 3;
+            WriteLine(3 << left);
+
+
+            //creating oops object here
+            BasicClass obj = new BasicClass();
+            BasicClass obj1 = new BasicClass(200.5f, new DateTime());
+            BasicClass parmetrised = new BasicClass(obj1);
+            obj.DisplayUserDetails();
+            References refer = new References();
+        }
+        static void count()
+        {
+            int i = 1;
+            int j = 1;
+            for (int ii = 0; ii < 10; ii++)
+            {
+                i = +i;
+                j += j;
+            }
+
+            WriteLine(i + " and " + j);
+            WriteLine($"{3 << 3:B8}");
+            object og = "testing";
+            string? ogs = og as string;
+            WriteLine(ogs?.Length);
+
+
+            int? ff = 10;
+
+            if(ff is int)
+            {
+                WriteLine("true integer");
+            }
+            else
+            {
+                WriteLine("not integer");
+            }
+
+            int number = Random.Shared.Next(minValue: 1, maxValue: 7);
+            switch (number)
+            {
+                case 1:
+                    WriteLine("One");
+                    break; // Jumps to end of switch statement.
+                case 2:
+                    WriteLine("Two");
+                    goto case 1;
+                case 3: // Multiple case section.
+                case 4:
+                    WriteLine("Three or four");
+                    goto case 1;
+                case 5:
+                    goto v_label;
+                default:
+                    WriteLine("Default");
+                    break;
+            }
+ 
+
+        v_label:
+
+            WriteLine("After label jump1");
+
+            WriteLine("After label jump1");
+
+        
+        }
+
+        static void logical()
+        {
+            bool a = true;
+            bool b = false;
+
+            bool c = a && b;
         }
 
 
-      
     }
 
     internal class Sample2
@@ -118,6 +236,27 @@ namespace Learning.Basics
             Console.WriteLine("Run when class loaded one time");
         }
 
+       public void sum(out int a, out int b)
+        {
+            a = b = 10;
+            a = a + b;
+            b = b + a;
+            //return b;
+        }
 
+
+
+// normal method
+     public int sum2(int a , int b , out string name,out int age)
+        {
+            name = "jOhn";
+            age = 11;
+            
+            return a+b;
+            
+        }
     }
+
+
+
 }
