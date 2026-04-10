@@ -23,12 +23,10 @@ namespace Basics.OOPS
             pers.ArrayPer(arr);
             WriteLine("\n"+arr[2]);
 
+
         }
 
     }
-
-
-
 
     internal class Per
     {

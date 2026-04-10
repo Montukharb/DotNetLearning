@@ -70,7 +70,7 @@ namespace Learning.Basics
             user = 1234;
             Console.WriteLine(user);
 
-            user = new  ExpandoObject();
+            user = new ExpandoObject();
 
             user.FirstName = "John";
             user.LastName = "Don";
@@ -144,6 +144,19 @@ namespace Learning.Basics
             BasicClass parmetrised = new BasicClass(obj1);
             obj.DisplayUserDetails();
             References refer = new References();
+            Stenrec sten = new Stenrec();
+            Jk2 jkObj = new Jk2();
+
+            //deconstructor class object
+            DeConstructor deObj = new() {address="rohtak Abc", customerName="Vishal BOB", customerId=141413};
+            
+            var(cID,CName) = deObj;
+            //WriteLine(deObj.customerId);
+
+            WriteLine(cID + CName);
+
+            Polymorphism.EnteryPoint();
+
         }
         static void count()
         {
