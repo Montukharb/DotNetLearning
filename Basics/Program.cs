@@ -88,7 +88,7 @@ namespace Learning.Basics
 
             //string inp = TryParse(Console.ReadLine());
             Write("Enter number: ");
-            string input = ReadLine();
+            string? input = ReadLine();
             int num;
             bool success = int.TryParse(input, out num);
 
@@ -156,7 +156,13 @@ namespace Learning.Basics
             WriteLine(cID + CName);
 
             Polymorphism.EnteryPoint();
+            RecordClassAndEnum obRec = new();
+            obRec.Show();
 
+
+            //interface objects
+            InterfacesExcercise infex = new();
+            infex.CreateJob();
         }
         static void count()
         {

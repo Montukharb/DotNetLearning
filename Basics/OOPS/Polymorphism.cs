@@ -2,6 +2,22 @@
 namespace Basics.OOPS
 {
 
+    //if not default constructor in base class derived class write explicitely base keyword example
+    internal class Abt
+    {
+        internal int x;
+
+    }
+    internal class AbtChild : Abt
+    {
+        internal AbtChild()// :base() optinal hai by default compiler call kar deta hai
+        {
+
+        }
+    }
+
+
+
     internal class Asset
     {
         internal string? name { get; set; }
@@ -36,20 +52,24 @@ namespace Basics.OOPS
             WriteLine("Child class method run override by derived class");
         }
     }
-   
-   
      
     internal abstract class Abs
      {
 
+        //abstract class another abstract class inheride kar sakti hai;
         //internal abstract int aa; //we can't create abstract field in abstract class
 
         //abstract property
+        //internal abstract int fieldvariable;  //we can't declare abstract field
+        
         internal abstract int Fuel { get; set; } //we can declare abstract property but can't set value here;
 
         //abstract method
         internal abstract void SignalerAbs(int a,int b,out int sum); //we can't create abstract method body;
         
+        //normal constructor create in abstract class
+        internal Abs() { }
+
         //normal method
         internal void Show()
         {
@@ -64,7 +84,13 @@ namespace Basics.OOPS
 
 
      }
+
+    //internal abstract class Abs2
+    //{
+
+    //}
     
+    //internal class AbsDerived : Abs,Abs  //we can't derived mulitple base class
     internal class AbsDerived : Abs
     {
         internal override int Fuel { get; set; } = 85; //set default value we can also set in constructor or object creation time in right side curly braces
@@ -182,7 +208,6 @@ namespace Basics.OOPS
             absObj.Show();
             absObj.Dell();
 
-
             //sealed methods
             RBI rbi = new LocalBank();
             rbi.BankRequirements();
@@ -192,6 +217,7 @@ namespace Basics.OOPS
                 access.BankRequirements(); //changed success
             }
 
+            AbtChild ab = new AbtChild();
         }
 
     }
