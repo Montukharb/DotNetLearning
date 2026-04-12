@@ -53,6 +53,90 @@ namespace Basics.OOPS
         }
     }
      
+
+
+    public abstract class AT{
+       
+        //static method abstract
+        public static void VisBOdy()
+        {
+            WriteLine("static method");
+        }
+
+
+        public abstract void display();
+
+        public string? name { get; set; } = "vishal";  //normal property
+
+        public int age = 45;  //field
+        public abstract string? Name2 { get; set; } //abstract property
+
+        public void GeneralInstruction()
+        {
+            WriteLine("This line from general instruction");
+        }
+
+        //public AT()
+        //{
+        //    WriteLine("Abstract class default constructor");
+        //}
+
+        public AT(string address,int pincode,int number, string userName, int age)  :   this(number,userName,age)
+        {
+            WriteLine($"long parameter constructor run Address = {address} pincode = {pincode}");
+        }
+
+        public AT(int number, string userName, int age)
+        {
+           WriteLine( $"short parameter constructor run Number = {number} userName = {userName} age = {age}" );
+        }
+
+    }
+
+    public abstract class AT2 :AT
+    {
+
+        public AT2() : base("Rohtak ABC" , 124001,89864566,"John Don",23)
+        {
+            WriteLine("Second abstract constructor run");
+        }
+        public abstract void Display2();
+    }
+
+    public class Working:AT2 {
+
+
+        public Working():base()
+        {
+            WriteLine("Child class constructor run in end");
+        }
+
+
+        public override void Display2()
+
+        {
+            AT.VisBOdy();
+            WriteLine("Display 2 method");
+        }
+
+        public override void display()
+        {
+            WriteLine("Display method overide");
+        }
+     public void MyDisp()
+        {
+            base.GeneralInstruction();  //normal method jiski body abstract class me ha;
+        }
+
+        //abstract method overriding
+
+        public override string? Name2 { get; set; } = "Vishal Sharma Abstract name property overriding";
+
+
+    }
+
+
+
     internal abstract class Abs
      {
 

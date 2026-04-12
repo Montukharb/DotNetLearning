@@ -163,6 +163,29 @@ namespace Learning.Basics
             //interface objects
             InterfacesExcercise infex = new();
             infex.CreateJob();
+
+
+
+            //abstract class objects
+
+            Working wkobj = new();
+
+            wkobj.MyDisp();
+            wkobj.display();
+            wkobj.Display2();
+            wkobj.GeneralInstruction();
+
+
+            GChild Gchi = new("Jat boy");
+            Books bk = new Books();
+            bk.PageQuality("95 - GSM");
+           
+            DevRun dR = new DevRun();
+            //dR.accessAbleMethod();
+
+            //((Iundoable)dR).accessAbleMethod();
+            ((Stone)dR).accessAbleMethod();
+
         }
         static void count()
         {
