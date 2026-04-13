@@ -185,6 +185,18 @@ namespace Learning.Basics
             //((Iundoable)dR).accessAbleMethod();
             ((Stone)dR).accessAbleMethod();
 
+
+            //Generics
+            GenericsExcercise Gen = new GenericsExcercise();
+
+            //Delegates Excercise object
+            DelegatesExcercise deobg = new DelegatesExcercise();
+
+
+          
+            
+
+
         }
         static void count()
         {

@@ -1,5 +1,5 @@
 ﻿using System.Text;
-
+//using static System.Console; 
 namespace Basics.Animal
 {
 
