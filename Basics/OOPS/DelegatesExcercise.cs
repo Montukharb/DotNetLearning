@@ -69,11 +69,19 @@ namespace Basics.OOPS
                 WriteLine("Action Delegate with body example");
                 WriteLine(x1 + " .... " + x2);
             };
+            
 
             calculation1(100,200.5f);
             calculation2(456,256.2f);
-            
+
+            //lambda with static
+            Func<int,int> Mod = static x => (int)x % mod; 
+            Func<int,int,int> Mod2 = static(x, y) => ((int)(x % mod ) + (y % mod));
+
+            WriteLine($"MODULES with static parameter lambda function = {Mod(45)}");
+            WriteLine($"MODULES with static parameter lambda function = {Mod2(65,98)}");
         }
+            static int mod = 10;
            
         
     }
