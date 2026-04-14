@@ -80,8 +80,47 @@ namespace Basics.OOPS
 
             WriteLine($"MODULES with static parameter lambda function = {Mod(45)}");
             WriteLine($"MODULES with static parameter lambda function = {Mod2(65,98)}");
+
+            //anonymous method always using with delegates
+            d = delegate (int x)
+            {
+                return x * x;
+            };
+
+            WriteLine("Anonymous method using with delegates = " + d(20));
+
+            //Anonymous types = eak temporary class jiska name nahi hota
+            var temp = new { FirstRound = "10 shot", SecondRound = "5 shot", ThirdRound = "No energy" };
+
+            WriteLine(temp.FirstRound);
+
+            var temparr = new[]
+            {
+                new{Name = "John Don", Age = 23, Address = "vasant vihar A-Block Villa no-108 opp:Samsung Company"},
+                new{Name = "Dr. Dhum ketu",Age = 100, Address = "Old Kutiya Behind the Dolakpur Killa"}
+            };
+
+            foreach(var x in temparr)
+            {
+                Write($"Name = {x.Name}\nAge = {x.Age}\nAddress = {x.Address}");
+            }
+            WriteLine();
+
+            //tuple
+            var person = ("Bob", 23);
+            var (Name, age) = person;
+
+            WriteLine(Name + " " + age);
+
+            var nums = new List<int> { 1, 2, 3, 4, 5 };
+
+            var result = nums.Where(x => x > 3);
+            foreach(var x in result)
+            {
+                WriteLine(x);
+            }
         }
-            static int mod = 10;
+        static int mod = 10;
            
         
     }

@@ -6,10 +6,51 @@ using System.Dynamic;
 
 namespace Learning.Basics
 {
-    class Program
+    public class Fruit
     {
+       public Fruit()
+        {
+            WriteLine("Default constructor");
+            Secret();
+        }
+
+        public void DisplayFruit() { 
+            WriteLine("Learning Basics public Fruit class method displayfruit");
+
+        }
+
+        private void Secret()
+        {
+            WriteLine("Secret method");
+        }
+
+        protected internal void FriendSecret()  //full project access required inheride class
+        {
+            WriteLine("Protected method");
+        }
+
+        private protected static void SmallPrivate()
+        {
+            WriteLine("private protected static method");
+        }
+    }
+
+    
+
+
+
+    class Program : Fruit
+    {
+        public void disp()
+        {
+            SmallPrivate();
+            
+        }
         public static void Main(string[] args)
         {
+            Fruit f = new Fruit();
+            f.FriendSecret();
+            SmallPrivate();     
             //create object Testing class
             A ok = new A();
             //ok.met(); //due to private access modifier did't called
@@ -192,6 +233,9 @@ namespace Learning.Basics
             //Delegates Excercise object
             DelegatesExcercise deobg = new DelegatesExcercise();
 
+
+            //yieldExcercise
+            YieldExcercise y1 = new();
 
           
             
