@@ -71,8 +71,8 @@ namespace Basics.OOPS
                 WriteLine("Action Delegate with body example");
                 WriteLine(x1 + " .... " + x2);
             };
-            
 
+            var labdafunc = (int x1, int x2) => { return x1 + x2; };
             calculation1(100,200.5f);
             calculation2(456,256.2f);
 

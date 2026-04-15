@@ -93,14 +93,15 @@ namespace Basics.OOPS
 
     }
 
-    public abstract class AT2 :AT
+    public abstract class AT2 : AT
     {
 
-        public AT2() : base("Rohtak ABC" , 124001,89864566,"John Don",23)
+        public AT2() : base("Rohtak ABC", 124001, 89864566, "John Don", 23)
         {
             WriteLine("Second abstract constructor run");
         }
         public abstract void Display2();
+        public virtual void si() { }
     }
 
     public class Working:AT2 {
