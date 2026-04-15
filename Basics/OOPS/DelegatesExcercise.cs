@@ -1,4 +1,6 @@
 ﻿
+using System.Xml.Linq;
+
 namespace Basics.OOPS
 {
 
@@ -14,7 +16,7 @@ namespace Basics.OOPS
         //accessSpecifier keyword return-type, delegateName , accept only one parameter in any method;
         
         delegate int Transformer(int x);
-
+        
          Transformer d;
         
         delegate int Transformer2();
@@ -90,8 +92,9 @@ namespace Basics.OOPS
             WriteLine("Anonymous method using with delegates = " + d(20));
 
             //Anonymous types = eak temporary class jiska name nahi hota
-            var temp = new { FirstRound = "10 shot", SecondRound = "5 shot", ThirdRound = "No energy" };
+            var temp = new { FirstRound = "10 shot ball", SecondRound = "5 shot ball", ThirdRound = "No energy" };
 
+            var updatedTemp = temp with { ThirdRound = "2 shot ball"};
             WriteLine(temp.FirstRound);
 
             var temparr = new[]
@@ -99,6 +102,7 @@ namespace Basics.OOPS
                 new{Name = "John Don", Age = 23, Address = "vasant vihar A-Block Villa no-108 opp:Samsung Company"},
                 new{Name = "Dr. Dhum ketu",Age = 100, Address = "Old Kutiya Behind the Dolakpur Killa"}
             };
+
 
             foreach(var x in temparr)
             {
@@ -119,9 +123,61 @@ namespace Basics.OOPS
             {
                 WriteLine(x);
             }
+
+            var tuple = (FName: "Montu",lName:"kharb", arrayitem: new int[]{10,20,30,40,50,60});
+            var (fn,ln,ar) = tuple;
+            Write(fn + " " + ln);
+            foreach(var x in ar)
+            {
+                WriteLine(x);
+            }
+            //DelegatesEventHandler DeventHandler = new();
+            DelegatesEventHandler.DelegatesEventFun();
         }
         static int mod = 10;
-           
-        
+
+
+    }
+
+
+  
+
+class Button
+    {
+        public event EventHandler OnClick;
+
+        public void Click()
+        {
+            Console.WriteLine("Button clicked");
+            OnClick?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    class DelegatesEventHandler
+    {
+       public static void DelegatesEventFun()
+        {
+            Button btn = new Button();
+        //    class MyData : EventArgs
+        //{
+        //    public string Message { get; set; }
+        //}
+        //static void HandleClick(object sender, MyData e)
+        //{
+        //Console.WriteLine(e.Message);
+        //}
+
+        btn.OnClick += (sender, e) =>
+            {
+                Console.WriteLine("Handler 1");
+            };
+
+            btn.OnClick += (sender, e) =>
+            {
+                Console.WriteLine("Handler 2");
+            };
+
+            btn.Click();
+        }
     }
 }

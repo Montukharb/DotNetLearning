@@ -2,8 +2,20 @@
 using Basics.OOPS;
 using System.Drawing;
 using System.Dynamic;
-
-
+namespace Basics.OOPS
+{
+  internal partial  class PartialExercise
+    {
+       internal void Truck()
+        {
+            WriteLine("Truck is running");
+        }
+        internal partial void Car2()
+        {
+            WriteLine("Car2 is running and it is partial method");
+        }
+    }
+}
 namespace Learning.Basics
 {
     public class Fruit
@@ -236,9 +248,30 @@ namespace Learning.Basics
 
             //yieldExcercise
             YieldExcercise y1 = new();
+            //indexer and event object 
 
-          
-            
+            IndexerAndEvents IAE = new();
+            IAE[0] = 150;
+            IAE[1] = 2000;
+            IAE[2] = 3000;
+
+            WriteLine(IAE[0]); 
+            WriteLine(IAE[1]);
+            WriteLine(IAE[2]);
+
+            PartialExercise PE = new();
+            PE.Car();
+            PE.Truck();
+            PE.Car2();
+            PE.LabmdaMethodOP();
+            Test t = new Test();
+            t.OnRun +=()=> WriteLine("task1");
+            t.OnRun += () => WriteLine("task2");
+            t.Run();
+
+            //circlepasser object
+            ObjectPasser op = new();
+
 
 
         }
