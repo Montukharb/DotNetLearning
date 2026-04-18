@@ -272,8 +272,16 @@ namespace Learning.Basics
             //circlepasser object
             ObjectPasser op = new();
 
+            //operator overloading
+            OperatorOverloading opover = new OperatorOverloading();
 
+            //NewMemoryAllocation
+            NewMemoryAllocation MA = new();
+            MA.CheckMemoryAllocation();
 
+            //StringBuilderAndSystemTextNamespace
+            StringBuilderAndSystemTextNamespace sban = new();
+            sban.Display();
         }
         static void count()
         {
@@ -385,6 +393,7 @@ namespace Learning.Basics
             return a+b;
             
         }
+       
     }
 
 

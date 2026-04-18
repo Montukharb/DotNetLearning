@@ -1,5 +1,4 @@
 ﻿
-using System.Xml.Linq;
 
 namespace Basics.OOPS
 {
@@ -10,18 +9,18 @@ namespace Basics.OOPS
         internal int qube(int val) => val * val * val;
 
 
-       
+
         //A Delegate is an object that points to a method and call it
         //create delegates type
         //accessSpecifier keyword return-type, delegateName , accept only one parameter in any method;
-        
+
         delegate int Transformer(int x);
-        
-         Transformer d;
-        
+
+        Transformer d;
+
         delegate int Transformer2();
         Transformer2 d2;
-        
+
         internal int FirstDisp()
         {
             WriteLine("First Disp");
@@ -33,9 +32,10 @@ namespace Basics.OOPS
             return 2;
         }
 
-        
 
-        internal DelegatesExcercise() {
+
+        internal DelegatesExcercise()
+        {
             WriteLine("Delegates run");
             d = Square;
 
@@ -50,8 +50,8 @@ namespace Basics.OOPS
             d2 += SecondDisp;
             //d2 += FirstDisp;
 
-            
-            int res =  d2();
+
+            int res = d2();
             WriteLine("Multiple called but return last assigned method return value = " + res);
 
             //lambda function with delecates
@@ -62,7 +62,7 @@ namespace Basics.OOPS
             //Func,Action inbuild delegates hai C sharp ke;
             //Func Example
             Func<int, float, float> Calculation = (x1, x2) => x1 + x2;
-            WriteLine(Calculation(10,20.5f));
+            WriteLine(Calculation(10, 20.5f));
 
             //Action example action does not return any value
             Action<int, float> calculation1 = (x1, x2) => WriteLine(x1 + " .... " + x2);
@@ -73,15 +73,15 @@ namespace Basics.OOPS
             };
 
             var labdafunc = (int x1, int x2) => { return x1 + x2; };
-            calculation1(100,200.5f);
-            calculation2(456,256.2f);
+            calculation1(100, 200.5f);
+            calculation2(456, 256.2f);
 
             //lambda with static
-            Func<int,int> Mod = static x => (int)x % mod; 
-            Func<int,int,int> Mod2 = static(x, y) => ((int)(x % mod ) + (y % mod));
+            Func<int, int> Mod = static x => (int)x % mod;
+            Func<int, int, int> Mod2 = static (x, y) => ((int)(x % mod) + (y % mod));
 
             WriteLine($"MODULES with static parameter lambda function = {Mod(45)}");
-            WriteLine($"MODULES with static parameter lambda function = {Mod2(65,98)}");
+            WriteLine($"MODULES with static parameter lambda function = {Mod2(65, 98)}");
 
             //anonymous method always using with delegates
             d = delegate (int x)
@@ -94,7 +94,7 @@ namespace Basics.OOPS
             //Anonymous types = eak temporary class jiska name nahi hota
             var temp = new { FirstRound = "10 shot ball", SecondRound = "5 shot ball", ThirdRound = "No energy" };
 
-            var updatedTemp = temp with { ThirdRound = "2 shot ball"};
+            var updatedTemp = temp with { ThirdRound = "2 shot ball" };
             WriteLine(temp.FirstRound);
 
             var temparr = new[]
@@ -104,7 +104,7 @@ namespace Basics.OOPS
             };
 
 
-            foreach(var x in temparr)
+            foreach (var x in temparr)
             {
                 Write($"Name = {x.Name}\nAge = {x.Age}\nAddress = {x.Address}");
             }
@@ -119,15 +119,15 @@ namespace Basics.OOPS
             var nums = new List<int> { 1, 2, 3, 4, 5 };
 
             var result = nums.Where(x => x > 3);
-            foreach(var x in result)
+            foreach (var x in result)
             {
                 WriteLine(x);
             }
 
-            var tuple = (FName: "Montu",lName:"kharb", arrayitem: new int[]{10,20,30,40,50,60});
-            var (fn,ln,ar) = tuple;
+            var tuple = (FName: "Montu", lName: "kharb", arrayitem: new int[] { 10, 20, 30, 40, 50, 60 });
+            var (fn, ln, ar) = tuple;
             Write(fn + " " + ln);
-            foreach(var x in ar)
+            foreach (var x in ar)
             {
                 WriteLine(x);
             }
@@ -140,11 +140,11 @@ namespace Basics.OOPS
     }
 
 
-  
 
-class Button
+
+    class Button
     {
-        public event EventHandler OnClick;
+        public event EventHandler? OnClick;
 
         public void Click()
         {
@@ -155,22 +155,22 @@ class Button
 
     class DelegatesEventHandler
     {
-       public static void DelegatesEventFun()
+        public static void DelegatesEventFun()
         {
             Button btn = new Button();
-        //    class MyData : EventArgs
-        //{
-        //    public string Message { get; set; }
-        //}
-        //static void HandleClick(object sender, MyData e)
-        //{
-        //Console.WriteLine(e.Message);
-        //}
+            //    class MyData : EventArgs
+            //{
+            //    public string Message { get; set; }
+            //}
+            //static void HandleClick(object sender, MyData e)
+            //{
+            //Console.WriteLine(e.Message);
+            //}
 
-        btn.OnClick += (sender, e) =>
-            {
-                Console.WriteLine("Handler 1");
-            };
+            btn.OnClick += (sender, e) =>
+                {
+                    Console.WriteLine("Handler 1");
+                };
 
             btn.OnClick += (sender, e) =>
             {
@@ -181,3 +181,4 @@ class Button
         }
     }
 }
+

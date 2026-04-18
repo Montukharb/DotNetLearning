@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <DefineConstants>DEBUG;COMPILE;ANOTHERCONSTANTS</DefineConstants>
   </PropertyGroup>
 	<ItemGroup>
 		<Using Include="System.Console" Static="true" />

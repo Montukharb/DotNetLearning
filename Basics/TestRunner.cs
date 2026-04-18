@@ -82,13 +82,14 @@ namespace Basics.Test
                 int x = 10;
                 int* ptr = &x;
 
-                IntPtr address = (IntPtr)ptr;
+                IntPtr address = (IntPtr)ptr; //for giving address any pointer variable using predefine special IntPtr  keyword
                 Console.WriteLine($"Address: {address}");
                 Console.WriteLine($"Value: {*ptr}");
 
                 int* ptr2 = &x;
                 int** ptr3 = &ptr2;
 
+                //n stand for native int means allocate variable memory size according to system specificatoin 32bit or 64bit etc
                 Console.WriteLine($"Pointer: {(nuint)ptr2}");
                 Console.WriteLine($"Double Pointer: {(nuint)ptr3}");
 
@@ -98,6 +99,7 @@ namespace Basics.Test
                     Console.WriteLine($"Array address: {(nuint)p}");
                 }
             }
+
 
             object pi = 3.14f;
             pi = "name";
