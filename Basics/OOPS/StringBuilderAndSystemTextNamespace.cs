@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 namespace Basics.OOPS
 {
-    email = "montu@gmail"
+   
     
 
     //Important Methods of string builder:

@@ -74,7 +74,8 @@ namespace Learning.Basics
 
             decimal balance = 10.55m;
             Console.WriteLine(balance);
-            //bool label = default;
+            //bool label = default;p
+
             //Console.WriteLine(label);
             double myDouble = 9.78;
             int myInt = (int)myDouble;    // Manual casting: double to int
@@ -138,7 +139,7 @@ namespace Learning.Basics
 
             Console.WriteLine(d);
 
-            //string inp = TryParse(Console.ReadLine());
+            //string? inp = TryParse(Console.ReadLine());
             Write("Enter number: ");
             string? input = ReadLine();
             int num;
@@ -282,6 +283,14 @@ namespace Learning.Basics
             //StringBuilderAndSystemTextNamespace
             StringBuilderAndSystemTextNamespace sban = new();
             sban.Display();
+
+            //files management path set karo
+            //FilesMangement.CopyFile();
+            //FilesMangement.MoveFile();
+            //FilesMangement.ReplaceFile();
+            FilesMangement.WriteFileLineByLine("writeFileLinebyLine", new[] {"A","B","third line" });
+            //directory class
+            DirectoryClass.GetINFO();
         }
         static void count()
         {
