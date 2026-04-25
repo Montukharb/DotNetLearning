@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Basics.OOPS
 {
@@ -166,8 +167,8 @@ FileInfo / DirectoryInfo → advanced info*/
                         }
                         else if(num ==0)
                         {
-                            File.WriteAllText(newPath, content);
-                            WriteLine("File Writing success");
+                            throw new Exception("Go to greate method create new file");
+                            //WriteLine("File Writing success");
                         }
                     }
                     throw new Exception("Wrong input");
@@ -354,8 +355,10 @@ FileInfo / DirectoryInfo → advanced info*/
             {
                 string internalPath = path + $"\\{source}.txt";
                 string destinationPath = path + $"\\{destination}.txt";
+                //var guid = System.Guid.NewGuid();
+                //"fsdaf3532(#$@2340ds543"
                 
-                string backupPath = Guid.NewGuid() + ".txt"; //guid = Globally unique identifier which is impossible never repeat
+                    string backupPath = Guid.NewGuid() + ".txt"; //guid = Globally unique identifier which is impossible never repeat
                 if (File.Exists(internalPath))
                 {
                     if (File.Exists(destination))
@@ -569,47 +572,258 @@ FileInfo / DirectoryInfo → advanced info*/
         }
 
     }
-    internal  class FileInfoClass
+    internal class FileInfoClass
     {
 
         internal void AllOperation()
         {
-            FileInfo f2 = new FileInfo("ok.txt");
-
+            FileInfo? file = new FileInfo(Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations", "Ok.txt"));
+            string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
             //   ⚠️ Deep Rules:
             //✔ file exist nahi → new banegi
             //✔ exist hai → overwrite
             //❗ stream close nahi ki → file lock
-            using (var stream = f2.Create()) { }
 
-            if(f2.Exists)
+            try
             {
-                WriteLine("File exists");
+
+                if (file.Exists)
+                {
+                    WriteLine("File exists");
+                    //return;
+                }
+                else
+                {
+                    WriteLine("File not exists we are creating ok.txt file");
+                    using (FileStream stream = file.Create())
+                    {
+                        //WE CAN WRITE HERE ANY DATA IN BYTES
+                        string? mydata = " Hello world this text is writing using filestream";
+                        byte[] data = Encoding.UTF8.GetBytes(mydata);   //convert string in bytes
+                        stream.Write(data, 0, data.Length); //write data using write method and streams
+                                                            //data = bytes, 0 = starting point of data, data.length = how long data write / data.length means complete data 
+                    }
+
+                }
             }
-            else
+            catch (Exception ex)
             {
-                WriteLine("File not exists");
+                WriteLine("Error occur during file creating using FileInfo create method: " + ex.Message);
             }
             /*
              🔥 3. Delete()
-📌 Kya karta hai:
-
-👉 file permanently delete karta hai
-
-📌 Return:
-
-👉 void
-
-📌 Example:
-file.Delete();
-⚠️ Deep Rules:
-✔ recycle bin nahi
-❗ file open hai → error
-❗ permission issue → error
+             📌 Kya karta hai:
+             
+             👉 file permanently delete karta hai
+             
+             📌 Return:
+             
+             👉 void
+             
+             📌 Example:
+             ⚠️ Deep Rules:
+             ✔ recycle bin nahi
+             ❗ file open hai → error
+             ❗ permission issue → error
              */
-            //f2.Delete();
-            FileInfo file = f2.CopyTo("newOk.txt", true);
-           
+            //file.Delete();
+
+            void CopyToMethod()
+            {
+                try
+                {
+                    //copyto original safe overwrite option true or false
+                    FileInfo fileinfo = file.CopyTo(Path.Combine(path + "okCopied.txt"), true);
+                    //string rootpath = Path.GetPathRoot("okCopied.txt") ?? "null";
+                }
+                catch (Exception ex)
+                {
+                    WriteLine(ex.Message);
+                }
+
+            }
+            CopyToMethod();
+
+            void MoveToMethod()
+            {
+                try
+                {
+                    string destination = Path.Combine(path + "okCopied.txt");
+                    if (!File.Exists(destination))
+                    {
+                        throw new Exception("File already exits");
+                    }
+                    
+                    //copyto original safe overwrite option true or false
+                    file.MoveTo(destination);
+                    WriteLine("Moving successfull");
+                }
+                catch (Exception ex)
+                {
+                    WriteLine(ex.Message);
+                }
+
+            }
+            //MoveToMethod();
+
+            //file.openRead() file ko read mode me open karta hai
+            void OpenReadModeFile()
+            {
+               using(FileStream stream = file.OpenRead()) //file open hogi read mode me
+                {
+                    //create a container that's store file bytes
+                    byte[] byteContiner = new byte[stream.Length];
+                  
+                    //fill a continer with byte data using read method
+                    int bytesread = stream.Read(byteContiner, 0, byteContiner.Length);
+
+                    //convert bytes into string
+                    string? data = null;
+                    if(bytesread>0)
+                    {
+                        data = Encoding.UTF8.GetString(byteContiner, 0, bytesread);
+                    }
+                    WriteLine("Data is reading using openRead = "+data);
+                }
+            }
+            OpenReadModeFile();
+             
+
+            void WritingDataUsingOpenWriteMethod()
+            {
+                //target hai long file read karni hai
+                FileInfo file = new FileInfo(Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations", "New Text Writing Document.txt"));
+                try
+                {
+                    if (!file.Exists)
+                    {
+
+                        using (FileStream fs = file.OpenWrite())
+                        {
+
+                            string? data = "Hello vishal how are you what are you doing";
+
+                            //convert data into bytes
+                            byte[] byteData = Encoding.UTF8.GetBytes(data);
+
+                            fs.Write(byteData, 0, byteData.Length);
+                            WriteLine("data writing successfull at locaion " + file.FullName);
+                        }
+
+                    }
+                    else
+                    {
+                        throw new Exception("File already exits");
+                    }
+                }catch(Exception ex)
+                {
+                    WriteLine("error occur during writing file using openwrite: " + ex.Message);
+                }
+            }
+            WritingDataUsingOpenWriteMethod();
+
+            //append text using FileInfo object class
+            void AppendDataUsingAppendTextFileInfoClassMethod()
+            {
+                //target hai long file read karni hai
+                FileInfo file = new FileInfo(Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations", "New Text WritingAppending Document.txt"));
+                try
+                {
+                    if (!file.Exists)
+                    {
+
+                        using (StreamWriter sw = file.AppendText())
+                        {
+                            sw.WriteLine("First line");
+                            sw.WriteLine("Second line");
+                            sw.Write("Third line");
+                            sw.WriteLine("Fourth Line");
+
+                            WriteLine("Append Writing successfull at location: " + file.FullName);      
+                        }
+
+                    }
+                    else
+                    {
+                        throw new Exception("File already exits");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WriteLine("error occur during writing file using openwrite: " + ex.Message);
+                }
+            }
+            AppendDataUsingAppendTextFileInfoClassMethod();
+
+            //createText method file auto create kare ge or write
+            void CreateTextFileInfoClassMethod()
+            {
+                FileInfo file = new FileInfo(Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations", "CreateTextMethod.txt"));
+
+                try
+                {
+                    if(!file.Exists)
+                    {
+                        using(StreamWriter sw = file.CreateText()) //here is file created
+                        {
+                            //writing file using stream writer
+                            sw.WriteLine("This file is created using FileInfo class method createText auto create and write in just one method simplified stream writer");
+                            sw.WriteLine("This is second line");
+                            WriteLine("File creation success at location: " + file.FullName);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("File already exits");
+                    }
+                }
+                catch(Exception ex) {
+
+                    WriteLine("error occured during creating file: " + ex.Message);
+                }
+
+            }
+            CreateTextFileInfoClassMethod();
+
+
+
+            //open file OpenText file INfo method
+            void OpenTextFileInfoClassMethod()
+            {
+                FileInfo file = new FileInfo(Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations", "CreateTextMethod.txt"));
+
+                try
+                {
+                    if (file.Exists)
+                    {
+                        using (StreamReader sr = file.OpenText())
+                        {
+                            WriteLine(sr.ReadToEnd()); //reading data till end
+                            //string? data = null;
+                            //while((data = sr.ReadLine())!=null)
+                            //{
+                            //    WriteLine($"{data}");
+                            //}
+                            //while(!sr.EndOfStream)
+                            //{
+                            //    WriteLine(sr.ReadLine());
+                            //}
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("File does't exits");
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    WriteLine("error occured during creating file: " + ex.Message);
+                }
+
+            }
+            OpenTextFileInfoClassMethod();
         }
-    }
+
+}
 }

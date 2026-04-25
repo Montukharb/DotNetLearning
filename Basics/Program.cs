@@ -2,6 +2,7 @@
 using Basics.OOPS;
 using System.Drawing;
 using System.Dynamic;
+using System.Text;
 namespace Basics.OOPS
 {
   internal partial  class PartialExercise
@@ -295,6 +296,23 @@ namespace Learning.Basics
             //path class
             PathClass.AllOperationsPathClass();
             PathClass.BasicOperationsPathClass();
+
+           
+            
+
+            string? customerName = "Vishal Don";
+            byte[] bytedata = Encoding.UTF8.GetBytes(customerName);
+            foreach(var i in bytedata)
+            {
+                Write(i+" ");
+            }
+
+            string convertOriginalName = Encoding.UTF8.GetString(bytedata);
+            //WriteLine(convertOriginalName);
+            WriteLine("File operations ");
+            //file info class
+            FileInfoClass fic = new();
+            fic.AllOperation();
         }
         static void count()
         {

@@ -20,7 +20,7 @@ namespace Basics.OOPS
 
         delegate int Transformer2();
         Transformer2 d2;
-
+        
         internal int FirstDisp()
         {
             WriteLine("First Disp");
@@ -145,7 +145,8 @@ namespace Basics.OOPS
     class Button
     {
         public event EventHandler? OnClick;
-
+        public delegate void Notify();
+       
         public void Click()
         {
             Console.WriteLine("Button clicked");
