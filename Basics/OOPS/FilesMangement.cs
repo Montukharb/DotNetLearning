@@ -393,6 +393,7 @@ FileInfo / DirectoryInfo → advanced info*/
             using(StreamReader sr = new StreamReader(newPath))
             {
                     //WriteLine(sr.ReadToEnd()); //ye eak sath read kar de ga automatic
+                    //while (!sr.EndOfStream) { } // run till end of stream data
                     string? line;
                    while((line= sr.ReadLine()) != null)
                         {
@@ -428,9 +429,187 @@ FileInfo / DirectoryInfo → advanced info*/
     {
         internal static void GetINFO()
         {
-            
+           string? path =  @"D:\Dot Net Trainning\ProjectFilesOperations\NewDir";
             DirectoryInfo info =  Directory.CreateDirectory("TestingDir");
             WriteLine("directory path " + info.FullName);
+            info =  Directory.CreateDirectory(@"D:\Dot Net Trainning\ProjectFilesOperations\NewDir");
+            WriteLine(info.CreationTime.ToString());
+
+
+            //exits
+            if (Directory.Exists(path))
+            {
+                Console.WriteLine("Folder exists");
+
+            }
+            else
+            {
+                Console.WriteLine("Folder not found");
+            }
+
+            if(Directory.Exists("TestingAno"))
+            {
+                Directory.Delete("TestingAno", true); //True means recursive delete iska ander ka data bhi delete karana ho tab use karte hai empty directory me true ki need nahi hai
+            }
+            else
+            {
+                WriteLine("Can't find");
+            }
+
+            DirectoryInfo? dir = Directory.GetParent(path);
+            if (Directory.Exists(dir?.ToString()))
+                {
+                string[] files = Directory.GetFiles(dir.ToString(),"*.txt",searchOption:SearchOption.AllDirectories);
+                foreach (string file in files)
+                {
+                    WriteLine($"{file}");
+                }
+            }
+            else
+            {
+                WriteLine("Not Exists directory");
+            }
+
+            //get directories sub folder ki list deta hai
+            dir = Directory.GetParent(path);
+            if (Directory.Exists(dir?.ToString()))
+            {
+                string[] alldir = Directory.GetDirectories(dir.ToString(), "*.txt", searchOption: SearchOption.AllDirectories);
+                foreach (string childdir in alldir)
+                {
+                    WriteLine($"{childdir}");
+                }
+            }
+            else
+            {
+                WriteLine("Not Exists directory");
+            }
+
+        }
+        internal static void MoveDirectory(string source, string destination)
+        {
+            source = Path.Combine("D:\\Dot Net Trainning\\ProjectFilesOperations",source);
+            try
+            {
+                if (Directory.Exists(source))
+                {
+                    if (!Directory.Exists(destination))
+                    {
+                        Directory.Move(source, destination);  //rename hoga
+                        //Directory.Move(source, "backup\\newdata");  //backup phele se create hona chaiya folder ka ander data dir chali zaye gi
+                        
+                        WriteLine("Move file success");
+                    }
+                    else
+                    {
+                        throw new Exception("change your destination");
+                    }
+                }
+                else 
+                {
+                        throw new Exception("Change your source");
+                }
+                
+            }
+                catch(Exception ex)
+                    {
+                        WriteLine($"error occurred {ex.Message}");
+                    }
+        }
+
+
+    }
+
+    internal static class PathClass
+    {
+        internal static void AllOperationsPathClass()
+        {
+            string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
+            WriteLine("path = " + path);
+            try
+            {
+
+                if (Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(Path.Combine(path,"Paramount"));
+                    WriteLine("Directory created");
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLine($"error occur : {ex.Message}");
+            }
+
+        }
+        internal static void BasicOperationsPathClass()
+        {
+            string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
+
+            string name = Path.GetFileName(Path.Combine(path,"hello.txt"));
+            WriteLine(name);
+            WriteLine("full file name = " + Path.GetFileNameWithoutExtension(name));
+            WriteLine("Only file name" + Path.GetFileNameWithoutExtension(name));
+            WriteLine("Get file ext name = " + Path.GetExtension(name));
+            WriteLine("Full path = " + Path.GetFullPath("hello.txt"));
+            WriteLine(Path.GetFileName(path));
+            WriteLine(Path.GetExtension(path));
+
+            // Change extension
+            //real file change nahi hoti only view mode me change 
+            //file modify nahi hoti bas string change hoti hai.
+            string jsonPath = Path.ChangeExtension(path, ".json");
+
+            // Full path
+            WriteLine(Path.GetFullPath(path));
+
+            // Temp file automatic unique file create karta hai or path return 
+            string temp = Path.GetTempFileName();
+            WriteLine(temp);
+
+        }
+
+    }
+    internal  class FileInfoClass
+    {
+
+        internal void AllOperation()
+        {
+            FileInfo f2 = new FileInfo("ok.txt");
+
+            //   ⚠️ Deep Rules:
+            //✔ file exist nahi → new banegi
+            //✔ exist hai → overwrite
+            //❗ stream close nahi ki → file lock
+            using (var stream = f2.Create()) { }
+
+            if(f2.Exists)
+            {
+                WriteLine("File exists");
+            }
+            else
+            {
+                WriteLine("File not exists");
+            }
+            /*
+             🔥 3. Delete()
+📌 Kya karta hai:
+
+👉 file permanently delete karta hai
+
+📌 Return:
+
+👉 void
+
+📌 Example:
+file.Delete();
+⚠️ Deep Rules:
+✔ recycle bin nahi
+❗ file open hai → error
+❗ permission issue → error
+             */
+            //f2.Delete();
+            FileInfo file = f2.CopyTo("newOk.txt", true);
+           
         }
     }
 }

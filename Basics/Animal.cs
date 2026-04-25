@@ -160,8 +160,6 @@ namespace Basics.Animal
 
             }
         }
-
-    
         internal static decimal TaxCalculator(decimal amount, string countryCode)
         {
 

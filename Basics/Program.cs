@@ -62,6 +62,7 @@ namespace Learning.Basics
         {
             Fruit f = new Fruit();
             f.FriendSecret();
+
             SmallPrivate();     
             //create object Testing class
             A ok = new A();
@@ -291,6 +292,9 @@ namespace Learning.Basics
             FilesMangement.WriteFileLineByLine("writeFileLinebyLine", new[] {"A","B","third line" });
             //directory class
             DirectoryClass.GetINFO();
+            //path class
+            PathClass.AllOperationsPathClass();
+            PathClass.BasicOperationsPathClass();
         }
         static void count()
         {
