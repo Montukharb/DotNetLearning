@@ -297,8 +297,6 @@ namespace Learning.Basics
             PathClass.AllOperationsPathClass();
             PathClass.BasicOperationsPathClass();
 
-           
-            
 
             string? customerName = "Vishal Don";
             byte[] bytedata = Encoding.UTF8.GetBytes(customerName);
@@ -313,6 +311,22 @@ namespace Learning.Basics
             //file info class
             FileInfoClass fic = new();
             fic.AllOperation();
+
+            //Environment Class obj
+            EnvironMentClass enobj = new();
+            enobj.BasicOperation();
+
+            //directoryInfo class object
+            DirectroyInfoClass dinfo = new();
+            dinfo.CreateDirectory();
+            //dinfo.DeleteDirectory();
+            dinfo.CreateSubDirectory();
+            dinfo.GetAllDirectoryies();
+            dinfo.GetAllFiles();
+            dinfo.MoveToDirectory();
+            dinfo.BasicOperations();
+
+
         }
         static void count()
         {

@@ -1,7 +1,11 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.Metrics;
 using System.IO;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Basics.OOPS
 {
@@ -121,6 +125,8 @@ FileInfo / DirectoryInfo → advanced info*/
                 WriteLine("File does't exits");
             }
         }
+
+        
         internal static void CreateFile(string filename)
         {
 
@@ -796,6 +802,11 @@ FileInfo / DirectoryInfo → advanced info*/
                 {
                     if (file.Exists)
                     {
+                        //👉 Refresh() = file ki latest state dubara load karna
+                        //refresh ka use tab karte hai jab user mannually file edit kar de system old byte size de
+                        //return void
+                        //file.Refresh();
+                        
                         using (StreamReader sr = file.OpenText())
                         {
                             WriteLine(sr.ReadToEnd()); //reading data till end
@@ -819,11 +830,248 @@ FileInfo / DirectoryInfo → advanced info*/
                 {
 
                     WriteLine("error occured during creating file: " + ex.Message);
+                    
                 }
 
             }
             OpenTextFileInfoClassMethod();
+
+            void FileStreamMethod()
+            {
+                string path = Path.Combine("D:","Dot Net Trainning","ProjectFilesOperations","FileStreamDirectLowLevel.txt");
+
+                try
+                {
+                    /*
+                           🎯 Real Use Cases
+                           Image read / write 🖼️
+                           Video file handling 🎥
+                           Binary files(.exe, .dat)
+                           Large file processing
+                           Network streams
+                           🚀 Final Summary
+                           FileMode method
+                           | Mode         | Meaning              |
+                           | ------------ | -------------------- |
+                           | Open         | existing file open   |
+                           | Create       | new file (overwrite) |
+                           | Append       | end me data add      |
+                           | OpenOrCreate | open ya create       |
+
+                           FileAccess method
+                           | Type      | Meaning    |
+                           | --------- | ---------- |
+                           | Read      | sirf read  |
+                           | Write     | sirf write |
+                           | ReadWrite | dono       |
+
+                           ✔ FileStream = byte level control
+                           ✔ Write() → data likhna
+                           ✔ Read() → data padhna
+                           ✔ Position → pointer
+                           ✔ Seek() → jump
+                           ✔ using → auto close*/
+
+
+                    using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                        {
+                            if (fs.Length <= 0)
+                            {
+                                //write data;
+                                string? data = "Hello how are you this file is created using FileStream Class low level";
+                                byte[] buffer = Encoding.UTF8.GetBytes(data); //convert data into bytes
+
+                                fs.Write(buffer, 0, buffer.Length);
+                                WriteLine("Writing successfull");
+                            }
+                            else
+                            {
+                               
+                                //read data
+                                byte[] Readingcontainer = new byte[fs.Length]; //blank container created
+
+                                int readingCapicty = fs.Read(Readingcontainer, 0, Readingcontainer.Length);
+
+                                WriteLine("data read by Pure FileStream Class = " + Encoding.UTF8.GetString(Readingcontainer,0,readingCapicty));
+
+                        }
+                        
+                    }
+                }
+                catch (Exception ex) 
+                {
+                    WriteLine("Error occur during File read and write using FileStream class: " + ex.Message);
+                }
+            }
+            FileStreamMethod();
         }
 
 }
+
+    /*
+     Def and Rules in Environment class
+     System related info aur operations ke liye use hota 
+       OS info, user info, system variables, current directory, memory / processors
+     */
+    internal class EnvironMentClass
+        {
+           //basics operations
+           internal void BasicOperation()
+        {
+            WriteLine($"Machine name: {Environment.MachineName}");
+            WriteLine($"User name: {Environment.UserName}");
+            WriteLine($"User Domain name: {Environment.UserDomainName}");
+            WriteLine($"Current Directory name: {Environment.CurrentDirectory}");
+            WriteLine($"Operating system version: {Environment.OSVersion}");
+            WriteLine($"System Directory: {Environment.SystemDirectory}"); //os konsi dir me hai
+            WriteLine($"Processor count: {Environment.ProcessorCount}");
+            WriteLine($"is 64 bit operating system or not: {Environment.Is64BitOperatingSystem}");
+            WriteLine($"Dot Net Version: {Environment.Version}");
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            WriteLine(path);
+            string history = Environment.GetFolderPath(Environment.SpecialFolder.History);
+            string[] hislist = Directory.GetFiles(history, "*", searchOption: SearchOption.AllDirectories);
+            foreach (string his in hislist)
+            {
+                WriteLine(his);
+            }
+
+            
+        }
+        
+    }
+    internal class DirectroyInfoClass
+    {
+        internal readonly static string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
+
+        //DirectoryInfo create reference
+        internal DirectoryInfo di = new DirectoryInfo(Path.Combine(path, "DirectoryINFO"));
+        internal void CreateDirectory()
+        {
+
+            //create object Directory info;
+            /*
+             System.IO.DirectoryInfo is a class in the .NET Framework and .NET Core libraries that provides object-oriented
+             access to directories and their subdirectories. It allows developers to create, move, enumerate, and delete
+             directories while retrieving metadata such as creation time, attributes, and parent relationships.
+             
+             */
+            if (di.Exists)
+            {
+                WriteLine("yes Dir already exits DirectoryInfo class smoothley ignored re creation");
+            }
+            else
+            {
+                WriteLine("A fresh dir created");
+            }
+
+            //There are no need to check directory exists or not it is automatic check itself and same directory.create method auto check if exists smoothley ignore
+            di.Create();
+            WriteLine("Directory created at location: " + di.FullName);
+        }
+        internal void DeleteDirectory()
+        {
+            if(!di.Exists)
+            {
+                WriteLine("Directory does't exists");
+                return;
+            }
+            else
+            {
+                di.Delete(true);  //true means recursively deleted all data;
+                WriteLine("Directory deleted at location: " + di.FullName);
+            }
+        }
+
+        //if sub directory already exists it is never re create sub dir auto ignore and return directory info
+        internal void CreateSubDirectory()
+        {
+            //formalty message check and stop method but no need
+            DirectoryInfo sub = di.CreateSubdirectory("Subdir");
+            WriteLine("sub directory created successfull");
+
+            if (sub.Exists)
+            {
+              WriteLine($"sub directory already exists: {di.FullName}");
+            }
+        }
+
+        //return fileinfo array with sub directory
+        internal void GetAllDirectoryies()
+        {
+            DirectoryInfo[] dirs = di.GetDirectories("*",SearchOption.AllDirectories);
+
+            if(dirs.Length > 0)
+            {
+                foreach(DirectoryInfo dir in dirs)
+                {
+                    WriteLine($"{dir.FullName}");
+                }
+            }
+            else
+            {
+                WriteLine("No sub dir");
+            }
+        }
+        internal void GetAllFiles()
+        {
+            FileInfo[] files = di.GetFiles("*",searchOption:SearchOption.AllDirectories);
+
+            if (files.Length > 0)
+            {
+                foreach (FileInfo file in files)
+                {
+                    WriteLine($"{file.FullName}");
+                }
+            }
+            else
+            {
+                WriteLine("No files");
+            }
+        }
+
+        internal void MoveToDirectory()
+        {
+            DirectoryInfo di2 = new DirectoryInfo(Path.Combine(path, "MoveAbleDirInfo"));
+            string destination = Path.Combine(path, "Paramount","MoveAbleDirInfo");
+            if(!di2.Exists)
+            {
+                WriteLine("source does't exits");
+            }
+            if(!Directory.Exists(destination))
+            {
+                di2.MoveTo(destination);
+                WriteLine("Move successfull");
+            }
+            else
+            {
+                WriteLine("Choose diff destionation");
+            }
+        }
+
+        internal void BasicOperations()
+        {
+            WriteLine("Parent dir: "+di.Parent?.FullName);
+            WriteLine("current Dir name: "+di.Name);
+            WriteLine("current Dir FullName: "+di.FullName);
+            WriteLine("Creation Time: "+di.CreationTime);
+            WriteLine("Last Write Time: "+di.LastWriteTime);
+
+        }
+        
+    }
+    /*
+     Normaly data disk par write karte hai
+     MemoryStream ma Data Ram ma store karte hai current operation speed se perporm karne ka liya
+     temporary data handle karna ho
+     fast processing chahiye
+     file banane se pehle memory me kaam karna ho
+     API / network me data bhejna ho
+     
+     */
+    
+    internal class MemoryStreamClass
+    {
+
+    }
 }
