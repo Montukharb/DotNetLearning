@@ -376,6 +376,7 @@ FileInfo / DirectoryInfo → advanced info*/
                     if (File.Exists(destination))
                     {
                         File.Replace(internalPath, destinationPath, backupPath);
+
                     }
                     else
                     {
@@ -1084,32 +1085,34 @@ FileInfo / DirectoryInfo → advanced info*/
         {
 
             //create memory stream 
-            try { 
-            using (MemoryStream ms = new MemoryStream())
+            try
             {
-                //create byte data;
-                byte[] data = Encoding.UTF8.GetBytes("Hello this Memory Stream Data Write in Ram Memory");
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    //create byte data;
+                    byte[] data = Encoding.UTF8.GetBytes("Hello this Memory Stream Data Write in Ram Memory");
 
-                //writing memory stream
+                    //writing memory stream
 
-                ms.Write(data, 0, data.Length);
-                WriteLine("Writing Successfull");
+                    ms.Write(data, 0, data.Length);
+                    WriteLine("Writing Successfull");
 
-                // we cam't read data out of the this method scope it's not available 
-                //second method store data in hard disk after all operation
+                    // we cam't read data out of the this method scope it's not available 
+                    //second method store data in hard disk after all operation
 
-                //we can read here first
-                ms.Position = 0; //position must be set before reading beacause writer write data using position and reader read data using position index;
-                //ms.Seek(0, SeekOrigin.Begin); //same work as position it is provide little bit advance options as need.
+                    //we can read here first
+                    ms.Position = 0; //position must be set before reading beacause writer write data using position and reader read data using position index;
+                                     //ms.Seek(0, SeekOrigin.Begin); //same work as position it is provide little bit advance options as need.
 
-                byte[] buffer = new byte[ms.Length];
+                    byte[] buffer = new byte[ms.Length];
 
-                int byteRead = ms.Read(buffer, 0, buffer.Length);
+                    int byteRead = ms.Read(buffer, 0, buffer.Length);
 
-                string readableData = Encoding.UTF8.GetString(buffer, 0, byteRead);
-                WriteLine("data read from memory stream = " + readableData);
+                    string readableData = Encoding.UTF8.GetString(buffer, 0, byteRead);
+                    WriteLine("data read from memory stream = " + readableData);
+                }
             }
-            }catch(Exception ex)
+            catch (Exception ex)
             {
                 WriteLine("Exception occurr when creating MemoryStream: " + ex.Message);
             }
@@ -1159,14 +1162,14 @@ FileInfo / DirectoryInfo → advanced info*/
                 //create byte data;
                 byte[] data = Encoding.UTF8.GetBytes("Hello this Memory Stream Data Write using constructor in Ram Memory Also store after all operation in hard disk file for safted data not lose after destroyed memory");
                 MemoryStream ms = new MemoryStream(data); //writing auto in memorystream
-                
+
 
                 WriteLine("Writing Successfull in MemoryStream");
-                
-                //Memory ---> File data
-                File.WriteAllBytes(Path.Combine("D:","Dot Net Trainning","ProjectFilesOperations","MemoryStreamData","RAM.txt"),ms.ToArray());
 
-                    WriteLine("Data store in hard disk file successfull");
+                //Memory ---> File data
+                File.WriteAllBytes(Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations", "MemoryStreamData", "RAM.txt"), ms.ToArray());
+
+                WriteLine("Data store in hard disk file successfull");
 
 
                 //File ---> Memory
@@ -1175,17 +1178,17 @@ FileInfo / DirectoryInfo → advanced info*/
                 {
                     byte[] buffer = File.ReadAllBytes(mpath);
 
-                    WriteLine("Data read from file to Memory stream = " + Encoding.UTF8.GetString(buffer,0,buffer.Length));
+                    WriteLine("Data read from file to Memory stream = " + Encoding.UTF8.GetString(buffer, 0, buffer.Length));
                 }
                 ms.Dispose(); //realease all resources used by the stream.
-            
+
             }
-            
+
             catch (Exception ex)
             {
                 WriteLine("Exception occurr when creating MemoryStream: " + ex.Message);
             }
-        
+
         }
         internal void MemoryWriterUsingStreamReadAndWrite()
         {
@@ -1194,17 +1197,17 @@ FileInfo / DirectoryInfo → advanced info*/
             using (MemoryStream ms = new MemoryStream())
             using (StreamWriter sw = new StreamWriter(ms))
             {
-                    sw.WriteLine("Data write in memoryStream using Stream Writer class");
-                    sw.Flush(); //Now push the streamWriter data in memory stream
+                sw.WriteLine("Data write in memoryStream using Stream Writer class");
+                sw.Flush(); //Now push the streamWriter data in memory stream
 
                 ms.Seek(0, SeekOrigin.Begin); //set reading in starting index;
 
-                using(StreamReader sr = new StreamReader(ms))
+                using (StreamReader sr = new StreamReader(ms))
                 {
-                    WriteLine("Reading data using stream Reader from Memory stream = "+sr.ReadToEnd());
+                    WriteLine("Reading data using stream Reader from Memory stream = " + sr.ReadToEnd());
                 }
             }
-        
+
         }
     }
 
@@ -1242,22 +1245,23 @@ FileInfo / DirectoryInfo → advanced info*/
             try
             {
 
-            if (!File.Exists(path))
-            {
-            using(FileStream fs = new FileStream(path,FileMode.Create,FileAccess.Write,FileShare.None))
-            using(BinaryWriter bw = new BinaryWriter(fs))
-            {
-                bw.Write(1052);
-                bw.Write("hello writs a length prefixed string");
-                bw.Write(true);
-                    WriteLine("Binary data writing successfull");
+                if (!File.Exists(path))
+                {
+                    using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
+                    using (BinaryWriter bw = new BinaryWriter(fs))
+                    {
+                        bw.Write(1052);
+                        bw.Write("hello writs a length prefixed string");
+                        bw.Write(true);
+                        WriteLine("Binary data writing successfull");
+                    }
+                }
+                else
+                {
+                    WriteLine("binary File already exits");
+                }
             }
-            }
-            else
-            {
-                WriteLine("binary File already exits");
-            }
-            }catch(Exception ex)
+            catch (Exception ex)
             {
                 WriteLine("Exception occur: " + ex.Message);
             }
@@ -1279,7 +1283,7 @@ FileInfo / DirectoryInfo → advanced info*/
             try
             {
 
-                if (File.Exists(path))  
+                if (File.Exists(path))
                 {
                     using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
                     using (BinaryReader br = new BinaryReader(fs))

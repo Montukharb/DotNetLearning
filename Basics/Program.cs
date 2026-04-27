@@ -5,9 +5,9 @@ using System.Dynamic;
 using System.Text;
 namespace Basics.OOPS
 {
-  internal partial  class PartialExercise
+    internal partial class PartialExercise
     {
-       internal void Truck()
+        internal void Truck()
         {
             WriteLine("Truck is running");
         }
@@ -21,13 +21,14 @@ namespace Learning.Basics
 {
     public class Fruit
     {
-       public Fruit()
+        public Fruit()
         {
             WriteLine("Default constructor");
             Secret();
         }
 
-        public void DisplayFruit() { 
+        public void DisplayFruit()
+        {
             WriteLine("Learning Basics public Fruit class method displayfruit");
 
         }
@@ -48,7 +49,7 @@ namespace Learning.Basics
         }
     }
 
-    
+
 
 
 
@@ -57,21 +58,21 @@ namespace Learning.Basics
         public void disp()
         {
             SmallPrivate();
-            
+
         }
         public static void Main(string[] args)
         {
             Fruit f = new Fruit();
             f.FriendSecret();
 
-            SmallPrivate();     
+            SmallPrivate();
             //create object Testing class
             A ok = new A();
             //ok.met(); //due to private access modifier did't called
 
             //create object operatio class
             Operation objOp = new Operation();
-           
+
 
 
             decimal balance = 10.55m;
@@ -134,10 +135,10 @@ namespace Learning.Basics
             Console.WriteLine($"First name = {user.FirstName} \nLastName = {user.LastName}\nAge = {user.age}");
             DateTime date = DateTime.Now;
             Console.WriteLine(date);
-            date = new(1999,1,24);
+            date = new(1999, 1, 24);
 
             Console.WriteLine(date);
-            Point d = new(10,20);
+            Point d = new(10, 20);
 
             Console.WriteLine(d);
 
@@ -147,7 +148,7 @@ namespace Learning.Basics
             int num;
             bool success = int.TryParse(input, out num);
 
-            if(success)
+            if (success)
             {
                 WriteLine($"no : {num}");
             }
@@ -156,15 +157,15 @@ namespace Learning.Basics
                 WriteLine($"wrong input expected numberic value your input = {input}");
             }
 
-            var internalobj = new Sample2(100){ userName = "montu kharb" };
+            var internalobj = new Sample2(100) { userName = "montu kharb" };
 
             //int result = internalobj.sum(out int a, out int b);
 
             internalobj.sum(out int a, out int b);
-            Console.WriteLine("a = "+a + " b = " + b);
+            Console.WriteLine("a = " + a + " b = " + b);
             //Console.WriteLine("Return value = " + result);
 
-            WriteLine(internalobj.sum2(10, 20,out string userName, out int age));
+            WriteLine(internalobj.sum2(10, 20, out string userName, out int age));
             WriteLine($"user name = {userName} \nUser age = {age}");
 
             Type datatype = typeof(int);
@@ -182,7 +183,7 @@ namespace Learning.Basics
             int? pow = null;
             WriteLine(pow);
 
-            
+
 
             WriteLine(myname);
 
@@ -203,9 +204,9 @@ namespace Learning.Basics
             Jk2 jkObj = new Jk2();
 
             //deconstructor class object
-            DeConstructor deObj = new() {address="rohtak Abc", customerName="Vishal BOB", customerId=141413};
-            
-            var(cID,CName) = deObj;
+            DeConstructor deObj = new() { address = "rohtak Abc", customerName = "Vishal BOB", customerId = 141413 };
+
+            var (cID, CName) = deObj;
             //WriteLine(deObj.customerId);
 
             WriteLine(cID + CName);
@@ -234,7 +235,7 @@ namespace Learning.Basics
             GChild Gchi = new("Jat boy");
             Books bk = new Books();
             bk.PageQuality("95 - GSM");
-           
+
             DevRun dR = new DevRun();
             //dR.accessAbleMethod();
 
@@ -258,7 +259,7 @@ namespace Learning.Basics
             IAE[1] = 2000;
             IAE[2] = 3000;
 
-            WriteLine(IAE[0]); 
+            WriteLine(IAE[0]);
             WriteLine(IAE[1]);
             WriteLine(IAE[2]);
 
@@ -268,7 +269,7 @@ namespace Learning.Basics
             PE.Car2();
             PE.LabmdaMethodOP();
             Test t = new Test();
-            t.OnRun +=()=> WriteLine("task1");
+            t.OnRun += () => WriteLine("task1");
             t.OnRun += () => WriteLine("task2");
             t.Run();
 
@@ -290,7 +291,7 @@ namespace Learning.Basics
             //FilesMangement.CopyFile();
             //FilesMangement.MoveFile();
             //FilesMangement.ReplaceFile();
-            FilesMangement.WriteFileLineByLine("writeFileLinebyLine", new[] {"A","B","third line" });
+            FilesMangement.WriteFileLineByLine("writeFileLinebyLine", new[] { "A", "B", "third line" });
             //directory class
             DirectoryClass.GetINFO();
             //path class
@@ -300,9 +301,9 @@ namespace Learning.Basics
 
             string? customerName = "Vishal Don";
             byte[] bytedata = Encoding.UTF8.GetBytes(customerName);
-            foreach(var i in bytedata)
+            foreach (var i in bytedata)
             {
-                Write(i+" ");
+                Write(i + " ");
             }
 
             string convertOriginalName = Encoding.UTF8.GetString(bytedata);
@@ -325,7 +326,7 @@ namespace Learning.Basics
             dinfo.GetAllFiles();
             dinfo.MoveToDirectory();
             dinfo.BasicOperations();
-           
+
 
             //memoryStream class
             MemoryStreamClass msc = new();
@@ -338,6 +339,21 @@ namespace Learning.Basics
             BinaryReaderWriter brw = new();
             brw.BinaryWriterMethod();
             brw.BinaryReaderMethod();
+
+            //CompressionAndDecompression obj
+            CompressionAndDecompression Cpdp = new();
+            Cpdp.CompressData();
+            Cpdp.DeCompressData();
+            Cpdp.CompressDataUsingWrite();
+            Cpdp.DeCompressDataUsingRead();
+
+            //Zip Archive class
+            ZipArchiveClass zac = new();
+            zac.CreateZipBasic();
+            zac.SendMultipleFiles();
+            zac.SendBulkMultipleFiles();
+            zac.DirToZiDir();
+
 
         }
         static void count()
@@ -359,7 +375,7 @@ namespace Learning.Basics
 
             int? ff = 10;
 
-            if(ff is int)
+            if (ff is int)
             {
                 WriteLine("true integer");
             }
@@ -387,7 +403,7 @@ namespace Learning.Basics
                     WriteLine("Default");
                     break;
             }
- 
+
 
         v_label:
 
@@ -395,7 +411,7 @@ namespace Learning.Basics
 
             WriteLine("After label jump1");
 
-        
+
         }
 
         static void logical()
@@ -416,7 +432,7 @@ namespace Learning.Basics
             x = 10; // compulsory assign
         }
 
-      
+
         public Sample2(int a)
         {
             int num = 20;
@@ -425,13 +441,13 @@ namespace Learning.Basics
             Console.WriteLine(num); // 10
             WriteLine($"Constructor value = {a}");
         }
-        public required string userName{ get; set; }
+        public required string userName { get; set; }
         static Sample2()
         {
             Console.WriteLine("Run when class loaded one time");
         }
 
-       public void sum(out int a, out int b)
+        public void sum(out int a, out int b)
         {
             a = b = 10;
             a = a + b;
@@ -441,16 +457,16 @@ namespace Learning.Basics
 
 
 
-// normal method
-     public int sum2(int a , int b , out string name,out int age)
+        // normal method
+        public int sum2(int a, int b, out string name, out int age)
         {
             name = "jOhn";
             age = 11;
-            
-            return a+b;
-            
+
+            return a + b;
+
         }
-       
+
     }
 
 
