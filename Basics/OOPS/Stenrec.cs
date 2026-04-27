@@ -42,12 +42,12 @@ namespace Basics.OOPS
         public string password;
         public int age;
 
-        //public MyStruct()//no parameter provided in struct constructor must be public access specifier reqired to initialize property
-        // {
-        //     userName = "vishal sharma";
-        //     password = "vish@1324";
+        public MyStruct()//no parameter provided in struct constructor must be public access specifier reqired to initialize property
+        {
+            userName = "vishal sharma";
+            password = "vish@1324";
 
-        // }
+        }
 
         internal MyStruct(string userName, string password, int age = 10, params string[] arr)
         {

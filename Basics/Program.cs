@@ -325,7 +325,19 @@ namespace Learning.Basics
             dinfo.GetAllFiles();
             dinfo.MoveToDirectory();
             dinfo.BasicOperations();
+           
 
+            //memoryStream class
+            MemoryStreamClass msc = new();
+            msc.CreateMemoryStream();
+            msc.CreateMemoryStreamUsingConstructor();
+            msc.StoreDataHardDiskAfterMemoryStreamOperation();
+            msc.MemoryWriterUsingStreamReadAndWrite();
+
+            //binary reader and writer
+            BinaryReaderWriter brw = new();
+            brw.BinaryWriterMethod();
+            brw.BinaryReaderMethod();
 
         }
         static void count()
