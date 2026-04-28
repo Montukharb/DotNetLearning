@@ -353,8 +353,22 @@ namespace Learning.Basics
             zac.SendMultipleFiles();
             zac.SendBulkMultipleFiles();
             zac.DirToZiDir();
+            zac.AccesssAllFilesInZipFile();
+            zac.ReadSingleFileInZipFolder();
+            //zac.AddFileExitingZipFile();
+            zac.DeleteFileExitingZipFile();
+            zac.ExtractFileFromZip();
 
+            //ZipFileClass
+            ZipFileClass zfc = new();
+            zfc.FolderToZip();
+            zfc.ZipToFolder();
+            zfc.createZipfile();
 
+            //brotli compression and decompression objects
+            BrotliCompAndDecompression bcd = new();
+            bcd.compressFile();
+            bcd.DecompressFile();
         }
         static void count()
         {

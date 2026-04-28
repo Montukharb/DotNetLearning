@@ -320,7 +320,7 @@ namespace Basics.OOPS
         internal void DirToZiDir()
         {
             string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
-          
+
             try
             {
                 if (File.Exists(Path.Combine(path, "BigZipper.zip")))
@@ -351,8 +351,244 @@ namespace Basics.OOPS
          */
         internal void AccesssAllFilesInZipFile()
         {
+            string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
+            try
+            {
+                if (!File.Exists(Path.Combine(path, "BigZipper.zip")))
+                {
+                    throw new Exception("File not exits");
+                }
+                using (FileStream fs = new FileStream(Path.Combine(path, "BigZipper.zip"), FileMode.Open, FileAccess.Read, FileShare.None))
+                using (ZipArchive zip = new ZipArchive(fs, ZipArchiveMode.Read))
+                {
+
+                    //access all file which is stored in Zip file
+                    int i = 0;
+                    foreach (ZipArchiveEntry f in zip.Entries)
+                    {
+                        WriteLine("File Name: " + f.Name);
+                        i++;
+                    }
+                    WriteLine("Total Files in Zip File = " + i);
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLine("Exception occurr: " + ex.Message);
+            }
+        }
+
+        //Read Single file from Zip Folder
+        internal void ReadSingleFileInZipFolder()
+        {
+            string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
+
+            try
+            {
+                if (!File.Exists(Path.Combine(path, "BigZipper.zip")))
+                {
+                    throw new Exception("File not exists");
+                }
+                using (FileStream fs = new FileStream(Path.Combine(path, "BigZipper.zip"), FileMode.Open, FileAccess.Read, FileShare.None))
+                using (ZipArchive zip = new ZipArchive(fs, ZipArchiveMode.Read))
+                {
+                    List<string> fileName = new List<string>();
+
+                    foreach (ZipArchiveEntry f in zip.Entries)
+                    {
+                        fileName.Add(f.FullName);
+                    }
+                    WriteLine("Assigned successfull Start Reading First File");
+                    ZipArchiveEntry? fName = zip.GetEntry(fileName[0]);
+                    if (fName == null)
+                    {
+                        throw new Exception("Not valid file in Zip File");
+                    }
+                    using (StreamReader sr = new StreamReader(fName.Open()))
+                    {
+
+                        WriteLine(sr.ReadToEnd());
+                        WriteLine("Reading Successfull");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLine("Exception occurr: " + ex.Message);
+            }
+        }
+
+        //Add File Existing Zip File
+        internal void AddFileExitingZipFile()
+        {
+            string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
+
+            try
+            {
+                if (!File.Exists(Path.Combine(path, "BigZipper.zip")))
+                {
+                    throw new Exception("File Not Exists");
+                }
+                using (FileStream fs = new FileStream(Path.Combine(path, "BigZipper.zip"), FileMode.Open))
+                using (ZipArchive zip = new ZipArchive(fs, ZipArchiveMode.Update))
+                {
+                    zip.CreateEntryFromFile(Path.Combine(path, "okReadDecompress.txt"), "singleFile/OkReadDeCompress.txt", CompressionLevel.SmallestSize);
+                    //isme includeBaseDirectoryNahiHoti mannully hota hai singlefile/okcompres.txt
+                    WriteLine("Single file zip Successfull in existing");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                WriteLine("Exception occurr: " + ex.Message);
+            }
+        }
+
+        //. Delete file from ZIP
+        //New Text Document
+        internal void DeleteFileExitingZipFile()
+        {
+            string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
+            try
+            {
+
+                if (!File.Exists(Path.Combine(path, "BigZipper.zip")))
+                {
+                    throw new Exception("Zip folder not exists");
+                }
+
+                using (FileStream fs = new FileStream(Path.Combine(path, "BigZipper.zip"), FileMode.Open))
+                using (ZipArchive zip = new ZipArchive(fs, ZipArchiveMode.Update))
+                {
+                    ZipArchiveEntry? entry = zip.GetEntry("singleFile/OkReadDeCompress.txt");
+                    if (entry != null)
+                    {
+                        entry.Delete();
+                        WriteLine("File Deleted from Big Zipper file");
+                    }
+                    else
+                    {
+                        throw new Exception("Can't find deleting file");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLine("Exception occur during delete File from zip folder: " + ex.Message);
+            }
+        }
+
+        //extract single file from zip to disk
+        internal void ExtractFileFromZip()
+        {
+            string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
+            try
+            {
+
+                if (!File.Exists(Path.Combine(path, "BigZipper.zip")))
+                {
+                    throw new Exception("Zip folder not exists");
+                }
+
+                using (FileStream fs = new FileStream(Path.Combine(path, "BigZipper.zip"), FileMode.Open))
+                using (ZipArchive zip = new ZipArchive(fs, ZipArchiveMode.Read))
+                {
+
+                    //Ask question slash problem
+                    ZipArchiveEntry? entry = zip.GetEntry("Confidencial Record\\New Text Document.txt");
+                    if (entry != null)
+                    {
+                        entry.ExtractToFile(Path.Combine(path, "ExtractFolderBigZipper", entry.Name), true); //true == overwrite
+                        WriteLine("Extracting successfull");
+                    }
+                    else
+                    {
+                        throw new Exception("Can't find zip file");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLine("Exception occur during Extracting File from zip folder: " + ex.Message);
+            }
+        }
+    }
 
 
+    //ZipFile: ZipFile ek static helper class hai jo ZIP create aur extract karne ke liye shortcut methods deti hai
+    internal class ZipFileClass
+    {
+        string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
+
+        internal void FolderToZip()
+        {
+            try
+            {
+
+                if (!Directory.Exists(Path.Combine(path, "Confidencial Record")))
+                {
+                    throw new Exception("Source folder not exists");
+                }
+                ZipFile.CreateFromDirectory(Path.Combine(path, "Confidencial Record"), Path.Combine(path, "ZipFileData.zip"), CompressionLevel.SmallestSize, includeBaseDirectory: true);
+                WriteLine("Compression Completed ZipFile");
+            }
+            catch (Exception ex)
+            {
+                WriteLine("Exception occurred during compressing Folder: " + ex.Message);
+            }
+        }
+
+        //Decompression zipFile
+        internal void ZipToFolder()
+        {
+            try
+            {
+
+                if (!File.Exists(Path.Combine(path, "ZipFileData.zip")))
+                {
+                    throw new Exception("Source folder not exists");
+                }
+                ZipFile.ExtractToDirectory(Path.Combine(path, "zipFileData.zip"), Path.Combine(path, "ZipFileDataDecompression"));
+                WriteLine("Extracted zip File");
+            }
+            catch (Exception ex)
+            {
+                WriteLine("Exception occurred during Decompression Folder: " + ex.Message);
+            }
+        }
+
+        //zipfile open openRead and ZipFileMode read create update
+
+        //using ZipFile.Open and Mode using create
+        internal void createZipfile()
+        {
+
+            try
+            {
+
+                if (File.Exists(Path.Combine(path, "MyZip1.zip")))
+                {
+                    throw new Exception("MyZip1 already exits");
+                }
+                using (ZipArchive archive = ZipFile.Open(Path.Combine(path, "MyZip1.zip"), ZipArchiveMode.Create))
+                {
+                    ZipArchiveEntry? entry = archive.CreateEntry("Test1.txt");
+
+                    using (StreamWriter sw = new StreamWriter(entry.Open()))
+                    {
+                        sw.WriteLine("Hello this text is testing purpose");
+                        sw.Flush(); //ensure data write
+                        WriteLine("Data write successfully and compressed successfully");
+                        byte[] data = Encoding.UTF8.GetBytes("Hello this text is testing purpose");
+                        sw.BaseStream.Write(data, 0, data.Length);
+                        sw.Dispose();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLine("Exception occur during creating zip file: " + ex.Message);
+            }
         }
     }
 }
