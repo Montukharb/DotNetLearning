@@ -13,7 +13,7 @@ namespace Basics.OOPS
      */
     internal class BrotliCompAndDecompression
     {
-            string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
+        string path = Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations");
 
         internal void compressFile()
         {
@@ -24,18 +24,16 @@ namespace Basics.OOPS
                 {
                     throw new Exception("Already Compressed brotli data");
                 }
-                using(FileStream originalFileStream = File.Open(Path.Combine(path, "Brotli.txt"), FileMode.Open))
+                using (FileStream originalFileStream = File.Open(Path.Combine(path, "Brotli.txt"), FileMode.Open))
                 {
-                    using(FileStream compressedFileStream = File.Create(Path.Combine(path, "BrotliCompress.br")))
+                    using (FileStream compressedFileStream = File.Create(Path.Combine(path, "BrotliCompress.br")))
                     {
-                        using(BrotliStream brotliStream = new BrotliStream(compressedFileStream, CompressionMode.Compress))
-                        {
-                            originalFileStream.CopyTo(brotliStream);
-                            WriteLine("File compressed successfully.");
-                        }
+                        using BrotliStream brotliStream = new BrotliStream(compressedFileStream, compressionLevel: CompressionLevel.SmallestSize);
+                        originalFileStream.CopyTo(brotliStream);
+                        WriteLine("File compressed successfully.");
                     }
                 }
-              
+
             }
             catch (Exception ex)
             {
@@ -48,7 +46,7 @@ namespace Basics.OOPS
         {
             try
             {
-                if(!File.Exists(Path.Combine(path, "BrotliCompress.br")))
+                if (!File.Exists(Path.Combine(path, "BrotliCompress.br")))
                 {
                     throw new Exception("Compressed brotli data not found");
                 }
@@ -68,7 +66,7 @@ namespace Basics.OOPS
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 WriteLine("Exception occurred during decompressing Folder: " + ex.Message);
             }

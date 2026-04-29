@@ -22,6 +22,8 @@ namespace Basics.OOPS
             //Address2 = "sdafa";
             WriteLine(address);  //readonly access
         }
+
+        //record me auto create hota hai
         internal void Deconstruct(out int CUSTOMERID, out string? CUSTOMERNAME)
         {
             CUSTOMERID = customerId;

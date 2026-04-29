@@ -369,6 +369,10 @@ namespace Learning.Basics
             BrotliCompAndDecompression bcd = new();
             bcd.compressFile();
             bcd.DecompressFile();
+
+            //serialization and deserialization
+            SerializationAndDeSerialization sad = new SerializationAndDeSerialization();
+            sad.TestJsonSchemaExporter();
         }
         static void count()
         {
