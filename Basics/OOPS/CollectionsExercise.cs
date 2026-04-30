@@ -6,6 +6,8 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Text.Json;
 using System.Dynamic;
 using System.Text;
+using System.Numerics;
+using System.Drawing;
 
 namespace Basics.OOPS
 {
@@ -113,7 +115,7 @@ namespace Basics.OOPS
                 hashTable.Add("city", "Sonipat");
 
                 hashTable.Add("email", "montukharb68@gmail.com");
-
+                
                 bool containKey = hashTable.Contains(key: "Name");
                 WriteLine("Checking key using only contain = " + containKey);
 
@@ -199,18 +201,18 @@ namespace Basics.OOPS
 
             void queueCollection()
             {
-                Queue que = new Queue(new int[] {103,2049,250,030,89,54});
+                Queue que = new Queue(new int[] { 103, 2049, 250, 030, 89, 54 });
                 que.Enqueue(2);
                 var quearr = que.ToArray();
                 //quearr.Sort();
                 //quearr.Reverse();
                 WriteLine("Queue Collection");
-                foreach(var queitem in que)
+                foreach (var queitem in que)
                 {
                     Write(queitem + " ");
                 }
                 WriteLine();
-                if(que.Count >0)
+                if (que.Count > 0)
                 {
                     WriteLine("Peep item of que = " + que.Peek());
                     WriteLine("Enqueue item of que = " + que.Dequeue());
@@ -234,18 +236,88 @@ namespace Basics.OOPS
              */
             void SortedListColl()
             {
-                SortedList sortedlist = new SortedList() { {"Name","Montu" },{"name","montu"},{"age",23 }};
+                SortedList sortedlist = new SortedList() { { "Name", "Montu" }, { "name", "montu" }, { "age", 23 } };
 
                 WriteLine("sorted list collection");
                 //sortedlist.Add("email", "Montukharb868@gmail.com");
-                foreach(DictionaryEntry item in sortedlist)
+                foreach (DictionaryEntry item in sortedlist)
                 {
                     Write(item.Key + ":" + item.Value);
                 }
 
-
+                //all operation same hai hashtable ke jaise but sorted order maintain karta hai or index find for example
+                WriteLine(Environment.NewLine+"Index of name = " + sortedlist.IndexOfKey("name"));
+                WriteLine(sortedlist.GetByIndex(2));
             }
             SortedListColl();
+
+            /*
+             Bit array eak collection hai jo bits (0 aur 1) ko store karta hai. Ye memory efficient hota hai jab aapko large number of boolean values store karni hoti hain.
+             */
+            void BitArrayCollection()
+            {
+                //there are three way to create bit array
+                //size se
+                BitArray bitArray = new BitArray(5); //5 means size of bitarray default all set 0
+                //output false false false false false
+
+                //2.bool array se
+                bool[] bollarr = new bool[] {false,true,false };
+                BitArray bitArray1 = new BitArray(bollarr);
+                //output same copy ho zata hai bool array se
+
+                //3.int array se ye size ko bits ma convert karta hai jainse normal represet karte hai 5 = 101;
+                BitArray bitarray3 = new BitArray(new int[] { 5 });
+                //output 101; bit array banega true,false,true;
+
+                //index use set and get
+                //WriteLine(bitarray3[0]);//true
+                //WriteLine(bitarray3[1]);//false
+                //WriteLine(bitarray3[2]);//true
+
+                BitArray b1 = new BitArray(new bool[] { true, false });
+                BitArray b2 = new BitArray(new bool[] { true, true });
+
+                WriteLine(b1.And(b2));
+                foreach (var bit in b1)
+                {
+                    WriteLine(bit + " ");
+                }
+                WriteLine(b1.Or(b2));
+
+                WriteLine(b1.Xor(b2)); //different bit ko true karta hai same bit ko false karta hai
+
+                WriteLine(b1.Not()); //true ko false false ko true karta hai
+                WriteLine(b1.Length); //size of bit array
+                b1[0] = true;
+
+            }
+            BitArrayCollection();
+
+            
+            WriteLine(arrayList.GetHashCode()); //hash code generate karta hai arraylist ke liye but ye unique nahi hota hai same data ke liye same hash code generate hota hai isliye hash code ko unique identifier ke roop me use nahi karna chahiye
+
+            HashCode hashcode = new HashCode();
+            int a = 10;
+            string b = "Montu";
+
+            hashcode.Add(a); hashcode.Add(b);
+            WriteLine("hashcode = " + hashcode.ToHashCode());
+
+        }
+
+        //Modern way
+        internal void GenericCollections()
+        {
+
+            /*
+             Hash set eak collection hai jo unique elements ko store karta hai. Ye unordered hota hai aur fast lookup provide karta hai. HashSet me duplicate values allowed nahi hoti hain.
+            uses - jab unique data store karna ho, jaise user IDs, email addresses, etc. HashSet me order ki tension nahi hoti, isliye ye fast hota hai jab aapko data ko search karna ho ya check karna ho ki koi term exist karta hai ya nahi.
+            Example:- aadhar number, pan card number, voter id number, etc. in real life unique data store karne ke liye use hota hai.
+
+             */
+
+
         }
     }
 }
