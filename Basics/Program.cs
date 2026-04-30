@@ -373,6 +373,10 @@ namespace Learning.Basics
             //serialization and deserialization
             SerializationAndDeSerialization sad = new SerializationAndDeSerialization();
             sad.TestJsonSchemaExporter();
+
+            //collection object
+            CollectionsExercise ce = new();
+            
         }
         static void count()
         {

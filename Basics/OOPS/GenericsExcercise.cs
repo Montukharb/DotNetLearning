@@ -84,20 +84,22 @@ namespace Basics.OOPS
 
     //new keyword constraints
     //requirement generic type passing class must have one parameterless constructor
-    public class Factory<T> where T : InterfaceSomeone , new() //new() always last
+    public class Factory<T> where T :InterfaceSomeone, new() //new() always last
     {
     
       public T CreateInstance()
         {
             var obj = new T();
+            
             if(obj is School access)
             { 
             
                 access.Display("Building Repair");
+                access.RestrictedArea("From Factory class CreateInstance method");
                 
             }
+                obj.RestrictedArea("From Factory class CreateInstance method");
             //its accessible becasue interface take gurantee this method always in School class
-            obj.RestrictedArea("From Factory class CreateInstance method");
             return new T(); //return new object every time
         }
       
@@ -124,6 +126,10 @@ namespace Basics.OOPS
         }
     }
 
+    internal class School2
+    {
+        internal School2() { }//constructor
+    }
     internal class GenericsExcercise
     {
         internal GenericsExcercise()
@@ -147,6 +153,7 @@ namespace Basics.OOPS
 
             //factory object
             Factory<School> facOBj = new Factory<School>();
+            //Factory<School2> facsOBj = new Factory<School2>();
 
             var obj = facOBj.CreateInstance();
             WriteLine(obj.GetType().FullName);
