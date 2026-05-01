@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Basics\Basics.csproj" />
+	  <Using Include="System.Console" Static="true"/>
   </ItemGroup>
 	
 

@@ -7,6 +7,7 @@ public class Program : Fruit
         Console.WriteLine("LinQ test main method run ");
         Fruit fi = new Fruit();
         fi.DisplayFruit();
+        LanguageIntegratedQuery query = new LanguageIntegratedQuery();
         
     }
 }
