@@ -32,13 +32,13 @@ namespace Basics.OOPS
 
         private void HelperMethod()
         {
-            WriteLine("This is helper method called by with in interface scope any mehtod");  
+            WriteLine("This is helper method called by with in interface scope any mehtod");
         }
         public void CreateJob(string jobType);
     }
-    internal class InterfacesExcercise:Writer
+    internal class InterfacesExcercise : Writer
     {
-            public string writerName { get; set; } = "Bhagat Singh";
+        public string writerName { get; set; } = "Bhagat Singh";
         public void CreateJob(string? jobType = "Software Developer")
         {
             WriteLine("Job Created = " + jobType);
@@ -46,28 +46,30 @@ namespace Basics.OOPS
             //interface body method accessed  Object ko Writer interface mein cast karein
             ((Writer)this).PathFinder();
             ((Writer)this).writerName = "Writer Name set Gandhi";
-            WriteLine(((Writer)this).writerName);  
+            WriteLine(((Writer)this).writerName);
         }
     }
 
 
     public class GBase
     {
-        public GBase() {
+        public GBase()
+        {
             WriteLine("Gbase constructor run");
         }
-        public GBase(string name):this() {
+        public GBase(string name) : this()
+        {
 
             WriteLine("Gbase parameter constructor run " + name);
         }
     }
-    public class GChild:GBase
+    public class GChild : GBase
     {
-        public GChild():base("Montu kharb")
+        public GChild() : base("Montu kharb")
         {
             WriteLine("Gchild constructor run");
         }
-        public GChild(string name):this()
+        public GChild(string name) : this()
         {
 
             WriteLine("Gchild parameter constructor run " + name);
@@ -78,7 +80,7 @@ namespace Basics.OOPS
     //--------------------------------------------------//
     interface SimpleNoteBOOk
     {
-        protected string Note { get; set;}  //abstrace property override by only child
+        protected string Note { get; set; }  //abstrace property override by only child
     }
 
 
@@ -97,7 +99,7 @@ namespace Basics.OOPS
     interface Spiral : SimpleNoteBOOk
     {
         //property metod by default are public;
-        
+
         void PageQuality(string Gsm); //by default public and abstract;
         void Stock()  //normal method public without abstract afeter c# v 8.0
         {
@@ -117,11 +119,11 @@ namespace Basics.OOPS
 
     }
 
-   internal class Books:Spiral
+    internal class Books : Spiral
     {
 
         public string Note { get; set; } = "A4 NoteBOok";
-       public void PageQuality(string Gsm)
+        public void PageQuality(string Gsm)
         {
             WriteLine("Page quality = " + Gsm);
             WriteLine(Note);
@@ -132,7 +134,7 @@ namespace Basics.OOPS
             WriteLine(ads);
             //WriteLine(obj.ads = "Double positive");
         }
-      
+
 
         public string ads { get; set; } = "Positive";
     }
@@ -143,13 +145,13 @@ namespace Basics.OOPS
     //and override nahi kar sakti kyu ki ye explicitely defined or na hi virtual method hai undo
     internal interface Iundoable
     {
-       public void undo();
+        public void undo();
 
-       public void accessAbleMethod();
+        public void accessAbleMethod();
     }
 
 
-    internal class Stone:Iundoable
+    internal class Stone : Iundoable
     {
         void Iundoable.undo()
         {
@@ -159,9 +161,9 @@ namespace Basics.OOPS
         }
 
 
- //interface method ko normal(implicit) tarike se implement karte ho,
-//to wo method default me sealed (override nahi ho sakta) hota hai isliya virtual bana deta hai
-//implementation wali class me
+        //interface method ko normal(implicit) tarike se implement karte ho,
+        //to wo method default me sealed (override nahi ho sakta) hota hai isliya virtual bana deta hai
+        //implementation wali class me
         public virtual void accessAbleMethod()
         {
             WriteLine("Virtual method declare in interface implemented in stone base class");
@@ -183,9 +185,9 @@ public class RichTextBox : TextBox, IUndoable
 👉 Ye override nahi hai
 👉 Ye new implementation hai(reimplementation)   */
 
-    internal class DevRun:Stone
+    internal class DevRun : Stone
     {
-         internal DevRun()
+        internal DevRun()
         {
             Stone s1 = new Stone();
             // s1.undo();// can't access using object a explicite implementation interface method
@@ -193,29 +195,13 @@ public class RichTextBox : TextBox, IUndoable
 
             //accessed 
             ((Iundoable)s1).undo();  //same work
-            //s1.accessAbleMethod(); //run virtual method
+                                     //s1.accessAbleMethod(); //run virtual method
 
-            
+
         }
         public override void accessAbleMethod()
         {
             WriteLine("virtual method override by child class");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

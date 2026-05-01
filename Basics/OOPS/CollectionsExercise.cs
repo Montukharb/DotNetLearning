@@ -2,12 +2,13 @@
 using Basics.OOPS;
 using System.Collections;
 using System.Collections.Generic;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Text.Json;
-using System.Dynamic;
-using System.Text;
-using System.Numerics;
 using System.Drawing;
+using System.Dynamic;
+using System.Numerics;
+using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Basics.OOPS
 {
@@ -26,14 +27,15 @@ namespace Basics.OOPS
               2.Hashtable
               3.Stack
               4.Queue
-              5.SortedList
+              5.SortedList -> hashtable ka sorted version as a key sorting
               6.BitArray
-              7.HashSet
-              8.LinkedList
+              7.HashCode
               
 
              */
             OldStyleCollections();
+            //Generic Collections
+            GenericCollections();
         }
 
         internal void OldStyleCollections()
@@ -115,7 +117,7 @@ namespace Basics.OOPS
                 hashTable.Add("city", "Sonipat");
 
                 hashTable.Add("email", "montukharb68@gmail.com");
-                
+
                 bool containKey = hashTable.Contains(key: "Name");
                 WriteLine("Checking key using only contain = " + containKey);
 
@@ -217,7 +219,8 @@ namespace Basics.OOPS
                     WriteLine("Peep item of que = " + que.Peek());
                     WriteLine("Enqueue item of que = " + que.Dequeue());
                 }
-
+                //copy queue
+                Queue copyQue = (Queue)que.Clone();
                 que.Clear(); //complete que deleted;
             }
             queueCollection();
@@ -237,7 +240,7 @@ namespace Basics.OOPS
             void SortedListColl()
             {
                 SortedList sortedlist = new SortedList() { { "Name", "Montu" }, { "name", "montu" }, { "age", 23 } };
-
+                sortedlist.Add("city", "Sonipat");
                 WriteLine("sorted list collection");
                 //sortedlist.Add("email", "Montukharb868@gmail.com");
                 foreach (DictionaryEntry item in sortedlist)
@@ -246,7 +249,7 @@ namespace Basics.OOPS
                 }
 
                 //all operation same hai hashtable ke jaise but sorted order maintain karta hai or index find for example
-                WriteLine(Environment.NewLine+"Index of name = " + sortedlist.IndexOfKey("name"));
+                WriteLine(Environment.NewLine + "Index of name = " + sortedlist.IndexOfKey("name"));
                 WriteLine(sortedlist.GetByIndex(2));
             }
             SortedListColl();
@@ -262,7 +265,7 @@ namespace Basics.OOPS
                 //output false false false false false
 
                 //2.bool array se
-                bool[] bollarr = new bool[] {false,true,false };
+                bool[] bollarr = new bool[] { false, true, false };
                 BitArray bitArray1 = new BitArray(bollarr);
                 //output same copy ho zata hai bool array se
 
@@ -294,15 +297,16 @@ namespace Basics.OOPS
             }
             BitArrayCollection();
 
-            
+            //har object ka hash code hota hai jo uske data ke basis par generate hota hai,
             WriteLine(arrayList.GetHashCode()); //hash code generate karta hai arraylist ke liye but ye unique nahi hota hai same data ke liye same hash code generate hota hai isliye hash code ko unique identifier ke roop me use nahi karna chahiye
 
-            HashCode hashcode = new HashCode();
+            //HashCode hashcode = new HashCode();
             int a = 10;
             string b = "Montu";
-
-            hashcode.Add(a); hashcode.Add(b);
-            WriteLine("hashcode = " + hashcode.ToHashCode());
+            WriteLine("string B hashcode = " + b.GetHashCode());
+            WriteLine("Integer A hashcode = " + a.GetHashCode());
+            //hashcode.Add(a); hashcode.Add(b);
+            //WriteLine("hashcode = " + hashcode.ToHashCode());
 
         }
 
@@ -310,101 +314,490 @@ namespace Basics.OOPS
         internal void GenericCollections()
         {
 
+            //NameSpace = System.Collections.Generic
             /*
-             Hash set eak collection hai jo unique elements ko store karta hai. Ye unordered hota hai aur fast lookup provide karta hai. HashSet me duplicate values allowed nahi hoti hain.
-            uses - jab unique data store karna ho, jaise user IDs, email addresses, etc. HashSet me order ki tension nahi hoti, isliye ye fast hota hai jab aapko data ko search karna ho ya check karna ho ki koi term exist karta hai ya nahi.
-            Example:- aadhar number, pan card number, voter id number, etc. in real life unique data store karne ke liye use hota hai.
+             1.List
+             2.Dictionary
+             3.Queue
+             4.Stack
+             5.HashSet
+             6.LinkedList
+             7.SortedSet
+             8.SortedDictionary
+             9.SortedList
+
+            Ye direct use nahi hote, but base hote hain:
+            IEnumerable<T>
+            ICollection<T>
+            IList<T>
+            IDictionary<TKey, TValue>
 
              */
 
+            void ListCollection()
+            {
+                /*
+                 list eak generic collection hai jo dynamically resizable array ki tarah kaam karta hai. Ye type safe hota hai, matlab aap sirf ek specific type ke data ko store kar sakte hain. List me aapko size define karne ki zarurat nahi hoti, ye automatically apne size ko adjust kar leta hai jab aap data add ya remove karte hain.
+                 */
+                List<int> numList = new List<int>() { 1970, 230, 350, 21, 430, 36, 871, 645, 952, 20, 36 };
 
+                numList.Add(698); //add single item
+                if (numList.Count > 0)
+                {
+                    numList.Remove(20); //remove specific item
+                    numList.RemoveAt(2); //remove item at specific index
+                }
+
+
+                foreach (int i in numList)
+                {
+                    Write(i + " ");
+                }
+                WriteLine();
+                numList.Sort(); //sort list in ascending order
+                if (numList.Count > 0)
+                {
+                    var countRemovedItems = numList.RemoveAll(x => x < 100); //remove all items less than 100 and return count of removed items
+                    WriteLine("Removed items count = " + countRemovedItems);
+                }
+
+                if (numList.Count > 0)
+                {
+                    numList.RemoveRange(3, 4); //range of index se delete karta hai 3 se start hoke 4 item delete karega
+                }
+                foreach (int i in numList)
+                {
+                    Write(i + " ");
+                }
+                WriteLine(numList.Contains(36) ? "List contains 36" : "List does not contain 36");
+                WriteLine("Index of 36 = " + numList.IndexOf(36)); //index of specific item
+                numList.Insert(2, 999); //insert item at specific index
+                numList.InsertRange(4, new int[] { 111, 222, 333 }); //insert range of items at specific index,list ke index 4 se start hoke 111,222,333 insert karega.
+                numList.Reverse(); //reverse list order.
+
+                var item = numList.Find(x => x > 250); //find first item that matches the condition
+                WriteLine("First item greater than 250 = " + item);
+
+                var allItems = numList.FindAll(x => x > 350); //find all items that matches the condition
+                WriteLine("All items greater than 350 = " + string.Join(", ", allItems));
+
+                //object list
+                List<StudentList> listObj = new List<StudentList>()
+                {
+                  new StudentList(){ Id = 1, Name = "Montu", Age = 23 },
+                  new StudentList(){ Id = 2, Name = "Sachin", Age = 21 },
+                  new StudentList(){ Id = 3, Name = "vishal", Age = 23 },
+                      new StudentList(){ Id = 4, Name = "Konki", Age = 22 }
+
+                }
+                    ;
+
+                listObj.Add(new StudentList { Id = 5, Name = "Tonki", Age = 23 });
+
+                //print listObj
+                foreach (StudentList sl in listObj)
+                {
+                    WriteLine("id:" + sl.Id + " name:" + sl.Name + " age:" + sl.Age);
+                }
+
+                WriteLine("Total students = " + listObj.Count());
+                listObj.Clear();
+
+                //Note: Size pata ho to capacity set karo avoid unnecessary resizing of list.
+
+            }
+            ListCollection();
+
+            void DictionaryCollection()
+            {
+                /*
+                 Dictionary eak generic collection hai jo key-value pairs ko store karta hai. Ye type safe hota hai, matlab aap sirf ek specific type ke key aur value ko store kar sakte hain. Dictionary me aapko size define karne ki zarurat nahi hoti, ye automatically apne size ko adjust kar leta hai jab aap data add ya remove karte hain.
+                 */
+                Dictionary<int, string> dict = new Dictionary<int, string>() { { 1, "Montu" }, { 2, "Sachin" }, { 3, "Vishal" } };
+                dict.Add(4, "Konki");
+                dict[5] = "Tonki"; //another way to add item in dictionary
+                if (dict.ContainsKey(2))
+                {
+                    WriteLine("Key 2 exists in dictionary with value = " + dict[2]);
+                }
+                else
+                {
+                    WriteLine("Key 2 does not exist in dictionary");
+                }
+                foreach (var kvp in dict)
+                {
+                    WriteLine("Key: " + kvp.Key + " Value: " + kvp.Value);
+                }
+                dict.Remove(3); //remove item by key
+                WriteLine("After removing key 3");
+                foreach (var kvp in dict)
+                {
+                    WriteLine("Key: " + kvp.Key + " Value: " + kvp.Value);
+                }
+                WriteLine(dict[1]); // access value by key
+                WriteLine("Total items in dictionary = " + dict.Count);
+
+                //safeaccess
+                if (dict.ContainsKey(2))
+                {
+                    WriteLine("item present in index 2 = " + dict[2]);
+                }
+                //try get value method eak safe way hai value access karne ka without throwing exception if key not found
+                if (dict.TryGetValue(3, out var value))
+                {
+                    WriteLine("item present in index 3 = " + value);
+                }
+                else
+                {
+                    WriteLine("Key 3 not found in dictionary");
+                }
+                //update value using key
+                if (dict.ContainsKey(4))
+                {
+                    dict[4] = "Updated Konki";
+                    WriteLine("Updated value for key 4 = " + dict[4]);
+                }
+
+                //Dictionary with object;
+                Dictionary<int, StudentList> data = new Dictionary<int, StudentList>()
+                {
+                    {1, new StudentList { Id = 1, Name = "Montu" }},
+                    {2, new StudentList { Id = 2, Name = "Rahul" }}
+                };
+
+                //display dictionary with object
+                foreach (var kvp in data)
+                {
+                    WriteLine("Key: " + kvp.Key + " Name = " + kvp.Value.Name);
+                }
+
+            }
+            DictionaryCollection();
+
+            void QueueCollection()
+            {
+                /*
+                 Queue eak generic collection hai jo first-in-first-out (FIFO) principle par kaam karta hai. Isme aap data ko enqueue karte hain (add karte hain) rear se, aur dequeue karte hain (remove karte hain) front se. Queue me aapko size define karne ki zarurat nahi hoti, ye automatically apne size ko adjust kar leta hai jab aap data add ya remove karte hain.
+                 */
+                Queue<string> queue = new Queue<string>(new string[] { "Montu", "Sachin", "Vishal" });
+                queue.Enqueue("Konki");
+                queue.Enqueue("Tonki");
+                queue.Enqueue("Rahul");
+
+                WriteLine("Queue collection");
+
+                foreach (var item in queue)
+                {
+                    WriteLine(item);
+                }
+                if (queue.Count > 0)
+                {
+                    WriteLine("Dequeue item = " + queue.Dequeue()); //remove front item
+                    WriteLine("Peek item = " + queue.Peek()); //view front item without removing
+                }
+                if (queue.Count > 0)
+                {
+                    queue.Dequeue(); //remove front item safely without throwing exception
+                }
+
+                //queue with object
+                Queue<StudentList> studentQueue = new Queue<StudentList>();
+                studentQueue.Enqueue(new StudentList { Id = 1, Name = "Montu", Age = 23 });
+                studentQueue.Enqueue(new StudentList { Id = 2, Name = "Sachin", Age = 21 });
+
+                //display queue with object
+                foreach (var student in studentQueue)
+                {
+                    WriteLine("Id: " + student.Id + " Name: " + student.Name + " Age: " + student.Age);
+                }
+                //dequeue with object
+                if (studentQueue.Count > 0)
+                {
+                    var dequeuedStudent = studentQueue.Dequeue();
+                    WriteLine("Dequeued Student - Id: " + dequeuedStudent.Id + " Name: " + dequeuedStudent.Name + " Age: " + dequeuedStudent.Age);
+                }
+                bool containsRahul = queue.Contains("Rahul"); //check if item exists in queue
+                WriteLine("Queue contains 'Rahul' = " + containsRahul);
+                StudentList sq = new StudentList()
+                {
+                    Id = 3,
+                    Name = "Vishal",
+                    Age = 22
+                };
+                studentQueue.Enqueue(sq);
+                sq.Name = "Updated Vishal"; //reference type ke case me queue me update ho jata hai kyuki reference type ke case me memory me same location point karta hai
+                foreach (var student in studentQueue)
+                {
+                    WriteLine("Id: " + student.Id + " Name: " + student.Name + " Age: " + student.Age);
+                }
+                if (queue.TryDequeue(out var result)) //safe way to dequeue without throwing exception if queue is empty
+                {
+                    WriteLine("Dequeued item = " + result);
+                }
+                else
+                {
+                    WriteLine("Queue is empty, cannot dequeue");
+                }
+
+
+                queue.Clear(); //clear all items from queue.
+
+            }
+            QueueCollection();
+
+            void stackCollection()
+            {
+                /*
+                 Stack eak generic collection hai jo last-in-first-out (LIFO) principle par kaam karta hai. Isme aap data ko push karte hain (add karte hain) top par, aur pop karte hain (remove karte hain) top se. Stack me aapko size define karne ki zarurat nahi hoti, ye automatically apne size ko adjust kar leta hai jab aap data add ya remove karte hain.
+                 */
+                Stack<string> stack = new Stack<string>(new string[] { "Montu", "Sachin", "Vishal" });
+                stack.Push("Konki");
+                stack.Push("Tonki");
+                stack.Push("Rahul");
+                WriteLine("Stack collection");
+                foreach (var item in stack)
+                {
+                    WriteLine(item);
+                }
+                if (stack.Count > 0)
+                {
+                    WriteLine("Pop item = " + stack.Pop()); //remove top item
+                    WriteLine("Peek item = " + stack.Peek()); //view top item without removing
+                }
+                if (stack.Count > 0)
+                {
+                    stack.Pop(); //remove top item safely without throwing exception
+                }
+                //stack with object
+                Stack<StudentList> studentStack = new Stack<StudentList>();
+                studentStack.Push(new StudentList { Id = 1, Name = "Montu", Age = 23 });
+                studentStack.Push(new StudentList { Id = 2, Name = "Sachin", Age = 21 });
+                //display stack with object
+                foreach (var student in studentStack)
+                {
+                    WriteLine("Id: " + student.Id + " Name: " + student.Name + " Age: " + student.Age);
+                }
+                //pop with object
+                if (studentStack.Count > 0)
+                {
+                    var poppedStudent = studentStack.Pop();
+                    WriteLine("Popped Student - Id: " + poppedStudent.Id + " Name: " + poppedStudent.Name + " Age: " + poppedStudent.Age);
+                }
+                bool containsRahul = stack.Contains("Rahul"); //check if item exists in stack
+                WriteLine("Stack contains 'Rahul' = " + containsRahul);
+                var arr = stack.ToArray();
+                foreach (var item in arr)
+                {
+                    Write(item + " ");
+                }
+                WriteLine();
+
+                if (stack.TryPop(out var poppedItem))
+                {
+                    WriteLine("poped item = " + poppedItem);
+                }
+                if (stack.TryPeek(out var value))
+                {
+                    Console.WriteLine("Peek stack item = " + value);
+                }
+
+                stack.TrimExcess(); // stack ke ander jo extra reserved capacity hai ausko hata/release kar deta hai.
+
+
+
+
+                stack.Clear(); //clear all items from stack.
+            }
+            stackCollection();
+            void HashSetCollection()
+            {
+                /*
+          Hash set eak collection hai jo unique elements ko store karta hai. Ye unordered hota hai aur fast lookup provide karta hai. HashSet me duplicate values allowed nahi hoti hain.
+         uses - jab unique data store karna ho, jaise user IDs, email addresses, etc. HashSet me order ki tension nahi hoti, isliye ye fast hota hai jab aapko data ko search karna ho ya check karna ho ki koi term exist karta hai ya nahi.
+         Example:- aadhar number, pan card number, voter id number, etc. in real life unique data store karne ke liye use hota hai.
+          */
+                HashSet<int> hashset = new HashSet<int>() { 10, 20, 30, 40, 40 };
+                //can't add 40 in second time because its duplicate of 40 and not throw error return bool statement true unique false duplicate
+                bool res = hashset.Add(50);
+                WriteLine("Result unique and duplicate = " + res);
+                res = hashset.Add(50);
+                WriteLine("Result unique and duplicate = " + res);
+
+                //diplay all set
+                foreach (int i in hashset)
+                {
+                    Write(i + " ");
+                }
+                WriteLine();
+                WriteLine("Contains check 20 = " + hashset.Contains<int>(20));
+
+                if (hashset.Contains<int>(30))
+                {
+                    WriteLine("Removed item = " + hashset.Remove(30));
+                    //return bool True/False.
+
+                }
+                WriteLine("Total set = " + hashset.Count());
+
+                HashSet<int> set2 = new HashSet<int>() { 50, 20, 60, 80, 100 };
+
+                //Dono sets ko combine kar do (duplicate hata ke)
+                hashset.UnionWith(set2); //unionWith original hashset me merge kare ga
+                                         //union, unionBy = linQ ka method hai
+
+                foreach (var i in hashset)
+                {
+                    Write(i + " ");
+                }
+                WriteLine();
+
+                //Sirf common elements rakho jo dono me match ho
+                WriteLine("Intersection set");
+                hashset.IntersectWith(set2);
+                foreach (var i in hashset)
+                {
+                    Write(i + " ");
+                }
+                WriteLine();
+
+                //set1 me se wo elements hata do jo set2 me ha
+                WriteLine("After Except with");
+                hashset.ExceptWith(new HashSet<int>() { 1, 2, 3, 4, 100 });
+                foreach (var i2 in hashset)
+                {
+                    if (hashset.Count == 0)
+                    {
+                        WriteLine("Empty hashset");
+                        return;
+                    }
+                    Write(i2 + " ");
+                }
+                WriteLine();
+                var set1 = new HashSet<int> { 1, 2, 3 };
+                var set12 = new HashSet<int> { 3, 4, 5 };
+
+                //dono me jo common nahi hai sirf wo rakho.
+                set1.SymmetricExceptWith(set12);
+                foreach (var i in set1)
+                {
+                    Write(i + " ");
+
+                }
+                //issubsetof kya seta ka sabhi elements setb me hai
+                HashSet<int> seta = new HashSet<int> { 1, 2 };
+                HashSet<int> setb = new HashSet<int> { 1, 2, 3 };
+
+                WriteLine(seta.IsSubsetOf(setb)); //true or false.
+
+
+                //IsSupersetOf()
+                //Kya setaa me setbb ke sab elements hai?
+
+                HashSet<int> setaa = new HashSet<int> { 1, 2, 3 };
+                HashSet<int> setbb = new HashSet<int> { 1, 2 };
+
+                WriteLine("IsSupersetOf = " + setaa.IsSupersetOf(setbb));
+
+                //overlaps
+                //Kya dono me at least ek element common hai ?
+                WriteLine("Overlaps = " + setaa.Overlaps(setbb));
+
+
+                HashSet<int> seta1 = new HashSet<int> { 1, 2, 3 };
+                HashSet<int> seta2 = new HashSet<int> { 3, 2, 1 };
+
+                WriteLine("SetEquals = " + set1.SetEquals(set2));
+
+            }
+            HashSetCollection();
+
+            void LinkedListCollection()
+            {
+                /*
+                 👉 LinkedList ek collection hai jisme:
+
+                  ✔ Data nodes me store hota hai
+                  ✔ Har node ke paas:
+                  
+                  Value
+                  Next pointer
+                  Previous pointer
+                  
+                  👉 Ye Doubly Linked List hoti hai (C# me)
+                 */
+                LinkedList<int> linkedList = new LinkedList<int>(new int[] { 10, 20, 30, 40, 50 });
+                linkedList.AddFirst(1);
+                linkedList.AddLast(100);
+
+                WriteLine("Linked list");
+                void disp(LinkedList<int> list)
+                {
+                    foreach (int i in list)
+                    {
+                        Write(i + " ");
+                    }
+                    WriteLine();
+                }
+                disp(linkedList);
+                var res = linkedList.Find(40);
+                //find method node return karta hai ausme value next previous pointer hota hai
+                if (res?.Previous != null)
+                {
+                    var s = linkedList.AddBefore(res, 400);
+                    WriteLine("Value added before 40 = " + s.Value);
+                }
+                if (res?.Next != null)
+                {
+                    linkedList.AddAfter(res, 500);
+                }
+                disp(linkedList);
+
+                /*
+                thre are three way to remove linked list element 
+                1. using value return bool
+                2. node void return
+                3. first and last return void
+                */
+                WriteLine("Remove using value return bool only = " + linkedList.Remove(1));
+                linkedList.RemoveFirst();
+                linkedList.RemoveLast();
+                disp(linkedList);
+                WriteLine("Total node = " + linkedList.Count());
+                WriteLine("First node = " + linkedList.First());
+                WriteLine("Last node = " + linkedList.Last());
+
+
+            }
+            LinkedListCollection();
+
+            void SortedSetCollection()
+            {
+                /*
+                 HashSet ka same hai only auto sorting deta hai baki same.
+                 */
+                SortedSet<int> sortedSet = new SortedSet<int>() { 1, 112, 3, 0, 0, -1, -2, -2, 2, 6, 4, 5, 630, 4, 50, 64, 78, 9 };
+
+                void disp(SortedSet<int> set)
+                {
+                    foreach (int i in set)
+                    {
+                        Write(i + " ");
+                    }
+                    WriteLine();
+                }
+                disp(sortedSet);
+            }
+            SortedSetCollection();
+
+            //sortedDictionary bhi dictionary jaise hai bas key sorted hoti hai auto-matic
+            //sortedList me dat index based or sorted by key and key value pair small data access karne ke liya index based access    
+        }
+
+        public class StudentList
+        {
+            public int Id { get; set; }
+            public string? Name { get; set; }
+            public int Age { get; set; }
         }
     }
 }
-
-
-
-
-/*
-
-🧱 1.Collections in .NET(Data store karne ke tools)
-
-👉 Collections ka matlab:
-
-Multiple data items ko store + manage karna
-
-Jaise array hota hai, but collections zyada powerful aur flexible hote hain.
-
-📦 Main Collection Types
-1. System.Collections (Non-Generic ❌)
-
-👉 Old style collections
-
-ArrayList
-Hashtable
-
-❌ Problem:
-
-Type safety nahi (object store karta hai)
-Performance slow
-
-👉 Example:
-
-ArrayList list = new ArrayList();
-list.Add(10);
-list.Add("Hello"); // allowed (problem!)
-2.System.Collections.Generic(Best ✔️)
-
-👉 MOST IMPORTANT(Exam + Interview ⭐)
-
-List<T>
-Dictionary<TKey, TValue>
-Queue<T>
-Stack < T >
-
-✔️ Advantages:
-
-Type safe
-Fast
-Modern
-
-👉 Example:
-
-List<int> numbers = new List<int>();
-numbers.Add(10);
-numbers.Add(20);
-
-3.System.Collections.Concurrent(Thread - safe 🔒)
-
-👉 Multi - threading me use hota hai
-
-ConcurrentDictionary
-ConcurrentQueue
-
-✔️ Jab multiple threads ek hi data access kare
-
-4. System.Collections.Immutable (Read-only 🔐)
-
-👉 Data change nahi hota (safe)
-
-ImmutableList
-
-✔️ Functional programming me useful
-
-5. System.Collections.Frozen (High Performance ⚡)
-
-👉 Read-only + super fast
-
-✔️ Jab data change nahi hota but speed chahiye
-
-6. System.Collections.ObjectModel
-
-👉 Custom collection banane ke liye
-
-7. System.Collections.Specialized
-
-👉 Specialized collections
-
-StringCollection
-NameValueCollection
-    */
