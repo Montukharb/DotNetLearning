@@ -246,6 +246,65 @@ namespace LinQ
                     new Department { Id = 2, DeptName = "HR" }
                 };
             */
+
+            var students = new List<Student1>
+                {
+                    new Student1 { Id = 1, Name = "Montu", DeptId = 1 },
+                    new Student1 { Id = 2, Name = "Vishal", DeptId = 2 }
+                };
+
+            var departments = new List<Department1>
+                {
+                    new Department1 { Id = 1, DeptName = "IT" },
+                    new Department1 { Id = 2, DeptName = "HR" }
+                };
+            var libraryData = new List<Library>() { 
+                    new Library { Id = 1, BookName = "C# in Depth", Author = "Jon Skeet", Year = 2019 },
+                    new Library { Id = 2, BookName = "Clean Code", Author = "Robert C. Martin", Year = 2008 },
+              
+            };
+
+            var combineResult = from stu in students
+                                join dep in departments on stu.DeptId equals dep.Id
+                                join lib in libraryData on stu.Id equals lib.Id 
+                                select new
+                                {
+                                    Id = stu.Id,
+                                    Name = stu.Name,
+                                    DeptName = dep.DeptName,
+                                    BookName = lib.BookName,
+                                    Author = lib.Author,
+                                    year = lib.Year
+,
+                                };
+
+            foreach(var item in combineResult)
+            {
+                WriteLine("Id: " + item.Id + ", Name: " + item.Name + ", DeptName: " + item.DeptName + ", BookName: " + item.BookName + ", Author: " + item.Author + ", Year: " + item.year);
+            }
         }
+
+        //partitioning data ko partition karna using linq method skip, take, skipwhile, takewhile etc
     }
+
+    class Student1
+    {
+        public int Id;
+        public string? Name;
+        public int DeptId;
+    }
+
+    class Department1
+    {
+        public int Id;
+        public string? DeptName;
+    };
+    class Library
+    {
+        public int Id;
+        public string? BookName;
+        public string? Author;
+        public int Year;
+    }
+
 }
