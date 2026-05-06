@@ -258,15 +258,15 @@ namespace LinQ
                     new Department1 { Id = 1, DeptName = "IT" },
                     new Department1 { Id = 2, DeptName = "HR" }
                 };
-            var libraryData = new List<Library>() { 
+            var libraryData = new List<Library>() {
                     new Library { Id = 1, BookName = "C# in Depth", Author = "Jon Skeet", Year = 2019 },
                     new Library { Id = 2, BookName = "Clean Code", Author = "Robert C. Martin", Year = 2008 },
-              
+
             };
 
             var combineResult = from stu in students
                                 join dep in departments on stu.DeptId equals dep.Id
-                                join lib in libraryData on stu.Id equals lib.Id 
+                                join lib in libraryData on stu.Id equals lib.Id
                                 select new
                                 {
                                     Id = stu.Id,
@@ -278,7 +278,7 @@ namespace LinQ
 ,
                                 };
 
-            foreach(var item in combineResult)
+            foreach (var item in combineResult)
             {
                 WriteLine("Id: " + item.Id + ", Name: " + item.Name + ", DeptName: " + item.DeptName + ", BookName: " + item.BookName + ", Author: " + item.Author + ", Year: " + item.year);
             }
