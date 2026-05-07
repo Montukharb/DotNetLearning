@@ -791,62 +791,7 @@ namespace Basics.OOPS
             //sortedDictionary bhi dictionary jaise hai bas key sorted hoti hai auto-matic
             //sortedList me dat index based or sorted by key and key value pair small data access karne ke liya index based access    
 
-           void IEnummerableMethod()
-            {
-                //IEnumerable povide only iteration no add remove method
-                IEnumerable ienum = new ArrayList();
-                IEnumerable ienum2 = new List<int>() { 10,20,30,40,50};
-
-                WriteLine("IEnumerable Data");
-                foreach (var i in ienum2)
-                {
-                    Write(i + " ");
-                }
-                WriteLine();
-
-                IEnumerable<int> ienum3 = new List<int>() { 1, 2, 3, 1, 6, 4, 8, 8 };
-
-                 foreach (var i in ienum3)
-                {
-                    Write(i + " ");
-                }
-                WriteLine();
-            }
-
-            IEnummerableMethod();
-
-
-            void IEnumerableCollectionMethod()
-            {
-                //isme cout add remove clear method use kar sakte hai 
-                ICollection<string> names = new List<string>();
-
-                names.Add("Montu");
-
-                Console.WriteLine("Name item = "+names.Count);
-            }
-
-            IEnumerableCollectionMethod();
-
-            void IList()
-            {
-                IList<int> nums = new List<int>();
-
-                nums.Add(10);
-
-                Console.WriteLine("Ilist item = "+nums[0]);
-            }
-
-            IList();
-
-            void ICollectionMehtod()
-            {
-                //ICollection<string, string> Door = new Dictionary<string, string>() { };
-            }
-
-            ICollectionMehtod();
         }
-
         public class StudentList
         {
             public int Id { get; set; }
@@ -854,4 +799,5 @@ namespace Basics.OOPS
             public int Age { get; set; }
         }
     }
+
 }

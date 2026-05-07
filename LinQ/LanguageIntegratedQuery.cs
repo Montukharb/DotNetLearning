@@ -10,6 +10,143 @@ namespace LinQ
     {
         internal LanguageIntegratedQuery()
         {
+
+            void IEnummerableMethod()
+            {
+                //IEnumerable povide only iteration no add remove method
+                IEnumerable ienum = new ArrayList();
+                IEnumerable ienum2 = new List<int>() { 10, 20, 30, 40, 50 };
+
+                WriteLine("IEnumerable Data");
+                foreach (var i in ienum2)
+                {
+                    Write(i + " ");
+                }
+
+                WriteLine();
+
+                IEnumerable<int> ienum3 = new List<int>() { 1, 2, 3, 1, 6, 4, 8, 8 };
+
+                foreach (var i in ienum3)
+                {
+                    Write(i + " ");
+                }
+                WriteLine();
+            }
+
+            IEnummerableMethod();
+
+
+            void IEnumerableCollectionMethod()
+            {
+                //isme cout add remove clear method use kar sakte hai 
+                ICollection<string> names = new List<string>();
+
+                names.Add("Montu");
+
+                Console.WriteLine("Name item = " + names.Count);
+            }
+
+            IEnumerableCollectionMethod();
+
+            void IList()
+            {
+                IList<int> nums = new List<int>();
+
+                nums.Add(10);
+                Console.WriteLine("Ilist item = " + nums[0]);
+            }
+
+            IList();
+
+            void ICollectionMehtod()
+            {
+                //ICollection<string, string> Door = new Dictionary<string, string>() { };
+            }
+
+            ICollectionMehtod();
+
+            /* 
+             IQueryable<T> is an interface that represents a queryable data source and allows LINQ queries to be translated into another query language such as SQL.
+            IQueryable eak interface hai jo linQ query ko sql query ma convert kar sakta hai or database par execute karwa sakta hai
+            IQueryable tell the database Filtering tum karo pura data muje mat bhejo 
+
+            var adults = users.Where(x => x.Age > 18); //LinQ query ye direct memory me filter nahi kare ga Sql Generate kare ga example
+
+            SELECT * 
+            FROM users
+            WHERE AGE > 18
+
+
+            Sirf Selected Method SQL banati hai
+             Where
+             Select
+             OrderBy
+             Skip
+             Take
+             Any
+             Count
+             GroupBy
+
+
+            context.Users   //Select * from user = ye query database me chale gi after to list data ram me aye ga
+           .ToList()  // After ToList() data ab Ram ma aye ga further operation ram me hoge same work as a AsEnumerable()
+           .Where(x => x.Age > 18)
+
+
+            .AsEnumerable()  IQueryable() ko IEnumerable() me convert kar de ga sql translation stop Ram Memory ma execute hoga
+
+
+             */
+            void IQueryAbleMannualy()
+            {
+
+                //create IQueryable mannually using list
+                WriteLine("IQueryAble Mannual Create");
+                List<int> nums = new List<int>() { 10, 20, 30, 40, 50, 60 };
+
+                IQueryable<int> users = nums.AsQueryable<int>();  //data iQuerable me to convert ho gaya laking query generate nahi hogi kyui data already memory me hai;
+
+                foreach (var user in users)
+                {
+                    Write(user + " ");
+                }
+                WriteLine();
+            }
+
+            IQueryAbleMannualy();
+
+            /*
+             Que = What is Defered Execution ?
+             Ans = Query abhi execute nahi hoti sirf query prepare/store hoti hai Excecution bad me hota hai.
+
+            Example = nums.where(x => x.age>18); Not execute here only prepare store isi ko defered Execution bolte hai
+
+            Execute hogi First(), Tolist(),Count(),foreach() kisi iteration par etc;
+            */
+
+            /*
+             Que = What is ImmediateExecution ? 
+             Ans = Query Filtering Immediate Execute hoti hai example 
+             
+            var result = nums.Where(x => x > 2).ToList();
+             */
+
+            /*
+            Que = What is Expression Tree? 
+            Ans = Code ka Data Structure and tree representation
+            Example :-
+            x => x.Age > 18
+            Normal lag raha hai
+            
+            BUT IQueryable me:
+            ye directly run nahi hota
+            
+            Tree structure ban zata hai taki framework analyze kar sake sql generate kar sakte 
+            Final Exp :- Blueprint of Code.
+
+             */
+
             WriteLine("Language Integrated Query");
             FilteringData();
             ProjectionData();
@@ -50,6 +187,45 @@ namespace LinQ
 
             var filterDataUType = arrayList.OfType<string>(); //filtering only string data from arrayList
             displayList(filterDataUType, "Filtered Data using ofType");
+
+            //Index Method introduce in Net 9 version
+            //Index method convert any data into index based data like i.index and i.item for example;
+
+            
+            var indexBased = list.Index<int>();
+
+            WriteLine("Index based Method");
+            foreach(var i in indexBased)
+            {
+                WriteLine($"Index: {i.Index} value: {i.Item}");
+            }
+
+            var skippeditem = list.Skip(10);
+            Write("After Skipped 10 items remainning items = ");
+            foreach(var i in skippeditem)
+            {
+                Write(i + ",");
+            }
+            WriteLine();
+
+            //skipwhile() jab tak condition true hai skip karta rahe ga if condtion break stop skipping never restart next item
+            //for eaxample list = [1,2,3,4,1,2,3,5]
+            List<int> Llist = new() { 1, 2, 3, 4, 1, 2, 3, 5 };
+
+            var skipWhileItem = Llist.SkipWhile(x => x < 3);  //output 3,4,1,2,3,5  skip only 1,2 because if condition break never restart
+
+            Write("After SkipWhile x < 3 items remainning items = ");
+            foreach (var i in skipWhileItem)
+            {
+                Write(i + ",");
+            }
+            WriteLine();
+
+            IEnumerable<int> skipLast = Llist.SkipLast(2); //skip 2 item start from end of list
+            Write("After SkipLast remainning items = " + string.Join(",",skipLast));
+            
+
+
         }
 
         //projection data change but not the original data only the output of the query is changed
@@ -57,6 +233,8 @@ namespace LinQ
         internal void ProjectionData()
         {
             var projectedData = list.Select(x => x * 2); //projecting data by multiplying each element by 2
+
+
             displayList(projectedData, "Projected Data using select");
 
             //chaine system
@@ -284,7 +462,7 @@ namespace LinQ
             }
         }
 
-        //partitioning data ko partition karna using linq method skip, take, skipwhile, takewhile etc
+        //partitioning = data ko partition karna using linq method skip, take, skipwhile, takewhile etc
     }
 
     class Student1
