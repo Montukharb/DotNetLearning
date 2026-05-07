@@ -42,6 +42,8 @@ namespace Basics.OOPS
             //convert byte to text
             sb.Append(Encoding.UTF8.GetString(bytedata));
             WriteLine(sb);
+            sb.Remove(5, 5);
+            WriteLine("After removed method string = " + sb);
 
         }
     }

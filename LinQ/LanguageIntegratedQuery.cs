@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -157,6 +158,7 @@ namespace LinQ
             Conversion();
             Grouping();
             Joining();
+            TakeMethod();
         }
 
         //global list for operations
@@ -191,18 +193,18 @@ namespace LinQ
             //Index Method introduce in Net 9 version
             //Index method convert any data into index based data like i.index and i.item for example;
 
-            
+
             var indexBased = list.Index<int>();
 
             WriteLine("Index based Method");
-            foreach(var i in indexBased)
+            foreach (var i in indexBased)
             {
                 WriteLine($"Index: {i.Index} value: {i.Item}");
             }
 
             var skippeditem = list.Skip(10);
             Write("After Skipped 10 items remainning items = ");
-            foreach(var i in skippeditem)
+            foreach (var i in skippeditem)
             {
                 Write(i + ",");
             }
@@ -222,10 +224,18 @@ namespace LinQ
             WriteLine();
 
             IEnumerable<int> skipLast = Llist.SkipLast(2); //skip 2 item start from end of list
-            Write("After SkipLast remainning items = " + string.Join(",",skipLast));
-            
+            Write("After SkipLast remainning items = " + string.Join(",", skipLast));
 
+            Llist.Sort();
+            Llist.Reverse();
+            WriteLine("after reversed = " +  string.Join(",", Llist));
+            //Llist.Reverse(1,4) starting index,or count ka based par reverse kare ga only
 
+            /*
+             2 Reverse method hai eak linq ka eak list ka ye collection ka ye decide hota hai compile time pa kon sa apply hoga method dono ka same hai apply karne ka 
+            source ienumerable hai to linq ka apply hoga new result return kare ga collection hai to original ma change kare ga 
+            Note: agar original ma change nahi karna to list.AsEnumerable().Reverse() use kar lo ye new result return kare ga
+             */
         }
 
         //projection data change but not the original data only the output of the query is changed
@@ -276,6 +286,13 @@ namespace LinQ
 
             var sortedDataMultipleCriteriaDescending = list.OrderBy(x => x % 2).ThenByDescending(x => x); //sorting data first by even and odd numbers, then sorting each group in descending order
             displayList(sortedDataMultipleCriteriaDescending, "Sorted Data using multiple criteria sorting in descending order");
+
+            int[] arr = { 4, 9, 9, 2, 1, 30, 4, 6, 2, 3, };
+            //order and orderDescending new linQ method Both are working only primitive data types not working in objects. For Example
+            var sortedArr = arr.Order<int>(); //we can also set generic.
+            var sortedArrDescending = arr.OrderDescending<int>(); //also set generic or not depend your requirement.
+            WriteLine("sortedArr = " + string.Join(",", sortedArr));
+            WriteLine("sortedArrDescending = " + string.Join(",", sortedArrDescending));
         }
 
         //Elements (Single value nikalna) using linq methods like first, firstordefault, single, singleordefault, last, lastordefault etc
@@ -442,6 +459,30 @@ namespace LinQ
 
             };
 
+            var bankofindia = new List<BankOfIndia>()
+            {
+                new BankOfIndia{ BankId = 1, Year = 2001, AccHolderName = "Sachin",Balance = 985200},
+                new BankOfIndia{ BankId = 2, Year = 2002, AccHolderName = "Ashish",Balance = 20360},
+                new BankOfIndia{ BankId = 3, Year = 2003, AccHolderName = "Vishal",Balance = 20660},
+                new BankOfIndia{ BankId = 4, Year = 2003, AccHolderName = "Deepesh",Balance = 20740},
+                new BankOfIndia{ BankId = 5, Year = 2002, AccHolderName = "Montu",Balance = 1200},
+                new BankOfIndia{ BankId = 6, Year = 2002, AccHolderName = "Kharb",Balance = 2200},
+                
+            };
+
+            var grouped = bankofindia.GroupBy<BankOfIndia,int>(x=> x.Year);
+
+            foreach(var group in grouped)
+            {
+                WriteLine("Grouped Name = " + group.Key);
+                
+                foreach(var item in group)
+                {
+                    Write($"BankId: {item.BankId}, AccountHolderName: {item.AccHolderName}, OpenedData: {item.Year}, Balance: {item.Balance}");
+                }
+                WriteLine();
+            }
+
             var combineResult = from stu in students
                                 join dep in departments on stu.DeptId equals dep.Id
                                 join lib in libraryData on stu.Id equals lib.Id
@@ -462,7 +503,20 @@ namespace LinQ
             }
         }
 
-        //partitioning = data ko partition karna using linq method skip, take, skipwhile, takewhile etc
+
+        internal void TakeMethod()
+        {
+            //take = choose first n item pick means starting ke kitna item lene hai
+            List<string> list = new List<string>() { "Toko", "Ponki", "Men", "Donkey", "Men", "Women", "Other" };
+
+            var item = list.Take(3);
+            WriteLine("Take item = " + string.Join(",", item));
+
+            WriteLine("TakeWhile item = " + string.Join(",", list.TakeWhile(x => x != "Men")));
+            WriteLine("TakeLast item = " + string.Join(",", list.TakeLast(2)));
+
+        }
+
     }
 
     class Student1
@@ -483,6 +537,15 @@ namespace LinQ
         public string? BookName;
         public string? Author;
         public int Year;
+    }
+
+    class BankOfIndia
+    {
+        public int BankId;
+        public string? AccHolderName;
+        public int Year;
+        public long Balance;
+
     }
 
 }
