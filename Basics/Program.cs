@@ -376,6 +376,10 @@ namespace Learning.Basics
 
             //collection object
             CollectionsExercise ce = new();
+
+            //Enumerator class object
+            IEnumeratorClass enc = new();
+            enc.EnumeratorMethod();
             
         }
         static void count()

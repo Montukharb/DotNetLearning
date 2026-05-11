@@ -60,12 +60,7 @@ namespace LinQ
 
             IList();
 
-            void ICollectionMehtod()
-            {
-                //ICollection<string, string> Door = new Dictionary<string, string>() { };
-            }
-
-            ICollectionMehtod();
+           
 
             /* 
              IQueryable<T> is an interface that represents a queryable data source and allows LINQ queries to be translated into another query language such as SQL.
@@ -260,7 +255,7 @@ namespace LinQ
                     new List<int>(){7,8,9}
                 };
 
-            var flatList = nestedList.SelectMany(x => x); //flattening the nested list into a single list
+            var flatList = nestedList.SelectMany<List<int>,int>(x => x); //flattening the nested list into a single list
             displayList(flatList, "Flat List using selectMany");
         }
 
@@ -356,13 +351,14 @@ namespace LinQ
         internal void Conversion()
         {
             var toList = list.ToList(); //converts the list to a new list
+            
             displayList(toList, "Converted to List");
             var toArray = list.ToArray(); //converts the list to an array
             displayList(toArray, "Converted to Array");
 
             //key create karte time duplicate key exception throw karege to isliya ya to phele list.Distinct() karna hoga duplicate remove par isse data loss hoga ya fir key ko unique banana hoga jaise yaha par guid use kar rahe hai to unique key milegi.
 
-            var toDictionary = list.ToDictionary(x => System.Guid.NewGuid(), x => x * 2); //converts the list to a dictionary with key as element and value as element multiplied by 2
+            var toDictionary = list.ToDictionary(x => Guid.NewGuid(), x => x * 2); //converts the list to a dictionary with key as element and value as element multiplied by 2
             WriteLine("Converted to Dictionary: ");
             foreach (var item in toDictionary)
             {
@@ -396,7 +392,8 @@ namespace LinQ
             var list1 = new List<int>() { 1, 2, 3, 4, 5, 6, 7 };
             var list2 = new List<int>() { 4, 5, 6, 7, 8 };
             var list3 = new List<int>() { 4, 5, 8, 9, 10, 11 };
-            var joinedData = list1.Join(list2, x => x, y => y, (x, y) => new { x, y }).Join(list3, xy => xy.y, c => c, (xy, c) => new { c }); //joining two lists based on common elements
+            var joinedData = list1.Join(list2, x => x, y => y, (x, y) => new { x, y }).Join(list3, xy => xy.y, c => c, (xy, c) => new { c }); //joining two lists based on common elements 
+            //Fluent Syntax
             displayList(joinedData, "Joined Data using join");
             string s = "hello world";
             //spilt in character array linke h e l l o   w o r l d
@@ -483,6 +480,7 @@ namespace LinQ
                 WriteLine();
             }
 
+            //Query Syntax
             var combineResult = from stu in students
                                 join dep in departments on stu.DeptId equals dep.Id
                                 join lib in libraryData on stu.Id equals lib.Id
@@ -496,7 +494,7 @@ namespace LinQ
                                     year = lib.Year
 ,
                                 };
-
+            //Nested Query in Query syntax Practice
             foreach (var item in combineResult)
             {
                 WriteLine("Id: " + item.Id + ", Name: " + item.Name + ", DeptName: " + item.DeptName + ", BookName: " + item.BookName + ", Author: " + item.Author + ", Year: " + item.year);
