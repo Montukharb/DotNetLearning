@@ -70,7 +70,7 @@ namespace LinQ
             }
 
             //left join example left join koi method nahi hai ye groupjoin par hi use hoga 
-            var leftjoinresult= EmpList.GroupJoin(
+            var leftjoinresult = EmpList.GroupJoin(
                 DepList,
                 emp => emp.Id,
                 empdep => empdep.DepartmentId,
@@ -81,10 +81,11 @@ namespace LinQ
                     dataCollection
                 }
 
-               ).SelectMany(x=>x.dataCollection.DefaultIfEmpty(),(x,data)=> new {
-               EmployeName = x.employee.Name,
-               email = x.employee.Email,
-               data,
+               ).SelectMany(x => x.dataCollection.DefaultIfEmpty(), (x, data) => new
+               {
+                   EmployeName = x.employee.Name,
+                   email = x.employee.Email,
+                   data,
                });
         }
 
