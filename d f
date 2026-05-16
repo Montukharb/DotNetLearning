@@ -1,0 +1,249 @@
+[33mcommit 052782d77bd5da6809492d8aacdd00ad7b858df7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Sat May 16 12:20:16 2026 +0530
+
+    Project Setup
+
+[33mcommit 8cb8cc17582c04f8b7c319adfd2f8ad051dc75ce[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Sat May 16 12:17:21 2026 +0530
+
+    Project Setup
+
+[33mcommit de37121fc0785bc74ab7d0adb102eabd73d83a68[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Fri May 15 23:41:37 2026 +0530
+
+    Microsoft Entity Framework
+
+[33mcommit ace1f6caf269dd0b89d0a15e46351624b9cb79d3[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Fri May 15 20:39:02 2026 +0530
+
+    ASP.NET Project installation & basic setup
+
+[33mcommit 5ec70986587474b93733836b9833c7fa768b484c[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Mon May 11 15:54:49 2026 +0530
+
+    i-Enumerator and groupjoin and groupleft right join
+
+[33mcommit b15a85c92e47571aef588bb65ecd359f262d5ac4[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Thu May 7 17:38:14 2026 +0530
+
+    Additional Method GroupBy etc
+
+[33mcommit cd62001a677dcac0b6fe99b8d5fcedcd66c80f68[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Thu May 7 13:44:32 2026 +0530
+
+    IEnumerable,Icollection,Ilist,IQueryable,LinQ Method etc
+
+[33mcommit 903eb63d8c3b2e39de9008f6cd1b60dee9085886[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Wed May 6 17:02:03 2026 +0530
+
+    I EnumeraleCollection interface
+
+[33mcommit 187e87aab9e0633a3cdfe375aa35146f4cdfef7d[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Sat May 2 11:21:33 2026 +0530
+
+    Linq join Method using Query syntax
+
+[33mcommit 4383a9553dfe5fcdd1edfd53059a6d8758de7d63[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Sat May 2 03:37:09 2026 +0530
+
+    Language integrated Query LinQ and Most important used Methods
+
+[33mcommit ccd512ff2a87bd8a167c41343f6a6c774da2e94c[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Fri May 1 15:49:55 2026 +0530
+
+    Generic Collection
+
+[33mcommit 7496bee0e955b0462b2c42a2e43959e3f51505c0[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Thu Apr 30 18:35:19 2026 +0530
+
+    old collection
+
+[33mcommit 16e1fd7f84be2b37683435bcb41bc59d98ed6fc9[m
+Author: Montu kharb <121380488+Montukharb@users.noreply.github.com>
+Date:   Thu Apr 30 16:16:15 2026 +0530
+
+    Add GitHub Actions workflow for .NET project
+    
+    This workflow automates the build and test process for a .NET project on push and pull request events to the main branch.
+
+[33mcommit 1584965e47586911b3bb7fb2176d3d1116ec82f8[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Thu Apr 30 15:57:18 2026 +0530
+
+    Old Collection
+
+[33mcommit e68a9fb1fe56400c14f5f001434cca34559942e7[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Wed Apr 29 09:51:53 2026 +0530
+
+    Serialize and Deserialize, JSON Schema Exporter
+
+[33mcommit 80e2104f98274796cd02582c67619b4f0b72dcda[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Tue Apr 28 23:28:38 2026 +0530
+
+    ZipFile, Brotli Compression and Decompression
+
+[33mcommit d2252fd8e4833707b267d65ed568cf01ed6ee533[m
+Merge: 5f62a08 a3c5ff4
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Mon Apr 27 21:06:27 2026 +0530
+
+    Compressing and Decompressing Files using Gzip and ZipArchive Classes
+
+[33mcommit 5f62a0811f2e7d09aa2e9783ec890dcbd10b01bb[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Mon Apr 27 21:03:46 2026 +0530
+
+    Compressing and Decompressing Files using Gzip and ZipArchive Classes
+
+[33mcommit a3c5ff486e6abefb662717f239d9acea29f322bb[m
+Author: Montu kharb <121380488+Montukharb@users.noreply.github.com>
+Date:   Mon Apr 27 12:56:59 2026 +0530
+
+    Create README.md
+
+[33mcommit fd2104efb544afd075315c753191fba07f05bd69[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Mon Apr 27 12:50:13 2026 +0530
+
+    Binary Reader and Writer MemoryStream Operations etc
+
+[33mcommit c32114f3752d4ef0dcc9d02b1a9a98b98b40a140[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Sun Apr 26 23:59:05 2026 +0530
+
+    FileInfo Streams Directory Info
+
+[33mcommit af0fdecb4cc00fbc0e30802e339d7ef46a34ca9e[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Sat Apr 25 16:02:25 2026 +0530
+
+    FileInfo class And its Method
+
+[33mcommit edce186657ad26af2981b33f07a7407c4540fa92[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Sat Apr 25 06:59:16 2026 +0530
+
+    FileInfo
+
+[33mcommit 21cb60fe52b26f1251dbcf9ce30a89a758f03760[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Thu Apr 23 23:47:09 2026 +0530
+
+    file Management File Class and Text Stream Writer or Reader
+
+[33mcommit 6dd13521de2054059ed2e81cb9ee0d232ea653bc[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Sat Apr 18 08:31:50 2026 +0530
+
+    Collection and string builder etc
+
+[33mcommit 79333532938b763abbaf875bfe265302945aad57[m
+Merge: d0cdbab 77059a2
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Wed Apr 15 16:20:39 2026 +0530
+
+    Class Indexer, Partial Method, Inbuild Delegates & Events, Field & value
+
+[33mcommit d0cdbab9bf9878e46f115ff2d9cd52cfe55f8dbc[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Wed Apr 15 16:17:59 2026 +0530
+
+    Class Indexer, Partial Method, Inbuild Delegates & Events, Field & value
+
+[33mcommit 77059a25f9edd8edcf968ea143b2f786a48605ae[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Wed Apr 15 10:45:38 2026 +0530
+
+    fix some code
+
+[33mcommit f89c13236df7818f935683a86a34bc08512d4d79[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Tue Apr 14 13:08:10 2026 +0530
+
+    yields, tuple, Ienumerable,where
+
+[33mcommit 110ee7855eeb799ad070cb2f2a027fa1d99961ee[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Mon Apr 13 17:18:25 2026 +0530
+
+    In build Delegates and lambda function
+
+[33mcommit 68f5a4c888c1f10c861f49e93bac9f2e017836e3[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Mon Apr 13 16:47:03 2026 +0530
+
+    In build Delegates and lambda function
+
+[33mcommit d62d02e60960afdc6077bf3d9098c4118283d1de[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Sun Apr 12 23:13:41 2026 +0530
+
+    Fix code
+
+[33mcommit 897fa6743ff6556c11894e8f631e63a5495e6a69[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Sun Apr 12 22:49:38 2026 +0530
+
+    Interface
+
+[33mcommit 677d42e40ffc3481ffda88109f59611043fdefd1[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Sat Apr 11 18:31:56 2026 +0530
+
+    interfaces exercise
+
+[33mcommit 9c0fb30fa93fadfae240e7e5aabbf4c51fda0f5d[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Fri Apr 10 17:25:44 2026 +0530
+
+    inheritance,polymorphism,sealed class & methods, abstract class etc
+
+[33mcommit 28d5e91de0c7b0eff7b956c1448b27c4f12bfef7[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Tue Apr 7 20:03:28 2026 +0530
+
+    references and other types practice
+
+[33mcommit bcaba45fad302b3f5d2bb14d73c8bb1cfc1f073e[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Mon Apr 6 07:54:59 2026 +0530
+
+    fix code
+
+[33mcommit 46fcb668aa4a71a6173834fe41accc4b6bb93d35[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Mon Apr 6 07:52:15 2026 +0530
+
+    fix code
+
+[33mcommit 335b371f2240b3e852b521cf28a4bdf1e18b4656[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Mon Apr 6 07:48:13 2026 +0530
+
+    basics learn
+
+[33mcommit 895d59ab27e8f8427c189234d7e10ec9bd51a396[m
+Author: montu kharb <montukharb868@gmail.com>
+Date:   Sun Apr 5 10:42:15 2026 +0530
+
+    namespace and fix issues
+
+[33mcommit f6b40f277eeeda2dcee74b695a3d1fe4e4b1ba21[m
+Author: Montukharb <montukharb868@gmail.com>
+Date:   Fri Apr 3 16:13:16 2026 +0530
+
+    setup initial
