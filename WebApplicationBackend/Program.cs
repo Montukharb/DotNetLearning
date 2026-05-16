@@ -1,5 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
+var appName = builder.Configuration["MySettings:AppName"]; //custom setting access from appsetting.json file
+
+
 // Add services to the container.
 
 builder.Services.AddControllers();
