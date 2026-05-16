@@ -1,6 +1,6 @@
 var builder = WebApplication.CreateBuilder(args);
 
-var appName = builder.Configuration["MySettings:AppName"]; //custom setting access from appsetting.json file (:) colon means nested
+var appName = builder.Configuration["MySettings:AppName"]; //custom setting access from appsetting.json file Colon (:)means nested
 
 
 // Add services to the container.
