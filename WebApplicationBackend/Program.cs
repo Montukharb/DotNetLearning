@@ -1,10 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using WebApplicationBackend.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var appName = builder.Configuration["MySettings:AppName"]; //custom setting access from appsetting.json file Colon (:)means nested
 
 
 // Add services to the container.
-
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
