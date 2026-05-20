@@ -7,6 +7,7 @@ namespace WebApplicationBackend.Entities
         public int Id { get; set; }
         public string StateName { get; set; } = "Center";
 
+        //[ForeignKey("Department")] 
         public int MemberId { get; set; } //Foreign key
         public Member Member { get; set; } //Navigation Property
     }
