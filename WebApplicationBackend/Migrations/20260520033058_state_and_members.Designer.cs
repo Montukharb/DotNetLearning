@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplicationBackend.Context;
 
@@ -11,9 +12,11 @@ using WebApplicationBackend.Context;
 namespace WebApplicationBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260520033058_state_and_members")]
+    partial class state_and_members
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,58 +77,6 @@ namespace WebApplicationBackend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Members");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Age = 54,
-                            Email = "rahul@inc.com",
-                            Gender = "Male",
-                            JoinDate = new DateTime(2004, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberName = "Rahul Gandhi",
-                            Phone = "9876543210"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Age = 82,
-                            Email = "kharge@inc.com",
-                            Gender = "Male",
-                            JoinDate = new DateTime(1969, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberName = "Mallikarjun Kharge",
-                            Phone = "9876543211"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Age = 53,
-                            Email = "priyanka@inc.com",
-                            Gender = "Female",
-                            JoinDate = new DateTime(1999, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberName = "Priyanka Gandhi",
-                            Phone = "9876543212"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Age = 70,
-                            Email = "tharoor@inc.com",
-                            Gender = "Male",
-                            JoinDate = new DateTime(2009, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberName = "Shashi Tharoor",
-                            Phone = "9876543213"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Age = 48,
-                            Email = "pilot@inc.com",
-                            Gender = "Male",
-                            JoinDate = new DateTime(2004, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberName = "Sachin Pilot",
-                            Phone = "9876543214"
-                        });
                 });
 
             modelBuilder.Entity("WebApplicationBackend.Entities.State", b =>
