@@ -50,7 +50,7 @@ namespace Basics.OOPS
                 {
                     throw new Exception("Compressed brotli data not found");
                 }
-                else if (!File.Exists(Path.Combine(path, "BrotliDecompress.br")))
+                else if (File.Exists(Path.Combine(path, "BrotliDecompress.txt")))
                 {
                     throw new Exception("Brotli Decompress data alreay exists");
                 }

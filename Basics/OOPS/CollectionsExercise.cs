@@ -59,11 +59,12 @@ namespace Basics.OOPS
             int i = arrayList.IndexOf("Montu kharb");  //if not found return -1;
             WriteLine("indexof = " + i);
 
-            //arrayList.Insert(2,new string[] {"Rahul Gandhi","Putin" ,"Xi-jimping","vote Chor"});
+            //arrayList.Insert(2,"vote Chor");
             arrayList.Add(1000);
+            //arrayList.InsertRange(2, new string[] { "Rahul Gandhi", "Putin", "Xi-jimping", "vote Chor" }); //index 2 se start hoke array ke sare items insert karega
             arrayList.Add(100);
             int size = arrayList.Count; //size of arraylist
-
+            
             arrayList.RemoveAt(size - 1);  //remove last item or removeAt index base delete karta hai
             bool contains = arrayList.Contains(3.14);
             WriteLine("Contains 3.14 = " + contains);
@@ -147,7 +148,6 @@ namespace Basics.OOPS
                 WriteLine("Name = " + name);
 
 
-
                 //hashTable Arraylist ke jaise addRange nahi hoti isko indirect loop se add karte hai for example
 
                 Hashtable hashTable2 = new Hashtable() { { "skills", new string[] { "html", "css", "etc" } }, { "phoneNumber", "617920010" } };
@@ -180,9 +180,8 @@ namespace Basics.OOPS
                 stack.Push("Station");
                 if (stack.Count > 0)
                 {
-                    WriteLine("Deleted item = " + stack.Pop());
                     WriteLine("Peek item of stack = " + stack.Peek());
-
+                    WriteLine("Deleted item = " + stack.Pop());
                 }
 
                 foreach (var item in stack)
@@ -241,6 +240,7 @@ namespace Basics.OOPS
             {
                 SortedList sortedlist = new SortedList() { { "Name", "Montu" }, { "name", "montu" }, { "age", 23 } };
                 sortedlist.Add("city", "Sonipat");
+
                 WriteLine("sorted list collection");
                 //sortedlist.Add("email", "Montukharb868@gmail.com");
                 foreach (DictionaryEntry item in sortedlist)
@@ -253,7 +253,7 @@ namespace Basics.OOPS
                 WriteLine(sortedlist.GetByIndex(2));
             }
             SortedListColl();
-
+             
             /*
              Bit array eak collection hai jo bits (0 aur 1) ko store karta hai. Ye memory efficient hota hai jab aapko large number of boolean values store karni hoti hain.
              */

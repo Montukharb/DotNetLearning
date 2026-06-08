@@ -127,7 +127,6 @@ public class Student
     [Phone] //phone number validation
     public string PhoneNumber { get; set; } = null!;
 
-
     // COLUMN NAME CHANGE and type 
     [Column("Student_City", TypeName = "varchar(100)")]
     public string City { get; set; }

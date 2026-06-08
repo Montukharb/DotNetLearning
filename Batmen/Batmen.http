@@ -1,0 +1,6 @@
+@Batmen_HostAddress = http://localhost:5279
+
+GET {{Batmen_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

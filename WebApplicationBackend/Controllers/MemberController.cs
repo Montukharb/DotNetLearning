@@ -4,6 +4,8 @@ using WebApplicationBackend.Entities;
 
 namespace WebApplicationBackend.Controllers
 {
+
+
     public class MemberController : Controller
     {
         private readonly AppDbContext _context;

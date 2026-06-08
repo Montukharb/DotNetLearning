@@ -6,7 +6,7 @@ namespace Basics.OOPS
     internal class BasicClass
     {
         //field
-        internal string name = "Vishal Sharma";
+        internal string name = "Ram";
         internal float amount;
         internal DateTime date;
 
@@ -27,6 +27,7 @@ namespace Basics.OOPS
 
             }
         } = 10;
+
 
         #region All types Constructor Demo
 
