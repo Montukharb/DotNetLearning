@@ -10,7 +10,8 @@ namespace WebApplicationBackend.Controllers
 
         public Task Get()
         {
-            return Ok("asd");
+            //fix ok
+            return Task.CompletedTask;
         }
     }
 }
