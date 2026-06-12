@@ -10,7 +10,7 @@ namespace EmptyProjectTesting.Controller
     public class NotebookController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public NotebookController(AppDbContext context)
+        public NotebookController(AppDbContext context) //context ma app dbcontext ka object ayega automatically dependency injection ke through
         {
             _context = context;
         }

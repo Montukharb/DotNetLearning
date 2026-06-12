@@ -7,7 +7,7 @@ var dbConnection = builder.Configuration.GetConnectionString("DefaultConnection"
 var appName = builder.Configuration["MySetting:AppName"];
 
 builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(dbConnection));
-builder.Services.AddControllers();
+builder.Services.AddControllers(); //controller related service register karta hai
 
 var app = builder.Build();
 app.Use((context, next) =>
@@ -18,7 +18,7 @@ app.Use((context, next) =>
 
   }
 );
-app.MapControllers();
+app.MapControllers(); //ye route ko map karta hai controller ke action method ke sath jese ki http get post put delete etc.
 app.MapGet("/", () => "Hello, World " + appName);
   
 app.Run();
