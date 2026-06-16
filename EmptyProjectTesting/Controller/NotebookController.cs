@@ -14,7 +14,7 @@ namespace EmptyProjectTesting.Controller
         {
             _context = context;
         }
-        [HttpGet]
+        [HttpGet("Allproducts/{id}")]
         public IActionResult Get()
         {
             return Ok("All products");
