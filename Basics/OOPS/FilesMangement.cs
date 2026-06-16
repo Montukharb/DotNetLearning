@@ -124,6 +124,10 @@ FileInfo / DirectoryInfo → advanced info*/
             {
                 WriteLine("File does't exits");
             }
+            //using (var fs = File.OpenRead("\\abc.txt"))
+            //{
+
+            //}
         }
 
 
@@ -711,7 +715,7 @@ FileInfo / DirectoryInfo → advanced info*/
                     if (!file.Exists)
                     {
 
-                        using (FileStream fs = file.OpenWrite())
+                        using (FileStream fs = file.OpenWrite()) //if file not exits create it self
                         {
 
                             string? data = "Hello vishal how are you what are you doing";
@@ -770,7 +774,7 @@ FileInfo / DirectoryInfo → advanced info*/
             AppendDataUsingAppendTextFileInfoClassMethod();
 
             //createText method file auto create kare ge or write
-            void CreateTextFileInfoClassMethod()
+            async Task CreateTextFileInfoClassMethod()
             {
                 FileInfo file = new FileInfo(Path.Combine("D:", "Dot Net Trainning", "ProjectFilesOperations", "CreateTextMethod.txt"));
 
@@ -783,6 +787,7 @@ FileInfo / DirectoryInfo → advanced info*/
                             //writing file using stream writer
                             sw.WriteLine("This file is created using FileInfo class method createText auto create and write in just one method simplified stream writer");
                             sw.WriteLine("This is second line");
+                            await sw.WriteLineAsync("This is third line");
                             WriteLine("File creation success at location: " + file.FullName);
                         }
                     }
@@ -815,7 +820,7 @@ FileInfo / DirectoryInfo → advanced info*/
                         //refresh ka use tab karte hai jab user mannually file edit kar de system old byte size de
                         //return void
                         //file.Refresh();
-
+                        
                         using (StreamReader sr = file.OpenText())
                         {
                             WriteLine(sr.ReadToEnd()); //reading data till end

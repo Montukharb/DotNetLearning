@@ -41,7 +41,7 @@ namespace EmptyProjectTesting.Migrations
 
                     b.HasKey("Code");
 
-                    b.ToTable("CountryFlag");
+                    b.ToTable("CountryFlag", (string)null);
 
                     b.HasData(
                         new
@@ -1430,7 +1430,7 @@ namespace EmptyProjectTesting.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Department");
+                    b.ToTable("Department", (string)null);
 
                     b.HasData(
                         new
@@ -1579,7 +1579,7 @@ namespace EmptyProjectTesting.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SpiralNotebooks");
+                    b.ToTable("SpiralNotebooks", (string)null);
                 });
 
             modelBuilder.Entity("EmptyProjectTesting.Entites.Student", b =>
@@ -1622,7 +1622,7 @@ namespace EmptyProjectTesting.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("EmptyProjectTesting.Entites.Student", b =>
