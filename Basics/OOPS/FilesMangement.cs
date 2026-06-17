@@ -782,6 +782,7 @@ FileInfo / DirectoryInfo → advanced info*/
                 {
                     if (!file.Exists)
                     {
+                        // if file exists overwrite if not exists create it and write
                         using (StreamWriter sw = file.CreateText()) //here is file created
                         {
                             //writing file using stream writer
@@ -820,8 +821,8 @@ FileInfo / DirectoryInfo → advanced info*/
                         //refresh ka use tab karte hai jab user mannually file edit kar de system old byte size de
                         //return void
                         //file.Refresh();
-                        
-                        using (StreamReader sr = file.OpenText())
+
+                        using (StreamReader sr = file.OpenText()) //mainly text file ko read karne ka liya use hoti hai easy way ma read kar deti hai long file ko bytes ma data nahi lena padta automatic karti hai other format ma data loose ho sakte hai better hoga filestream ka use kare other type me
                         {
                             WriteLine(sr.ReadToEnd()); //reading data till end
                             //string? data = null;
@@ -886,12 +887,18 @@ FileInfo / DirectoryInfo → advanced info*/
                            ✔ Seek() → jump
                            ✔ using → auto close*/
 
-
+                    /*FileStream me resume Download/Upload kar sakta ha 
+                    fs.Position = 5000;
+                    0------ - 4999------ - END
+          
+                    yahan se continue */
+                    
                     using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                     {
                         if (fs.Length <= 0)
                         {
                             //write data;
+
                             string? data = "Hello how are you this file is created using FileStream Class low level";
                             byte[] buffer = Encoding.UTF8.GetBytes(data); //convert data into bytes
 
@@ -905,7 +912,7 @@ FileInfo / DirectoryInfo → advanced info*/
                             byte[] Readingcontainer = new byte[fs.Length]; //blank container created
 
                             int readingCapicty = fs.Read(Readingcontainer, 0, Readingcontainer.Length);
-
+                            
                             WriteLine("data read by Pure FileStream Class = " + Encoding.UTF8.GetString(Readingcontainer, 0, readingCapicty));
 
                         }

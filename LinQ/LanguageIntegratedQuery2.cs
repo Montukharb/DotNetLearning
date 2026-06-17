@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 using System.Xml.Schema;
 
@@ -54,6 +55,7 @@ namespace LinQ
                      Name = employee.Name,
                      Email = employee.Email,
                      Id = employee.Id,
+
                      dataCollection
                  }
 
@@ -129,3 +131,60 @@ namespace LinQ
         public string? EmpDeptPosition { get; set; }
     }
 }
+/*
+2.Raw SQL
+var students = await _context.Students
+    .FromSqlRaw("SELECT * FROM Students")
+    .ToListAsync();
+
+Faayde:
+
+Complex queries likhna easy
+Existing SQL reuse kar sakte ho
+Stored Procedure call kar sakte ho
+
+Nuksan:
+
+String ke andar query likhni padti hai
+Column/table rename hone par compiler nahi batata
+SQL Injection ka risk (agar parameters sahi use na karo)
+
+    EF Core me 3 tareeke hain:
+
+1.LINQ Method Syntax(sabse ajeeb lagti hai)
+var data = _context.Students
+    .Join(
+        _context.Departments,
+        s => s.DepartmentId,
+        d => d.Id,
+        (s, d) => new
+        {
+            s.Name,
+            d.DepartmentName
+        });
+2.LINQ Query Syntax(SQL jaisi)
+
+Ye aksar beginners ko zyada samajh aati hai.
+
+var data =
+    from s in _context.Students
+    join d in _context.Departments
+    on s.DepartmentId equals d.Id
+    select new
+           {
+               s.Name,
+               d.DepartmentName
+           };
+
+Ye lagbhag SQL jaisa hi hai.
+
+3. Raw SQL (Seedha SQL)
+var data = await _context.StudentDtos
+    .FromSqlRaw(@"
+        SELECT s.Name,
+               d.DepartmentName
+        FROM Students s
+        INNER JOIN Departments d
+        ON s.DepartmentId = d.Id")
+    .ToListAsync();
+*/

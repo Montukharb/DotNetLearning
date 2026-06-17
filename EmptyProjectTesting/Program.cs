@@ -110,9 +110,10 @@ app.UseWhen(
 
 
 app.MapControllers(); //ye route ko map karta hai controller ke action method ke sath jese ki http get post put delete etc.
-app.MapGet("/", () => "Hello, World " + appName); //minimal api example
+app.MapGet("/", () => "Welcome to asp.net core web api " + appName); //minimal api example
 //wild card routes handled by inbuild minimal api routing feature ye internall routing system me register hota hai hamesha last ma place hoga iss se phele minimal api use kar sakte hai 
 //app.Map("/{*path}", branch => { }); // ye bhi unknown route handle kar sakta hai rarely use hota hai
+
 app.MapFallback(() =>
 {
     return Results.NotFound("EndPoint Route Not Found");
