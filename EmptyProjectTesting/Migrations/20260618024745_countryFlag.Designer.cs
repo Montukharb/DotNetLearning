@@ -4,6 +4,7 @@ using EmptyProjectTesting.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmptyProjectTesting.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260618024745_countryFlag")]
+    partial class countryFlag
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace EmptyProjectTesting.Migrations
 
                     b.HasKey("Code");
 
-                    b.ToTable("countryFlag", (string)null);
+                    b.ToTable("countryFlag");
 
                     b.HasData(
                         new
@@ -1430,7 +1433,7 @@ namespace EmptyProjectTesting.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Department", (string)null);
+                    b.ToTable("Department");
 
                     b.HasData(
                         new
@@ -1579,7 +1582,7 @@ namespace EmptyProjectTesting.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SpiralNotebooks", (string)null);
+                    b.ToTable("SpiralNotebooks");
                 });
 
             modelBuilder.Entity("EmptyProjectTesting.Entites.Student", b =>
@@ -1622,7 +1625,7 @@ namespace EmptyProjectTesting.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("EmptyProjectTesting.Entites.Student", b =>

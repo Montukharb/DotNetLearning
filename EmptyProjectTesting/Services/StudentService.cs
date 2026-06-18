@@ -26,6 +26,10 @@ namespace EmptyProjectTesting.Services
         }
         public async Task<bool> AddStudent(Student student)
         {
+            if(student.Age < 18)
+            {
+                return false;
+            }
             return await _repository.AddStudent(student);
         }
         public async Task<bool> DeleteByIdStudents(int Id)

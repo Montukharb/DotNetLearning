@@ -14,6 +14,8 @@ namespace EmptyProjectTesting.DbContexts
           3. Fluent Api -> fluent api Advance or better control deti hai isko mainly appdbcontext class ma override kiya jata hai predefine abstract method se
          */
         public DbSet<SpiralNotebook> SpiralNotebooks { get; set; }
+        public DbSet<CountryFlag> countryFlag { get; set; }
+        public DbSet<Department> department { get; set; }
         public DbSet<Student> Students { get; set; } //actual table name is Students not Student isko bhi by pass kar sakte hai fluent api se ToTable method se.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

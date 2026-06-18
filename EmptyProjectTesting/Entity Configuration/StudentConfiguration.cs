@@ -15,6 +15,7 @@ namespace EmptyProjectTesting.Entity_Configuration
             //hasmany means multiple navigations property
             //hasforeignkey which property is foreing key from another table primary key
             builder.HasOne(e => e.CountryFlag).WithMany(c => c.Students).HasForeignKey(f => f.CountryCode);
+            //builder.Property(x => x.Created).HasDefaultValueSql("GETDATE()");
         }
     }
 }

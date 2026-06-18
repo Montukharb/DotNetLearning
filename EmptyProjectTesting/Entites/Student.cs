@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmptyProjectTesting.Entites
@@ -14,12 +15,13 @@ namespace EmptyProjectTesting.Entites
         public string Gender { get; set; }
         [EmailAddress(ErrorMessage ="Invalid email address")]
         public string Email { get; set; }
-        public DateTime Created { get; set; } = DateTime.Now;
+        //public DateTime Created { get; set; } //configuration ma set kar di fluent api se
+        public DateTime Created { get; set; } = DateTime.UtcNow; //ye common approach hai
 
         [Required]
         public string CountryCode { get; set; }
-        public CountryFlag CountryFlag { get; set; }
+        public CountryFlag? CountryFlag { get; set; }
         public int DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public Department? Department { get; set; }
     }
 }

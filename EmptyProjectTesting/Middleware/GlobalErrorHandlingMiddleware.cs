@@ -22,7 +22,9 @@
                 await context.Response.WriteAsJsonAsync(
                      new
                      {
-                         message = ex.Message
+                         message = ex.Message,
+                         innerException = ex?.InnerException?.Message,
+                         detailMessage = ex?.StackTrace
                      }
                     );
             }
