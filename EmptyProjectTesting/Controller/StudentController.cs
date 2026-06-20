@@ -1,6 +1,8 @@
 ﻿using EmptyProjectTesting.Entites;
 using EmptyProjectTesting.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace EmptyProjectTesting.Controller
 {
@@ -131,22 +133,66 @@ namespace EmptyProjectTesting.Controller
         
         /student/5
          */
-        [HttpGet]
+        [HttpGet] //get all records
         public async Task<IActionResult> Get()
         {
             var res = await _studentService.GetAllStudents();
             var ur = Url.RouteUrl("Anothertest");
             return Ok(res);
         }
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Student student)
+        [HttpPost] //Record add
+        public async Task<IActionResult> Post([FromBody] Student student)
         {
-            if(student == null)
+            if (student == null)
             {
-                return BadRequest("Null object n");
+                return BadRequest("Null object");
             }
             var res = await _studentService.AddStudent(student);
             return Ok(res);
         }
+
+        [HttpGet("{id:int}")] //record get by id
+        public async Task<IActionResult> GetById(int id)
+        {
+            var res = await _studentService.GetByIdStudent(id);
+            if (res != null)
+            {
+                return Ok(res);
+            }
+            return NotFound(new { Message = $"Not found record at id = {id}" });
+        }
+
+        [HttpDelete("{id:int}")] //record delete by id
+        public async Task<IActionResult> DeleteById(int id)
+        {
+            var res = await _studentService.DeleteByIdStudents(id);
+            if (!res)
+            {
+                return NotFound(new
+                {
+                    Message = $"Does't exits data id = {id}"
+                });
+            }
+            return Ok(res);
+        }
+        [HttpPut("{id:int}")] //Complete update record
+        public async Task<IActionResult> Put(int id, [FromBody]Student student)
+        {
+            
+            var res = await _studentService.UpdateStudentRecordFullById(id, student);
+                       
+            if (!res)
+            {
+                return NotFound(new
+                {
+                    Message = $"Does't exits data id = {id}"
+                });
+            }
+            return Ok(new
+            {
+                Message = $"Record updated at id = {id}"
+            });
+        }
     }
+
 }

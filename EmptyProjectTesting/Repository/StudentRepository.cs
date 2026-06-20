@@ -1,6 +1,7 @@
 ﻿using EmptyProjectTesting.DbContexts;
 using EmptyProjectTesting.Entites;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace EmptyProjectTesting.Repository
 {
@@ -11,6 +12,7 @@ namespace EmptyProjectTesting.Repository
 
         public Task<bool> DeleteByIdStudents(int Id);
         public Task<bool> AddStudent(Student student);
+        public Task<bool> UpdateStudentRecordById(int id,Student student);
     }
     public class StudentRepository : IStudentRepository
     {
@@ -116,5 +118,40 @@ namespace EmptyProjectTesting.Repository
             int rowEffected = await _context.SaveChangesAsync();
             return rowEffected > 0;
         }
+        public async Task<bool> UpdateStudentRecordById(int id,Student student)
+        {
+            var user = await _context.Students.FindAsync(id); //ye line user object ko dbcontext ma track kar rahi hai
+            
+            /*
+            //not recommended this method
+            //Ek hi Id ke 2 object ko ek saath track nahi kar sakta.
+            _context.Entry(user).State = EntityState.Detached; //ye way recomended nahi generaly 
+            if (user is null)
+            {
+                return false;
+            }
+            if(student is not null)
+            {
+                student.Id = id; //ye bhi dubara track kar rahai is agar hm context.entry user .state entity state.detached nahi kart to error aye
+                _context?.Students.Update(student);
+                int roweffect = await _context.SaveChangesAsync();
+                return (roweffect > 0);
+            }
+            */
+            if(user is null)
+            {
+                return false;
+            }
+            user.Name = student.Name;
+            user.Email = student.Email;
+            user.Age = student.Age;
+            user.Department = student.Department;
+            user.Gender = student.Gender;
+            user.CountryCode = student.CountryCode;
+
+            int roweffects = await _context.SaveChangesAsync();
+            return (roweffects > 0);
+        }
+        
     }
 }

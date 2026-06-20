@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel;
+
 namespace Basics.OOPS
 {
 
@@ -137,16 +139,18 @@ namespace Basics.OOPS
     }
 
 
-
+    //An abstract class is a class that cannot be instantiated(object nahi bana sakte). It is used as a base class for other classes and can contain both abstract and non-abstract members.
     internal abstract class Abs
      {
-
+        //abstract class me static abstract method nahi ho sakta
+        //normal static method create with implement kar sakte hai 
         //abstract class another abstract class inheride kar sakti hai;
         //internal abstract int aa; //we can't create abstract field in abstract class
 
         //abstract property
         //internal abstract int fieldvariable;  //we can't declare abstract field
-        
+
+        //public static void me(){} work
         internal abstract int Fuel { get; set; } //we can declare abstract property but can't set value here;
 
         //abstract method
@@ -162,10 +166,13 @@ namespace Basics.OOPS
         }
 
         //virtual method
+        //virtual method abstract nahi ho sakta 
+        //virtual mehtod without implementation declare bhi nahi hoga abstract class me
         internal virtual void Dell() //there are no error if we not overriding virtual method which is created in abstract class
         {
             WriteLine("Abstract class virtual method");
         }
+        //public virtual void Hp() { } //work
 
 
      }

@@ -1,3 +1,4 @@
+using EmptyProjectTesting.ControllerActionFilter;
 using EmptyProjectTesting.DbContexts;
 using EmptyProjectTesting.Endpoints;
 using EmptyProjectTesting.Middleware;
@@ -22,8 +23,12 @@ builder.Services
        {
            options.JsonSerializerOptions.ReferenceHandler =
                ReferenceHandler.IgnoreCycles;
-       });
-builder.Services.AddControllers(); //controller related service register karta hai
+       }); //include se cycle banti hai unko remove karta hai kai bar error bhi de sakta hai better hoga dto use kare
+builder.Services.AddScoped<FlagActionFilter>();//ServiceFilter ma Registration karna padta hai typeFilter ma need nahi hai
+//ye global level par add ho gaya hai filter complete app par apply hoga ab
+builder.Services.AddControllers(options => { options.Filters.Add<DepartmentActionFilter>(); });
+
+builder.Services.AddControllers(); //controller register karta hai all
 
 var app = builder.Build();
 app.Use((context, next) =>
@@ -85,8 +90,6 @@ app.Map("/admin", branch =>
     {
         if (context.Request.Path.StartsWithSegments("/danzer"))
         {
-
-
             await context.Response.WriteAsync("Stopped pipeline");
             return; //middleware response end here
 
@@ -109,12 +112,11 @@ app.UseWhen(
 
     );
 
-
-app.MapControllers(); //ye route ko map karta hai controller ke action method ke sath jese ki http get post put delete etc.
+app.MapControllers(); //ye route ko map karta hai controller ke action method ke sath jese ki http get post put delete etc. routes ko match karta hai sabhi controller ke app.useRouting automatic laga deta hai net 8+ version me
 app.MapGet("/", () => "Welcome to asp.net core web api " + appName); //minimal api example
 //wild card routes handled by inbuild minimal api routing feature ye internall routing system me register hota hai hamesha last ma place hoga iss se phele minimal api use kar sakte hai 
 //app.Map("/{*path}", branch => { }); // ye bhi unknown route handle kar sakta hai rarely use hota hai
-app.MapCountryFlagEndpoints(); //endpoints register /call 
+app.MapCountryFlagEndpoints(); //endpoints register /call normally kha sakte hai minimal api call ho rahi ha
 app.MapFallback(() =>
 {
     return Results.NotFound("EndPoint Route Not Found");
