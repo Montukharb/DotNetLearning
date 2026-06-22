@@ -11,9 +11,11 @@ namespace EmptyProjectTesting.Controller
     public class StudentController : ControllerBase
     {
         private readonly IStudentServices _studentService;
-        public StudentController(IStudentServices studentService)
+        private readonly IConfiguration _configuration;
+        public StudentController(IStudentServices studentService ,IConfiguration configuration)
         {
             _studentService = studentService;
+            _configuration = configuration;
         }
         //[HttpGet("/detail",Name= "Anothertest")] ASP.NET Core route name "GetStudentById" se URL generate kar deta hai.
         //Route Generate using action name
@@ -23,15 +25,15 @@ namespace EmptyProjectTesting.Controller
          route ma parameter hai ya another parameters hai unki value deni jaruri hai nahi to url generate nahi hoga optional hai not required
          
          --------------
-
+        complete application me khi se bhi route create kar sakte hai
          There are there ways to get url
-         1.Url.RouteUrl("RouteName"); // isme action name required hai
+         1.Url.RouteUrl("RouteName"); // isme route name required hai
          2.Url.Action("ActionName", "ControllerName"); // actionname and controllername se 
          3.LinkGenerator.GetPathByName("RouteName"); inteeno ka example
         ---------------
         1. example
          
-         [HttpGet("student/{id}", Name = "GetStudent")]
+         [HttpGet("student/{id}", Name = "getstudent")]
          public IActionResult GetStudent(int id)
          {
              return Ok();
@@ -41,7 +43,7 @@ namespace EmptyProjectTesting.Controller
          public IActionResult Test()
          {
              string? url = Url.RouteUrl(
-                 "GetStudent",
+                 "getstudent",
                  new { id = 10 }
              );
          
@@ -138,6 +140,13 @@ namespace EmptyProjectTesting.Controller
         {
             var res = await _studentService.GetAllStudents();
             var ur = Url.RouteUrl("Anothertest");
+            var dburl = _configuration.GetConnectionString("DefaultConnection");
+            //nested ma : use hoge
+            var appname = _configuration["MySetting:AppName"];
+            Console.WriteLine(dburl);
+            Console.WriteLine(appname);
+
+
             return Ok(res);
         }
         [HttpPost] //Record add

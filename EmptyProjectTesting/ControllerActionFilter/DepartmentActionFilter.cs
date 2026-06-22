@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Elastic.CommonSchema;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EmptyProjectTesting.ControllerActionFilter
 {
@@ -20,8 +22,36 @@ namespace EmptyProjectTesting.ControllerActionFilter
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
+            //ILogger is an interface used to record application events, errors, warnings, and diagnostic information.
+            //ILogger ek contract(interface) hai jo application ke andar hone wali activities ko log file, console, database, Elasticsearch, ya kisi aur storage me save karne ke liye use hota hai.
             _stopwatch.Start();
             _logger.LogInformation("stopwatch start");
+//what is placholder in logger
+//in logger placholder model binding ka liya hota hai jiska kuch bhi name ho sata ahi {abc} lakin meaningful name hona chaiya 
+            int userId = 101;
+            string name = "Montu";
+
+            _logger.LogInformation(
+                "User Id: {UserId}, User Name: {UserName}",
+                userId,
+                name);
+/*OUTPUT:
+User Id: 101, User Name: Montu
+             
+BENEFIT of placeholder
+{
+  "Message":"User 101 logged in",
+  "UserId":101
+}
+
+.elastic kibana me search or indixing ka liya searchable rahta hai
+.better performance
+
+*/
+            _logger.LogWarning("Warning message");
+            _logger.LogError("Error message");
+            _logger.LogCritical("critical message");
+            _logger.LogTrace("trace message");
             /*
             if find any error in context reqest we can stop here execution like
             context.HttpContext.Response.StatusCode = 404;
@@ -102,7 +132,18 @@ Filter1 After
                     Message = "Key not matched"
                 });
             }
-            var resut = await next(); //action called and return desired result
+            var res = await next(); //action called and return desired result
+
+            if (res.Result is OkObjectResult use)
+            {
+
+                res.Result = new OkObjectResult(new
+                {
+                    Message = "ActionExecutionDelegate async data",
+                    value = use.Value
+                });
+            }
+
             //now we can interfare result modified response rok nahi sakte ab ausme altering kar sakte hai
         }
     }
@@ -134,5 +175,13 @@ Normally ek hi pattern use karna chaiya ya to async or sync.
         {
             Console.WriteLine("After");
         }
+
+        //public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        //{
+
+        //    var res = await next();
+
+
+        //}
     }
 }

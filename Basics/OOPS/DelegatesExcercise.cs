@@ -20,7 +20,7 @@ namespace Basics.OOPS
 
         delegate int Transformer2();
         Transformer2 d2;
-        
+
         internal int FirstDisp()
         {
             WriteLine("First Disp");
@@ -138,7 +138,234 @@ namespace Basics.OOPS
 
 
     }
+    /*
+    | Type              | Kya bhej sakta hai                                 |
+| ----------------- | -------------------------------------------------- |
+| `Action`          | Sirf notification (default `Action`)               |
+| `EventHandler`    | Notification + kis object ne raise kiya (`sender`) |
+| `EventHandler<T>` | Notification + sender + custom data                |
+ 
+1. Action
+public event Action Saved;
 
+Raise:
+
+Saved?.Invoke();
+
+Handler:
+
+void OnSaved()
+{
+    Console.WriteLine("Saved");
+}
+
+Yahan subscriber ko sirf itna pata hai ki event hua.
+
+2. EventHandler
+public event EventHandler Saved;
+
+Raise:
+
+Saved?.Invoke(this, EventArgs.Empty);
+
+Handler:
+
+void OnSaved(object? sender, EventArgs e)
+{
+}
+
+Yahan:
+
+sender = kis object ne event raise kiya
+e = koi extra data nahi
+
+Example:
+
+Console.WriteLine(sender.GetType().Name);
+
+Output:
+
+Employee
+3. EventHandler<T>
+public event EventHandler<UserEventArgs> UserCreated;
+
+Raise:
+
+UserCreated?.Invoke(
+    this,
+    new UserEventArgs
+    {
+        UserName = "Montu"
+    });
+
+Handler:
+
+void OnUserCreated(object? sender, UserEventArgs e)
+{
+    Console.WriteLine(e.UserName);
+}
+
+Output:
+
+Montu
+
+Yahan subscriber ko:
+
+kisne event raise kiya (sender)
+event ke saath data (e)
+
+dono mil gaye.
+     */
+
+    //detailed examples -----------------------------------
+
+    /*
+Note: event ko whi call kare ga jise event create kiya hai ausi class ka method ke ander
+event = delegate ka protected version hai 
+
+Delegate me koi bhi bahar se method call kar sakta hai
+Event me sirf class ke andar wala code hi trigger (Invoke) kar sakta hai.
+
+
+------------1---------------
+Action = predefined delegate void ()
+
+isme bas notification jaye ga event raise hoga subscribe hoga koi data pass nahi hoga
+Event ka Real Meaning
+
+
+Subscribe (+=) allow karna
+Unsubscribe (-=) allow karna
+Bahar se Invoke() karne se rokna
+
+event = security layer
+
+Suppose:
+
+Button Click Hua
+↓
+Notification Jaye
+↓
+Log Save Ho
+↓
+Email Jaye
+
+Button ko nahi pata kaun kaun kaam karega.
+
+Wo sirf event raise karega.
+
+Jo interested hai wo subscribe kar lega.
+
+Real Example
+Publisher
+public class Button
+{
+    public event Action Click;
+
+    public void Press()
+    {
+        Console.WriteLine("Button Pressed");
+
+        Click?.Invoke();
+    }
+}
+Subscribers
+public class EmailService
+{
+    public void SendEmail()
+    {
+        Console.WriteLine("Email Sent");
+    }
+}
+
+public class SmsService
+{
+    public void SendSms()
+    {
+        Console.WriteLine("SMS Sent");
+    }
+}
+Main
+Button btn = new Button();
+
+EmailService email = new EmailService();
+SmsService sms = new SmsService();
+
+btn.Click += email.SendEmail;
+btn.Click += sms.SendSms;
+
+btn.Press();
+
+Output
+
+Button Pressed
+Email Sent
+SMS Sent
+------------------------ 2 --------------------
+public event EventHandler workCompleted; no data pass 
+
+EventHandler Example
+public class Employee
+{
+    public event EventHandler WorkCompleted;
+
+    public void Complete()
+    {
+        WorkCompleted?.Invoke(this, EventArgs.Empty);
+    }
+}
+
+Subscribe
+
+emp.WorkCompleted += OnWorkCompleted;
+
+static void OnWorkCompleted(object? sender, EventArgs e)
+{
+    Console.WriteLine("Work Finished");
+}
+
+------------------------ 3 --------------------
+Data bhejna ho to:
+EventHandler<T> = predefined delegate
+                  void (object, T)
+    EventHandler<T>
+
+
+EventHandler<T> Example (Data Bhejna)
+public class EmployeeEventArgs : EventArgs
+{
+    public string Message { get; set; }
+}
+public class Employee
+{
+    public event EventHandler<EmployeeEventArgs> WorkCompleted;
+
+    public void Complete()
+    {
+        WorkCompleted?.Invoke(this,
+            new EmployeeEventArgs
+            {
+                Message = "Task Completed"
+            });
+    }
+}
+
+Subscriber
+
+emp.WorkCompleted += OnWorkCompleted;
+
+static void OnWorkCompleted(
+    object? sender,
+    EmployeeEventArgs e)
+{
+    Console.WriteLine(e.Message);
+}
+
+Output
+
+Task Completed    
+    
+ */
 
 
 
@@ -146,7 +373,7 @@ namespace Basics.OOPS
     {
         public event EventHandler? OnClick;
         public delegate void Notify();
-       
+
         public void Click()
         {
             Console.WriteLine("Button clicked");
