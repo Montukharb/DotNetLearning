@@ -198,7 +198,7 @@ app.Use((context, next) =>
 
   }
 );
-//global level exception handler 4 ways
+//global level exception handler 3 ways
 //app.UseExceptionHandler(); // 1. this is inbuild middleware we can overrite this middleware
 app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 //app.UseExceptionHandler("/error");2. global exception handler using controller koi bhi eak use kar sakte hai recommended hai custom class wala
@@ -215,6 +215,18 @@ app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 //                message = "Something went wrong",
 //            }
 //            );
+
+//branch.Run(async context =>
+//    {
+//        var exceptionfeature = context.Features.Get<IExceptionHandlerFeature>();
+//        context.Response.StatusCode = 500;
+//        context.Response.ContentType = "application/json";
+//        await context.Response.WriteAsJsonAsync(new
+//        {
+//            message = "Something went wrodsfng",
+//            exceptionProperMsg = exceptionfeature?.Error?.Message,
+//            errorStack = exceptionfeature?.Error?.StackTrace
+//        });
 //    });
 //});
 

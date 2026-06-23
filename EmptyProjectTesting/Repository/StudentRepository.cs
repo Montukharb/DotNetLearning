@@ -121,7 +121,6 @@ namespace EmptyProjectTesting.Repository
         public async Task<bool> UpdateStudentRecordById(int id,Student student)
         {
             var user = await _context.Students.FindAsync(id); //ye line user object ko dbcontext ma track kar rahi hai
-            
             /*
             //not recommended this method
             //Ek hi Id ke 2 object ko ek saath track nahi kar sakta.

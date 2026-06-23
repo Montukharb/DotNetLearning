@@ -1,8 +1,11 @@
 ﻿using EmptyProjectTesting.Entites;
 using EmptyProjectTesting.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EmptyProjectTesting.Controller
 {
@@ -10,6 +13,7 @@ namespace EmptyProjectTesting.Controller
     [Route("api/[controller]")]
     public class StudentController : ControllerBase
     {
+        private const string V = "";
         private readonly IStudentServices _studentService;
         private readonly IConfiguration _configuration;
         public StudentController(IStudentServices studentService ,IConfiguration configuration)
@@ -145,13 +149,40 @@ namespace EmptyProjectTesting.Controller
             var appname = _configuration["MySetting:AppName"];
             Console.WriteLine(dburl);
             Console.WriteLine(appname);
+            string str = "hello world";
 
+            byte[] data = new byte[str.Length];
+            data = Encoding.UTF8.GetBytes(str);
+            //return File(data,"text/plain","downloadname.txt");
+            //3 overload ma browser auto download kar de ga agar pass kiya toh.
 
+            /*PDF: "application/pdf"Excel(.xlsx): "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"Word (.docx): "application/vnd.openxmlformats-officedocument.wordprocessingml.document"Text(.txt): "text/plain"CSV: "text/csv"ZIP: "application/zip"Images: "image/jpeg" या "image/png"JSON: "application/json"
+            
+             */
+            
+            /*
+            string filePath = @"C:\MyFiles\LargeReport.pdf";
+
+            // 2.open file as a FileStream
+            // 'using' ka use na kare , ASP.NET Core file transfer hone ka bad auto close kar deta hai
+            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            // 3. File ओवरलोड: (Stream, ContentType, DownloadName)
+            // 
+            return File(stream, "application/pdf", "DownloadedReport.pdf")/
+                */
+
+            
             return Ok(res);
         }
         [HttpPost] //Record add
         public async Task<IActionResult> Post([FromBody] Student student)
         {
+            //var provider = new FileExtensionContentTypeProvider();
+            //if(provider.TryGetContentType("applic.pdf",out string typ))
+            //{
+            //    typ = V;
+            //}
             if (student == null)
             {
                 return BadRequest("Null object");
