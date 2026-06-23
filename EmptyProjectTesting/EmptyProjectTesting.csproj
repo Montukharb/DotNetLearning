@@ -23,5 +23,21 @@
     <PackageReference Include="Serilog.Sinks.File" Version="8.0.0-nblumhardt-02322" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="10.0.1-dev-00163" />
   </ItemGroup>
+	<ItemGroup>
+		<Content Include="PrivateAssets\**" CopyToPublishDirectory="PreserveNewest" />
+<!--
+PrivateAssets = foldername 
+\** = wildcard paths are same nested to nested same
+PreserveNewest (Sabse best): Agar aapne PrivateFiles me koi nayi file dali hai, ya kisi purani file ko edit kiya hai, toh hi yeh use server wale folder me copy karega. Agar file me koi badlav nahi hua, toh yeh use dobara copy karke time waste nahi karega. Isse build process fast ho jata hai.
+-->
+	</ItemGroup>
+	
+	
+  <ItemGroup>
+    <Folder Include="PrivateAssets\" />
+    <Folder Include="wwwroot\Text\" />
+    <Folder Include="wwwroot\Pdf\" />
+    <Folder Include="wwwroot\Video\" />
+  </ItemGroup>
 
 </Project>

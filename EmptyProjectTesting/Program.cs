@@ -7,6 +7,7 @@ using EmptyProjectTesting.Repository;
 using EmptyProjectTesting.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.FileProviders;
 using Serilog;
 using Serilog.Formatting.Compact;
 using Serilog.Formatting.Json;
@@ -17,8 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var dbConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 var appName = builder.Configuration["MySetting:AppName"];
-
 builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(dbConnection));
+
 
 //First always prefer to register services and repository then controller
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
@@ -38,6 +39,7 @@ builder.Host.UseSerilog((context, config) =>
     {
         config.WriteTo.Console();
         config.WriteTo.File("Logs/log.txt", shared: false, rollingInterval: RollingInterval.Day);
+        config.WriteTo.File(new JsonFormatter(), "Json_Logs/log.json", rollingInterval: RollingInterval.Day);
     }
     else
     {
@@ -48,9 +50,9 @@ builder.Host.UseSerilog((context, config) =>
             retainedFileCountLimit: 30 //last 30 file rakho baki auto 
             ); //json format with compact size industry type use 
 
-    //----------Database Save log ------------
+        //----------Database Save log ------------
 
-    config.WriteTo.MSSqlServer(dbConnection,sinkOptions:SinkOptions); //data base ma logs save hogi
+        config.WriteTo.MSSqlServer(dbConnection, sinkOptions: SinkOptions); //data base ma logs save hogi
     }
 });
 /*
@@ -126,8 +128,8 @@ builder.Host.UseSerilog((context, config) =>
 });
 
 Output:
-
 {"@t":"2026-06-22T10:20:15","@l":"Information","@mt":"User {UserId} Login","UserId":1}
+
 
 Ye file size kam rakhta hai.
  */
@@ -186,6 +188,7 @@ builder.Services.AddScoped<FlagActionFilter>();//ServiceFilter ma Registration k
 
 //department action filter ab global level par add ho gaya hai filter complete app par apply hoga ab
 builder.Services.AddControllers(options => { options.Filters.Add<DepartmentActionFilter>(); });
+//        context.Response.ContentType = "application/json";
 
 builder.Services.AddControllers(); //controller register karta hai all
 
@@ -220,7 +223,6 @@ app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 //    {
 //        var exceptionfeature = context.Features.Get<IExceptionHandlerFeature>();
 //        context.Response.StatusCode = 500;
-//        context.Response.ContentType = "application/json";
 //        await context.Response.WriteAsJsonAsync(new
 //        {
 //            message = "Something went wrodsfng",
@@ -242,8 +244,66 @@ app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 //        });
 //    });
 //});
-app.UseStatusCodePages();
-app.UseHttpsRedirection();
+app.UseStatusCodePages(); // generate custom text or structured responses for common HTTP error status codes (400–599) that otherwise return an empty response body
+                          //Agar ise use nahi karte aur application me 404 error aata hai, toh user ko browser me bilkul blank page dikhega. Yeh middleware us blank response ko intercept karke meaningful error message dikhata hai.
+
+// Custom Lambda HandlerAgar aapko logic lagana ho (jaise 401 aane par login page par redirect karna):
+/* 
+
+ usestatuscodepages lamda handler ka use tabhi karte hai jab har response error par same jagah data or status code send karna ho
+
+app.UseStatusCodePages(async context =>
+   {
+       var response = context.HttpContext.Response;
+
+       if (response.StatusCode == 401)
+       {
+           // Batao ki hum JSON bhej rahe hain
+           response.ContentType = "application/json";
+
+           // Custom error message create karo
+           var errorObject = new { message = "Aap logged in nahi hain. Kripya login karein." };
+
+           // JSON string me convert karke send karo
+           await response.WriteAsJsonAsync(errorObject);
+       }
+
+   });
+
+*/
+app.UseHttpsRedirection(); //http request convert/forworded into https
+app.UseStaticFiles();
+
+/*use static file me overload bhi hota hai wwwroot ma other path se data bhejna ho example*/
+app.UseStaticFiles(new StaticFileOptions { 
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "/Assets")), RequestPath = "/assets" /*requestpath me route kuch aise bane ga Ab user URL me "/assets/image.png" likh kar file access kar payega. */
+}); /*
+wwwroot files me stored  static files (jaise HTML, CSS, JavaScript, Images, Videos, aur Fonts) directly browser ko serve karne ki permission deta hai.
+According to security[
+1. Agar aapne sirf app.UseStaticFiles() likha hai, toh wwwroot folder ke andar ki koi bhi file bilkul public hoti hai. Agar kisi user ko file ka exact path (URL) pata hai, toh woh bina kisi login ya authorization ke use browser me open ya download kar sakta hai.
+2. Yeh security ke hisab se ek bada risk ho sakta hai agar aap wahan sensitive files rakh rahe hain.
+]  
+Note: Isse bachne ka 2 main ways hai 
+
+way-1. Jo files private hain (jaise users ke Aadhar Card, Invoices, ya PDFs), unhe wwwroot me mat rakhein. Unhe project ke bahar kisi alag folder me rakhlein aur ek Authorized Controller Action ke zariye serve karein.
+ [Authorize] // Sirf logged-in users hi access kar payenge
+---c-o-d-e---------------
+[HttpGet("download/{fileName}")]
+public IActionResult DownloadFile(string fileName)
+{
+    // wwwroot ke bahar ka path
+    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "PrivateFiles", fileName); 
+    
+    if (!System.IO.File.Exists(filePath))
+        return NotFound();
+
+    var fileBytes = System.IO.File.ReadAllBytes(filePath);
+    return File(fileBytes, "application/pdf", fileName);
+}
+------e-n-d-------
+
+                       
+                       */
 //custom class middleware
 app.UseMiddleware<CustomMiddleware>();
 app.UseMiddleware<CustomMiddleware2>();

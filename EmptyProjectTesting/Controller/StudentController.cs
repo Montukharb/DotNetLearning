@@ -16,11 +16,31 @@ namespace EmptyProjectTesting.Controller
         private const string V = "";
         private readonly IStudentServices _studentService;
         private readonly IConfiguration _configuration;
-        public StudentController(IStudentServices studentService ,IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+        private readonly ILogger<StudentController> _logger;
+        public StudentController(IStudentServices studentService ,IConfiguration configuration,IWebHostEnvironment env,ILogger<StudentController> logger)
         {
             _studentService = studentService;
             _configuration = configuration;
+            _env = env;
+            _logger = logger;
         }
+        [HttpGet("testEnv")] //without slash controller + action both
+        //[HttpGet("/testEnv")] // /testEnv starting ma slash use karne par absolute path bane ga apne app ko controller se divide kar de ga route bane              http://localhost:5272/testEnv
+        public IActionResult TestingEnvironment()
+        {
+            string environmentName= _env.EnvironmentName;
+            var rootPath = _env.WebRootPath;
+            _logger.LogInformation("Environment Name {Name}",environmentName);
+            return Ok(new
+            {
+                EnvironmentName = environmentName,
+                WebRootPath = rootPath,
+                ProjectRootPath = _env.ContentRootPath
+            });
+        }
+
+
         //[HttpGet("/detail",Name= "Anothertest")] ASP.NET Core route name "GetStudentById" se URL generate kar deta hai.
         //Route Generate using action name
         /*
