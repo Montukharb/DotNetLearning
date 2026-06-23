@@ -276,7 +276,7 @@ app.UseStaticFiles();
 
 /*use static file me overload bhi hota hai wwwroot ma other path se data bhejna ho example*/
 app.UseStaticFiles(new StaticFileOptions { 
-    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "/Assets")), RequestPath = "/assets" /*requestpath me route kuch aise bane ga Ab user URL me "/assets/image.png" likh kar file access kar payega. */
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "PrivateAssets")), RequestPath = "/assets" /*requestpath me route kuch aise bane ga Ab user URL me "/assets/image.png" likh kar file access kar payega. */
 }); /*
 wwwroot files me stored  static files (jaise HTML, CSS, JavaScript, Images, Videos, aur Fonts) directly browser ko serve karne ki permission deta hai.
 According to security[
