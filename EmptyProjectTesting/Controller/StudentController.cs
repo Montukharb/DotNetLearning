@@ -13,7 +13,7 @@ namespace EmptyProjectTesting.Controller
     [Route("api/[controller]")]
     public class StudentController : ControllerBase
     {
-        private const string V = "";
+       
         private readonly IStudentServices _studentService;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
@@ -27,7 +27,7 @@ namespace EmptyProjectTesting.Controller
         }
         [HttpGet("testEnv")] //without slash controller + action both
         //[HttpGet("/testEnv")] // /testEnv starting ma slash use karne par absolute path bane ga apne app ko controller se divide kar de ga route bane              http://localhost:5272/testEnv
-        public IActionResult TestingEnvironment()
+        public IActionResult TestingEnvironment(IStudentServices stuService)
         {
             string environmentName= _env.EnvironmentName;
             var rootPath = _env.WebRootPath;

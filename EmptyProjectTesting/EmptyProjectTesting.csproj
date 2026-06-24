@@ -25,6 +25,7 @@
   </ItemGroup>
 	<ItemGroup>
 		<Content Include="PrivateAssets\**" CopyToPublishDirectory="PreserveNewest" />
+		<!--<Using Include="System.Console" Static="true"/>-->
 <!--
 PrivateAssets = foldername 
 \** = wildcard paths are same nested to nested same

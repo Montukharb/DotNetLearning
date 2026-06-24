@@ -25,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(dbConn
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentServices, StudentService>();
 
+
 var SinkOptions = new MSSqlServerSinkOptions
 {
     TableName = "Logs",
@@ -190,7 +191,7 @@ builder.Services.AddScoped<FlagActionFilter>();//ServiceFilter ma Registration k
 builder.Services.AddControllers(options => { options.Filters.Add<DepartmentActionFilter>(); });
 //        context.Response.ContentType = "application/json";
 
-builder.Services.AddControllers(); //controller register karta hai all
+//builder.Services.AddControllers(); //controller register karta hai all
 
 var app = builder.Build();
 app.Use((context, next) =>
@@ -201,6 +202,19 @@ app.Use((context, next) =>
 
   }
 );
+app.Use(next => //use yahi karna chaiya asp.net frefer karta hai 
+{
+    return async (context) =>
+    {
+        // Log the incoming request details
+        Console.WriteLine($"Incoming Request: {context.Request.Method} {context.Request.Path}");
+
+        // Call the next middleware in the pipeline
+        await next(context);
+        // Log the outgoing response details
+        Console.WriteLine($"Outgoing Response: {context.Response.StatusCode}");
+    };
+});
 //global level exception handler 3 ways
 //app.UseExceptionHandler(); // 1. this is inbuild middleware we can overrite this middleware
 app.UseMiddleware<GlobalErrorHandlingMiddleware>();
@@ -276,7 +290,7 @@ app.UseStaticFiles();
 
 /*use static file me overload bhi hota hai wwwroot ma other path se data bhejna ho example*/
 app.UseStaticFiles(new StaticFileOptions { 
-    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "PrivateAssets")), RequestPath = "/assets" /*requestpath me route kuch aise bane ga Ab user URL me "/assets/image.png" likh kar file access kar payega. */
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "PrivateAssets")), RequestPath = "/ssetas" /*requestpath me route kuch aise bane ga Ab user URL me "/assets/image.png" likh kar file access kar payega. */
 }); /*
 wwwroot files me stored  static files (jaise HTML, CSS, JavaScript, Images, Videos, aur Fonts) directly browser ko serve karne ki permission deta hai.
 According to security[
@@ -348,6 +362,7 @@ app.MapGet("/", () => "Welcome to asp.net core web api " + appName); //minimal a
 //wild card routes handled by inbuild minimal api routing feature ye internall routing system me register hota hai hamesha last ma place hoga iss se phele minimal api use kar sakte hai 
 //app.Map("/{*path}", branch => { }); // ye bhi unknown route handle kar sakta hai rarely use hota hai
 app.MapCountryFlagEndpoints(); //endpoints register /call normally kha sakte hai minimal api call ho rahi ha
+app.MapTestEndpoint();
 app.MapFallback(() =>
 {
     return Results.NotFound("EndPoint Route Not Found");
