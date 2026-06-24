@@ -21,10 +21,10 @@ namespace EmptyProjectTesting.Endpoints
         public static void MapTestEndpoint(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("api2/test/person");
-            group.MapGet("{id:int}/{name:alpha?}", async Task<Results<Ok<Student>, NotFound>> (int id, [FromQuery] string? name, [FromServices] IStudentServices student,[FromServices] ILogger<Student> logger) =>
+            group.MapGet("{id:int?}/{name:alpha?}", async Task<Results<Ok<Student>, NotFound>> (int? id, [FromQuery] string? name, [FromServices] IStudentServices student,[FromServices] ILogger<Student> logger) =>
             {
                 logger.LogInformation("api test {name} user", name);
-                var students = await student.GetByIdStudent(id);
+                var students = await student.GetByIdStudent(id ?? 2);
 
                 if (students is not null)
                 {
@@ -41,7 +41,7 @@ namespace EmptyProjectTesting.Endpoints
                 {
                     Console.WriteLine($"Parameter name = {pamtrs.Name}, DataType = {pamtrs.ParameterType}");
                 }
-                if (parameters?.FirstOrDefault()?.ParameterType == typeof(int?))
+                if (parameters?.First()?.ParameterType == typeof(int?))
                 {
                     return async context => //filter create
                     {
