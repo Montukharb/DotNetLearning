@@ -1,10 +1,14 @@
+using Elastic.CommonSchema;
 using Elastic.Serilog.Sinks;
+using EmptyProjectTesting.Background_worker;
+using EmptyProjectTesting.Background_worker.Flag_State_Worker;
 using EmptyProjectTesting.ControllerActionFilter;
 using EmptyProjectTesting.DbContexts;
 using EmptyProjectTesting.Endpoints;
 using EmptyProjectTesting.Middleware;
 using EmptyProjectTesting.Repository;
 using EmptyProjectTesting.Services;
+using EmptyProjectTesting.State_Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.FileProviders;
@@ -18,13 +22,63 @@ var builder = WebApplication.CreateBuilder(args);
 
 var dbConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 var appName = builder.Configuration["MySetting:AppName"];
-builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(dbConnection));
+//builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(dbConnection, sqlOptions =>
+//{
+//    sqlOptions.EnableRetryOnFailure(
+//        maxRetryCount: 5,
+//        maxRetryDelay: TimeSpan.FromSeconds(5),
+//        errorNumbersToAdd: null
+//        );
+//})); //default lifetime dbContext == Scoped
+/* Problem with scoped dbcontext
+   1 HTTP request 1 DbContext instance auto dispose
+   When problem occured in scoped dbcontext ? => Background service, Parallel processing, Task.Run(), blazor service
+   Error occur -> cannot consumed scoped service from singleton
+   
+Solution AppDbContextFactory -> ye dbcontext ko Sigleton Service ma add karti hai or parallel processing
+factory = dbcontext ko track nahi karti auto disclose nahi hota mannually handle by using statement
+dbcontext factory work => jab bhi context chaiya new context create karti hai har bar new object
 
+# how to use
+--- 1. Reqister adddbcontextfactory in program.cs
+--- 2. when need context dependency use it 
+  { 
+   step 1. IDbContextFactory<AppdbContext> factory
+    _factory = factory;
+  step 2. create dbcontext as a service
+        using var db = await _factory.CreateDbContextAsync(); //new Context provided not use it
+         
+        return await db.students.ToListAsync();
+  }
+ */
+
+
+builder.Services.AddDbContextFactory<AppDbContext>(options => options.UseSqlServer(dbConnection, sqlOptions =>
+{
+    sqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 5,
+        maxRetryDelay: TimeSpan.FromSeconds(5),
+        errorNumbersToAdd: null
+        );
+}));
+//DbContext == Singleton Without tracking handle using statement when it is used any action.
+/*
+Toh.NET Core ka Dependency Injection system background mein do (2) kaam ek sath karta hai:
+1. Wo IDbContextFactory<AppDbContext> ko register karta hai (jo aapki background service use kar rahi hai).
+2. (Sabse Zaroori) Wo internally normal AppDbContext ko bhi as a Scoped service register kar deta hai.
+*/
+
+builder.Services.AddHostedService<Worker>(); //worker class auto managed and executed when app run and stop when app closed
+
+//for use custom in memory flag state handler register as singleton
+builder.Services.AddSingleton<State>();
+builder.Services.AddHostedService<FlagStateWorker>(); //work as normal worker but better control user can now process or idle in hand button.
 
 //First always prefer to register services and repository then controller
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentServices, StudentService>();
 
+builder.Services.AddHealthChecks();
 
 var SinkOptions = new MSSqlServerSinkOptions
 {
@@ -289,8 +343,10 @@ app.UseHttpsRedirection(); //http request convert/forworded into https
 app.UseStaticFiles();
 
 /*use static file me overload bhi hota hai wwwroot ma other path se data bhejna ho example*/
-app.UseStaticFiles(new StaticFileOptions { 
-    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "PrivateAssets")), RequestPath = "/ssetas" /*requestpath me route kuch aise bane ga Ab user URL me "/assets/image.png" likh kar file access kar payega. */
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "PrivateAssets")),
+    RequestPath = "/ssetas" /*requestpath me route kuch aise bane ga Ab user URL me "/assets/image.png" likh kar file access kar payega. */
 }); /*
 wwwroot files me stored  static files (jaise HTML, CSS, JavaScript, Images, Videos, aur Fonts) directly browser ko serve karne ki permission deta hai.
 According to security[
@@ -363,6 +419,7 @@ app.MapGet("/", () => "Welcome to asp.net core web api " + appName); //minimal a
 //app.Map("/{*path}", branch => { }); // ye bhi unknown route handle kar sakta hai rarely use hota hai
 app.MapCountryFlagEndpoints(); //endpoints register /call normally kha sakte hai minimal api call ho rahi ha
 app.MapTestEndpoint();
+app.MapHealthChecks("/health");
 app.MapFallback(() =>
 {
     return Results.NotFound("EndPoint Route Not Found");

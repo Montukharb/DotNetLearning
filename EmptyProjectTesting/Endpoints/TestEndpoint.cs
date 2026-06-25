@@ -21,7 +21,7 @@ namespace EmptyProjectTesting.Endpoints
         public static void MapTestEndpoint(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("api2/test/person");
-            group.MapGet("{id:int?}/{name:alpha?}", async Task<Results<Ok<Student>, NotFound>> (int? id, [FromQuery] string? name, [FromServices] IStudentServices student,[FromServices] ILogger<Student> logger) =>
+            group.MapGet("{id:int?}/{name:alpha?}", async Task<Results<Ok<Student>, NotFound>> (int? id, [FromQuery] string? name, [FromServices] IStudentServices student, [FromServices] ILogger<Student> logger) =>
             {
                 logger.LogInformation("api test {name} user", name);
                 var students = await student.GetByIdStudent(id ?? 2);
@@ -31,7 +31,9 @@ namespace EmptyProjectTesting.Endpoints
                     return TypedResults.Ok(students);
                 }
                 return TypedResults.NotFound();
-            }).AddEndpointFilterFactory((factoryContext, next) =>
+            });
+
+            group.AddEndpointFilterFactory((factoryContext, next) =>
             {
 
                 var methodInfo = factoryContext.MethodInfo;
@@ -53,23 +55,23 @@ namespace EmptyProjectTesting.Endpoints
 
                     };
                 }
-                
-                    return async context => //filter create
-                    {
-                        Console.WriteLine("Before action2");
-                        var Action_res = await next(context);
-                        Console.WriteLine("After action2");
-                        //if(Action_res is Results<Ok<Student>,NoContent> use)
-                        //{
-                        //    return TypedResults.Ok(new
-                        //    {
-                        //        Message = "Modifed of endpiont result in factory filter",
-                        //        Data = use.Result
-                        //    });
-                        //}
-                        return Action_res;
-                    };
-                
+
+                return async context => //filter create
+                {
+                    Console.WriteLine("Before action2");
+                    var Action_res = await next(context);
+                    Console.WriteLine("After action2");
+                    //if(Action_res is Results<Ok<Student>,NoContent> use)
+                    //{
+                    //    return TypedResults.Ok(new
+                    //    {
+                    //        Message = "Modifed of endpiont result in factory filter",
+                    //        Data = use.Result
+                    //    });
+                    //}
+                    return Action_res;
+                };
+
 
                 //return async context =>
                 //{
