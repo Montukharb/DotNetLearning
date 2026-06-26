@@ -61,12 +61,70 @@ builder.Services.AddDbContextFactory<AppDbContext>(options => options.UseSqlServ
         errorNumbersToAdd: null
         );
 }));
+
+
 //DbContext == Singleton Without tracking handle using statement when it is used any action.
 /*
 Toh.NET Core ka Dependency Injection system background mein do (2) kaam ek sath karta hai:
 1. Wo IDbContextFactory<AppDbContext> ko register karta hai (jo aapki background service use kar rahi hai).
 2. (Sabse Zaroori) Wo internally normal AppDbContext ko bhi as a Scoped service register kar deta hai.
 */
+
+builder.Services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(dbConnection, sqlOptions =>
+{
+    sqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 5,
+        maxRetryDelay: TimeSpan.FromSeconds(5),
+        errorNumbersToAdd: null
+
+        );
+
+}), poolSize: 2048); //by default poolsize 1024
+
+//PooledDbContextFactory use hevay traffic and high performance ka liya use hota hai ya internally 20-30 instance create kar ke rakhta hai user ki need hone par whi se object pick karta hai service complete hone ka bad wapis pool me store aise karne se bar bar creationg dispose ki problem khatam ho zati hai
+// ============================================================================
+// ⚠️ POOLED DBCONTEXT FACTORY RULES (IMPORTANT FOR PRODUCTION)
+// ============================================================================
+
+// RULE 1: STRICT STATELESSNESS (Sabse bada rule)
+// ----------------------------------------------------------------------------
+// DbContext class ke andar koi bhi custom runtime variables ya state store mat karna.
+// Example: public int CurrentUserId { get; set; } // ❌ DO NOT DO THIS!
+// Kyuki jab ek instance reuse hoga, toh User-1 ka data User-2 ko leak ho jayega.
+// DbContext must be 100% clean and stateless.
+
+
+// RULE 2: ALWAYS USE THE 'USING' STATEMENT (Dispose is mandatory)
+// ----------------------------------------------------------------------------
+// 'using var db = await _factory.CreateDbContextAsync();' likhna bilkul mat bhulna.
+// Normal factory me 'using' na lagane se Memory Leak hota hai.
+// Lekin Pooled factory me agar 'using' nahi lagaya, toh context kabhi Pool me wapas nahi jayega.
+// Natija? Pool jaldi hi khali (exhaust) ho jayega aur app hang ho jayegi.
+
+
+// RULE 3: DO NOT BENCHMARK / CONFIGURE INSIDE 'ONCONFIGURING'
+// ----------------------------------------------------------------------------
+// DbContext ki 'OnConfiguring' method ke andar heavy or dynamic configuration mat likho.
+// Pooled factory me 'OnConfiguring' sirf ek baar chalti hai jab pool pehli baar banta hai.
+// Har baar 'CreateDbContextAsync' call karne par ye method dubara RUN NAHI HOTI.
+
+
+// RULE 4: MULTI-THREADING AND THREAD-SAFETY
+// ----------------------------------------------------------------------------
+// Ek 'DbContext' instance ek waqt me sirf EK HI THREAD par chal sakta hai.
+// Agar 'Parallel.ForEach' ya 'Task.WhenAll' use kar rahe ho, toh har loop/thread ke andar 
+// 'await _factory.CreateDbContextAsync()' karke alag-alag instance nikalna mandatory hai.
+// Ek hi instance ko multiple parallel tasks me share mat karna.
+
+
+// RULE 5: DEFAULT POOL SIZE CAUTION
+// ----------------------------------------------------------------------------
+// By default, .NET pool ka size 1024 rakhta hai. 
+// Agar aapko lagta hai ki heavy load me 1024 se zyada concurrent connections lagenge,
+// toh Program.cs me 'poolSize: 2000' manually configure kar lena.
+// Example: builder.Services.AddPooledDbContextFactory<AppDbContext>(opt => ..., poolSize: 2000);
+// ============================================================================
+
 
 builder.Services.AddHostedService<Worker>(); //worker class auto managed and executed when app run and stop when app closed
 

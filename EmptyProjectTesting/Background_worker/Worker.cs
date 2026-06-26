@@ -20,20 +20,28 @@ namespace EmptyProjectTesting.Background_worker
             {
                 try
                 {
-                    using var db = await _factory.CreateDbContextAsync();
+                    using var db = await _factory.CreateDbContextAsync(stoppingToken);
 
-                    var students = await db.Students.ToListAsync();
+                    var students = await db.Students.ToListAsync(stoppingToken);
 
                     // Any operation as we need to do here
 
                     // ERROR FIXED: Yahan 'stoppingToken' pass karna zaroori hai.
                     // Isse agar application stop hogi, toh 5 second ka wait turant cancel ho jayega.
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Exception occur ");
+                }
+                try
+                {
                     await Task.Delay(5000, stoppingToken);
+
                 }
                 catch (OperationCanceledException) //run when app close
                 {
                     _logger.LogInformation("Worker background service stoped successfully");
-                     
+
                     break; //graceful break
                 }
             }

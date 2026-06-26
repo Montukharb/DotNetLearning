@@ -25,9 +25,9 @@ namespace EmptyProjectTesting.Background_worker.Flag_State_Worker
                 {
                     if (_state.IsEnabled) //state enabled start actually work in background 
                     {
-                        using var db = await _factory.CreateDbContextAsync(); //auto close
-                        var studentsList = await db.Students.ToListAsync();
                         _logger.LogInformation("Background flag-state-worker start");
+                        using var db = await _factory.CreateDbContextAsync(stoppingToken); //auto close
+                        var studentsList = await db.Students.ToListAsync(stoppingToken);
 
                     }
                     else
@@ -39,7 +39,7 @@ namespace EmptyProjectTesting.Background_worker.Flag_State_Worker
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogInformation("Error inside ");
+                    _logger.LogInformation("Error inside flag state");
                 }
                 try
                 {
