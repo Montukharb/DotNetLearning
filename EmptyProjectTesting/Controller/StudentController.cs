@@ -253,6 +253,24 @@ namespace EmptyProjectTesting.Controller
                 Message = $"Record updated at id = {id}"
             });
         }
+
+        public async Task<IActionResult> UploadFile(IFormFile singlefile,IFormCollection fileCollection, [FromServices]IWebHostEnvironment env)
+        {
+            //yaha normal disk file se kam method mile ga kyuki ye http request par upload hui file ka wrapper hai normal disk file nahi hai
+            //normal file ka sabhi operatin karne hai phele file save karni hogi
+            //Default provide methods
+            string filePath = Path.Combine(env.ContentRootPath, "PrivateAssets","Text_Files", singlefile.FileName);
+
+            
+            using FileStream fs = new FileStream($"{filePath} ", FileMode.Create, FileAccess.Write, FileShare.None);
+            
+            //singlefile.CopyTo(fs); //direct str    eam ma copy hogi normal file path ma nahi
+            await singlefile.CopyToAsync(fs); //ye bhi string me copy hogi asyncronous me
+            
+            using StreamReader stream = new StreamReader(singlefile.OpenReadStream());
+            string text = await stream.ReadToEndAsync();
+            return Ok(text);
+        }
     }
 
 }

@@ -459,12 +459,11 @@ FileInfo / DirectoryInfo → advanced info*/
             //exits
             if (Directory.Exists(path))
             {
-                Console.WriteLine("Folder exists");
-
+                WriteLine("Folder exists");
             }
             else
             {
-                Console.WriteLine("Folder not found");
+                WriteLine("Folder not found");
             }
 
             if (Directory.Exists("TestingAno"))
@@ -502,7 +501,8 @@ FileInfo / DirectoryInfo → advanced info*/
             }
             else
             {
-                WriteLine("Not Exists directory");
+                if (Directory.Exists(path))
+                    WriteLine("Not Exists directory");
             }
 
         }
@@ -666,7 +666,7 @@ FileInfo / DirectoryInfo → advanced info*/
                 try
                 {
                     string destination = Path.Combine(path + "okCopied.txt");
-                    if (!File.Exists(destination))
+                    if (File.Exists(destination))
                     {
                         throw new Exception("File already exits");
                     }
@@ -892,7 +892,7 @@ FileInfo / DirectoryInfo → advanced info*/
                     0------ - 4999------ - END
           
                     yahan se continue */
-                    
+
                     using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                     {
                         if (fs.Length <= 0)
@@ -912,7 +912,7 @@ FileInfo / DirectoryInfo → advanced info*/
                             byte[] Readingcontainer = new byte[fs.Length]; //blank container created
 
                             int readingCapicty = fs.Read(Readingcontainer, 0, Readingcontainer.Length);
-                            
+
                             WriteLine("data read by Pure FileStream Class = " + Encoding.UTF8.GetString(Readingcontainer, 0, readingCapicty));
 
                         }

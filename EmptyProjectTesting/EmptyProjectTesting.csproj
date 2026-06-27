@@ -36,8 +36,7 @@ PreserveNewest (Sabse best): Agar aapne PrivateFiles me koi nayi file dali hai, 
 	
 	
   <ItemGroup>
-    <Folder Include="NewFolder\" />
-    <Folder Include="PrivateAssets\" />
+    <Folder Include="PrivateAssets\Text_Files\" />
     <Folder Include="wwwroot\Text\" />
     <Folder Include="wwwroot\Pdf\" />
     <Folder Include="wwwroot\Video\" />
