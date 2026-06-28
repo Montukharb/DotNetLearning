@@ -53,14 +53,14 @@ dbcontext factory work => jab bhi context chaiya new context create karti hai ha
  */
 
 
-builder.Services.AddDbContextFactory<AppDbContext>(options => options.UseSqlServer(dbConnection, sqlOptions =>
-{
-    sqlOptions.EnableRetryOnFailure(
-        maxRetryCount: 5,
-        maxRetryDelay: TimeSpan.FromSeconds(5),
-        errorNumbersToAdd: null
-        );
-}));
+//builder.Services.AddDbContextFactory<AppDbContext>(options => options.UseSqlServer(dbConnection, sqlOptions =>
+//{
+//    sqlOptions.EnableRetryOnFailure(
+//        maxRetryCount: 5,
+//        maxRetryDelay: TimeSpan.FromSeconds(5),
+//        errorNumbersToAdd: null
+//        );
+//}));
 
 
 //DbContext == Singleton Without tracking handle using statement when it is used any action.
@@ -69,7 +69,7 @@ Toh.NET Core ka Dependency Injection system background mein do (2) kaam ek sath 
 1. Wo IDbContextFactory<AppDbContext> ko register karta hai (jo aapki background service use kar rahi hai).
 2. (Sabse Zaroori) Wo internally normal AppDbContext ko bhi as a Scoped service register kar deta hai.
 */
-
+//builder.Services.AddDbContext<>(); AddDbContext or AddDbContextPool eak sath registern nahi karte kyuki dono hi appDbcontext ko register karte hai eak hi sufficient hai.
 builder.Services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(dbConnection, sqlOptions =>
 {
     sqlOptions.EnableRetryOnFailure(
@@ -77,9 +77,20 @@ builder.Services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(
         maxRetryDelay: TimeSpan.FromSeconds(5),
         errorNumbersToAdd: null
 
-        );
+        ); //pooled use hoga normal addDbcontext jaise efficient works karne me 
 
 }), poolSize: 2048); //by default poolsize 1024
+
+builder.Services.AddPooledDbContextFactory<AppDbContext>(options => options.UseSqlServer(dbConnection, sqlOptions =>
+{
+    sqlOptions.EnableRetryOnFailure(
+        maxRetryCount:5,
+        maxRetryDelay:TimeSpan.FromSeconds(5),
+        errorNumbersToAdd: null
+        );
+
+}));
+
 
 //PooledDbContextFactory use hevay traffic and high performance ka liya use hota hai ya internally 20-30 instance create kar ke rakhta hai user ki need hone par whi se object pick karta hai service complete hone ka bad wapis pool me store aise karne se bar bar creationg dispose ki problem khatam ho zati hai
 // ============================================================================
