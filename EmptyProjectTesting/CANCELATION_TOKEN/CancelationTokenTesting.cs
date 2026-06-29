@@ -23,6 +23,7 @@ namespace EmptyProjectTesting.CANCELATION_TOKEN
                     "https://jsonplaceholder.typicode.com/posts",
                     linkedCts.Token);
 
+                //Throw and exception if status code is 400,404,500,etc.
                 response.EnsureSuccessStatusCode();
 
                 return response;

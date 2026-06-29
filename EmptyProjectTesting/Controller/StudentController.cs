@@ -254,12 +254,12 @@ namespace EmptyProjectTesting.Controller
             });
         }
 
-        public async Task<IActionResult> UploadFile(IFormFile singlefile,IFormCollection fileCollection, [FromServices]IWebHostEnvironment env)
+        public async Task<IActionResult> UploadFile(IFormFile singlefile,IFormCollection fileCollection)
         {
             //yaha normal disk file se kam method mile ga kyuki ye http request par upload hui file ka wrapper hai normal disk file nahi hai
             //normal file ka sabhi operatin karne hai phele file save karni hogi
             //Default provide methods
-            string filePath = Path.Combine(env.ContentRootPath, "PrivateAssets","Text_Files", singlefile.FileName);
+            string filePath = Path.Combine(_env.ContentRootPath, "PrivateAssets","Text_Files", singlefile.FileName);
 
             
             using FileStream fs = new FileStream($"{filePath} ", FileMode.Create, FileAccess.Write, FileShare.None);
