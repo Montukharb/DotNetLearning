@@ -31,7 +31,7 @@ namespace EmptyProjectTesting.Background_worker
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Exception occur ");
+                    _logger.LogError("Exception occur {exception-message}",ex.Message);
                 }
                 try
                 {

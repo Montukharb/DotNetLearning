@@ -6,6 +6,7 @@ using EmptyProjectTesting.ControllerActionFilter;
 using EmptyProjectTesting.DbContexts;
 using EmptyProjectTesting.Endpoints;
 using EmptyProjectTesting.Middleware;
+using EmptyProjectTesting.ParallelProgramming;
 using EmptyProjectTesting.Repository;
 using EmptyProjectTesting.Services;
 using EmptyProjectTesting.State_Configuration;
@@ -146,6 +147,9 @@ builder.Services.AddHostedService<FlagStateWorker>(); //work as normal worker bu
 //First always prefer to register services and repository then controller
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentServices, StudentService>();
+
+//parallelprogramming service register
+builder.Services.AddScoped<ParallelProgram>();
 
 builder.Services.AddHealthChecks();
 
