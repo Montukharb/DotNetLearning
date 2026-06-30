@@ -7,6 +7,7 @@ using EmptyProjectTesting.DbContexts;
 using EmptyProjectTesting.Endpoints;
 using EmptyProjectTesting.Middleware;
 using EmptyProjectTesting.ParallelProgramming;
+using EmptyProjectTesting.Race_Condition;
 using EmptyProjectTesting.Repository;
 using EmptyProjectTesting.Services;
 using EmptyProjectTesting.State_Configuration;
@@ -137,7 +138,7 @@ builder.Services.AddPooledDbContextFactory<AppDbContext>(options => options.UseS
 // Example: builder.Services.AddPooledDbContextFactory<AppDbContext>(opt => ..., poolSize: 2000);
 // ============================================================================
 
-
+//background class register
 builder.Services.AddHostedService<Worker>(); //worker class auto managed and executed when app run and stop when app closed
 
 //for use custom in memory flag state handler register as singleton
@@ -150,6 +151,9 @@ builder.Services.AddScoped<IStudentServices, StudentService>();
 
 //parallelprogramming service register
 builder.Services.AddScoped<ParallelProgram>();
+
+//RaceConditonServices register
+builder.Services.AddScoped<RaceProgram>();
 
 builder.Services.AddHealthChecks();
 
@@ -168,6 +172,7 @@ builder.Host.UseSerilog((context, config) =>
         config.WriteTo.Console();
         config.WriteTo.File("Logs/log.txt", shared: false, rollingInterval: RollingInterval.Day);
         config.WriteTo.File(new JsonFormatter(), "Json_Logs/log.json", rollingInterval: RollingInterval.Day);
+        config.WriteTo.MSSqlServer(dbConnection, sinkOptions: SinkOptions); //just checking
     }
     else
     {
@@ -180,7 +185,7 @@ builder.Host.UseSerilog((context, config) =>
 
         //----------Database Save log ------------
 
-        config.WriteTo.MSSqlServer(dbConnection, sinkOptions: SinkOptions); //data base ma logs save hogi
+        //config.WriteTo.MSSqlServer(dbConnection, sinkOptions: SinkOptions); //data base ma logs save hogi
     }
 });
 /*
@@ -306,16 +311,19 @@ app.Run();
  */
 
 builder.Services
-       .AddControllers()
+       .AddControllers(options => options.Filters.Add<DepartmentActionFilter>()) //departmentActionFilter global 
        .AddJsonOptions(options =>
        {
            options.JsonSerializerOptions.ReferenceHandler =
                ReferenceHandler.IgnoreCycles;
-       }); //include se cycle banti hai unko remove karta hai kai bar error bhi de sakta hai better hoga dto use kare
+       }
+       ); //include se cycle banti hai unko remove karta hai kai bar error bhi de sakta hai better hoga dto use kare
 builder.Services.AddScoped<FlagActionFilter>();//ServiceFilter ma Registration karna padta hai typeFilter ma need nahi hai
 
 //department action filter ab global level par add ho gaya hai filter complete app par apply hoga ab
-builder.Services.AddControllers(options => { options.Filters.Add<DepartmentActionFilter>(); });
+
+//builder.Services.AddControllers(options => { options.Filters.Add<DepartmentActionFilter>(); });
+
 //        context.Response.ContentType = "application/json";
 
 //builder.Services.AddControllers(); //controller register karta hai all
@@ -329,9 +337,9 @@ app.Use((context, next) =>
 
 }
 );
-app.Use(next => //use yahi karna chaiya asp.net frefer karta hai 
+app.Use(next => //use yahi karna chaiya asp.net first preference {Simplicity ka liye wrapper wala bhi use kar sakte hai}
 {
-    return async (context) =>
+    return async context =>
     {
         // Log the incoming request details
         Console.WriteLine($"Incoming Request: {context.Request.Method} {context.Request.Path}");
