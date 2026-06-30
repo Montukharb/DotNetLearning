@@ -14,6 +14,7 @@ namespace EmptyProjectTesting.Race_Condition
     public class RaceProgram
     {
         public static int _count;
+        public static int _count2;
         //Create thread class obj
         public Thread T = new Thread(CreateRaceCondition.ThreadWorker1);
         public Thread T2 = new Thread(CreateRaceCondition.ThreadWorker2);
@@ -36,14 +37,25 @@ namespace EmptyProjectTesting.Race_Condition
             Isliye race condition kabhi hoti hai aur kabhi nahi. Scheduler aur hardware decide karte hain ki threads kaise execute honge.
         */
         }
+        public int ThreadHandler_RaceCondSolver()
+        {
+            Thread T = new Thread(SolveRaceCondition.ThreadWorker1);
+            Thread T2 = new Thread(SolveRaceCondition.ThreadWorker2);
+            T.Start();
+            T2.Start();
+
+            T.Join();
+            T2.Join();
+            Console.WriteLine($"Count2 value = {_count2}");
+            return _count2;
+        }
     }
 
     public class CreateRaceCondition
     {
-
         public static void ThreadWorker1()
         {
-            for (int i = 0; i <= 1000000; i++) //using loop because normal increment can't determine race conditon
+            for (int i = 0; i <= 100000; i++) //using loop because normal increment can't determine race conditon
             {
                 RaceProgram._count++;
             }
@@ -55,7 +67,7 @@ namespace EmptyProjectTesting.Race_Condition
         }
         public static void ThreadWorker2()
         {
-            for (int i = 0; i <= 1000000; i++)
+            for (int i = 0; i <= 100000; i++)
             {
                 RaceProgram._count++;
             }
@@ -64,6 +76,30 @@ namespace EmptyProjectTesting.Race_Condition
              Step2 = add/increment
              Step3 = Write
              */
+        }
+    }
+    public class SolveRaceCondition
+    {
+        static object _obj = new();
+        public static void ThreadWorker1()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                lock (_obj)
+                {
+                    RaceProgram._count2++;
+                }
+            }
+        }
+        public static void ThreadWorker2()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                lock (_obj)
+                {
+                    RaceProgram._count2++;
+                }
+            }
         }
     }
 }

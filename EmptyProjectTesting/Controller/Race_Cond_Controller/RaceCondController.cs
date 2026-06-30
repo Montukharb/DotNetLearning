@@ -13,10 +13,16 @@ namespace EmptyProjectTesting.Controller.Race_Cond_Controller
             _raceProgram = raceProgram;
         }
 
-        [HttpGet]
+        [HttpGet("creater/")]
         public IActionResult RaceHandlerGet()
         {
             var countValue = _raceProgram.ThreadHandler();
+            return Ok(countValue);
+        }
+        [HttpGet("solver/")]
+        public IActionResult RaceSolverGet()
+        {
+            var countValue = _raceProgram.ThreadHandler_RaceCondSolver();
             return Ok(countValue);
         }
     }
