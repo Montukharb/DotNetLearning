@@ -27,7 +27,8 @@ namespace EmptyProjectTesting.Controller
         {
             _logger.LogInformation("SequentialProgramming service executed");
             _parallelProgram.SequentialMainMethod();
-
+            _parallelProgram.ThreadOperations();
+            
             return Ok("sequentialProgramming");
         }
     }
