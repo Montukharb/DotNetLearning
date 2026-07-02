@@ -31,7 +31,7 @@ namespace EmptyProjectTesting.Background_worker
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Exception occur {exception-message}",ex.Message);
+                    _logger.LogError("Exception occur {exception-message}", ex.Message);
                 }
                 try
                 {
@@ -54,4 +54,24 @@ Singleton Object: Hamesha ek hi rahega (Jab tak app chal rahi hai).
 CancellationToken: Har HTTP request ke sath naya banta hai aur request khatam hote hi expire ho jata hai.
 
 Rule: Singleton ke andar kabhi bhi CancellationToken ko class-level variable ya property bana kar store mat karo. Hamesha use Method ke arguments (parameters) ke zariye pass karo. 
+ */
+
+/*
+ 
+1. Scheduled Tasks & Cron Jobs (Time-based Tasks)
+    • Database Cleanup: Purane logs, expired sessions, ya temporary data ko daily delete karna.
+    • Daily Reports: Har raat ko business metrics calculate karke admin ko report bhejna.
+    • Subscription Check: Expired premium users ka status automatically update karna.
+2. Queue Processing & Message Consumption
+    • RabbitMQ / Kafka Consumer: Message brokers se messages ko receive karna aur background me process karna.
+    • Email Queue: Jab koi user register kare, toh email bhejte waqt main request ko block na karke message queue me dalna, fir background service se use send karna.
+    • Order Processing: E-commerce me order place hone ke baad payment confirmation aur inventory update background me handle karna.
+3. Data Syncing & Polling
+    • Third-Party API Polling: Har 15 minute me kisi external API (jaise stock prices ya weather data) se data fetch karke local database me save karna.
+    • Cache Refreshing: Heavy database queries ka data periodically refresh karke Redis cache me update karte rehna.
+4. Real-time Monitoring & Alerts
+    • System Health Check: Server ki health, memory usage, ya server availability ko continuous monitor karna.
+    • Alert Notifications: Agar system me koi critical error aaye toh developers ko Slack ya Microsoft Teams par turant alert bhejna.
+5. File Processing
+    • Bulk Uploads: User ki upload ki hui badi Excel, CSV, ya image files ko chunk-by-chunk read aur process karna taaki web application slow na ho.
  */

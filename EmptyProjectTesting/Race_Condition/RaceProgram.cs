@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyModel;
+﻿using Elastic.CommonSchema;
+using Microsoft.Extensions.DependencyModel;
 using System.ComponentModel;
 using System.Diagnostics;
 
+using System.Threading.Tasks; //Task or parallel 
 namespace EmptyProjectTesting.Race_Condition
 {
     /*
@@ -19,8 +21,11 @@ namespace EmptyProjectTesting.Race_Condition
         public Thread T = new Thread(CreateRaceCondition.ThreadWorker1);
         public Thread T2 = new Thread(CreateRaceCondition.ThreadWorker2);
 
+        //Task lik
         public int ThreadHandler()
         {
+            Console.WriteLine("Current Processor ID: " + Thread.GetCurrentProcessorId()); //GetCurrentProcessorId() method returns the ID of the processor on which the current thread is running. This can be useful for debugging and performance analysis, as it allows you to see which processor is executing a particular thread at a given time.
+
             T.Start(); //First Thread now go To ready state cpu decide whether is running state.
             T2.Start();
             T.Join(); //block the calling thread until the specified thread completes executions.
@@ -100,6 +105,51 @@ namespace EmptyProjectTesting.Race_Condition
                     RaceProgram._count2++;
                 }
             }
+
         }
+
+        /*
+    problem ye hai jab normal case me os thread ko scheduler decide karta hai kon start kare ga kon close kuch Dll me require hoti hai ki same Os thread use ho. Isliye .NET me Thread.BeginThreadAffinity() aur Thread.EndThreadAffinity() methods diye gaye hain. Ye methods OS ko inform karte hain ki is thread ko same OS thread par execute karna hai.
+        
+         Aaj ke modern .NET (.NET Core/.NET 5+) applications me BeginThreadAffinity() aur EndThreadAffinity() bahut hi kam use hote hain. Inka main purpose legacy COM interop ya native libraries ke saath kaam karna tha jahan same OS thread ki requirement hoti thi. Normal Console App, ASP.NET Core, WinForms, WPF, ya business applications me tumhe lagbhag kabhi inki zarurat nahi padegi.
+        | Project Type                   | Use `BeginThreadAffinity()`? |
+| ------------------------------ | ---------------------------- |
+| Console App                    | ❌ Never                      |
+| ASP.NET Core Web API           | ❌ Never                      |
+| MVC                            | ❌ Never                      |
+| Entity Framework Core          | ❌ Never                      |
+| Blazor                         | ❌ Never                      |
+| MAUI                           | ❌ Never                      |
+| WinForms/WPF (normal code)     | ❌ Almost never               |
+| Native C++ DLL Interop         | ✅ Sometimes                  |
+| COM Interop (legacy)           | ✅ Sometimes                  |
+| Hardware SDKs                  | ✅ Sometimes                  |
+| Game Engine / Rendering        | ✅ Rarely                     |
+| OS-level / Runtime development | ✅ Yes                        |
+
+         */
+        public static void SameOsThread()
+        {
+            Thread.BeginThreadAffinity(); //Inform OS that this thread should run on the same OS thread.
+            try
+            {
+                // Perform operations that require the same OS thread here.
+                Console.WriteLine("Thread is running with affinity to the same OS thread.");
+                for (int i = 1; i <= 5; i++)
+                {
+                    Console.WriteLine($"Index : {i} Processor/CPU : {Thread.GetCurrentProcessorId()} is Thread Id {Thread.CurrentThread.ManagedThreadId}");
+                    Thread.Sleep(800); // Simulate some work
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred: {0}", e.Message);
+            }
+            finally
+            {
+                Thread.EndThreadAffinity(); //Inform OS that this thread can now be scheduled on any OS thread.
+            }
+        }
+        //Note: 99% of the time, you will never need to use BeginThreadAffinity() and EndThreadAffinity() in modern .NET applications. Use them only when you have a specific requirement to run code on the same OS thread, such as when dealing with legacy COM components or certain native libraries.
     }
 }

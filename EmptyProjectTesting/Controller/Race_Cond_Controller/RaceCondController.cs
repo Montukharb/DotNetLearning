@@ -25,5 +25,11 @@ namespace EmptyProjectTesting.Controller.Race_Cond_Controller
             var countValue = _raceProgram.ThreadHandler_RaceCondSolver();
             return Ok(countValue);
         }
+        [HttpGet("sameosthread/")]
+        public IActionResult SameOsThreadGet()
+        {
+            SolveRaceCondition.SameOsThread();
+            return Ok(true);
+        }
     }
 }

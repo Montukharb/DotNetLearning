@@ -14,8 +14,10 @@ namespace EmptyProjectTesting.Endpoints
         public static void MapCountryFlagEndpoints(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("api/countryflag");
+            //http://localhost:7572/api/countryflag/IN
+            var group2 = app.MapGroup("api/VillageCode");
             //group.AddEndpointFilter<DepartmentEndPointFilter>(); // ye grouplevel filter hai 
-            group.MapGet("{code}", async Task<Results<Ok<List<CountryFlag>>, NoContent, BadRequest<string>>> (string code, [FromServices] AppDbContext context) =>
+            group.MapGet("{code}/{name}", async Task<Results<Ok<List<CountryFlag>>, NoContent, BadRequest<string>>> (string code, string name,[FromServices] AppDbContext context) =>
             {
                 var result = await context.countryFlag.ToListAsync();
 
@@ -26,6 +28,7 @@ namespace EmptyProjectTesting.Endpoints
                 Console.WriteLine(context.HttpContext.Request.Path);
                 //getting parameters from endpoints using getArgument
                 string code = context.GetArgument<string>(0);
+                string name = context.GetArgument<string>(1);
                 if (code is not ("IN" or "US"))
                 {
                     return TypedResults.BadRequest("Enter only india and united states coutry code");

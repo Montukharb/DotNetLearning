@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Text;
 using System.Threading;
 
@@ -37,9 +38,9 @@ namespace EmptyProjectTesting.ParallelProgramming
         Thread represents an operating system thread.
         Complete List
         Properties
-            Name
-            IsAlive
-            IsBackground
+           1.Name ✅ t.name = "Download Thread" Note: Thread name can be set only once. If you try to set it again, it will throw an InvalidOperationException.
+           2.IsAlive ✅ t.IsAlive result true if thread is running or false if thread is not running.
+           3.IsBackground ✅ t.IsBackground = true; If a thread is marked as a background thread. program will not wait for it to finish before exiting. 
             Priority
             ManagedThreadId
             ThreadState
@@ -47,21 +48,21 @@ namespace EmptyProjectTesting.ParallelProgramming
             CurrentUICulture
 
         Instance Methods
-            Start()
-            Join()
+            Start() ✅
+            Join() ✅
             Interrupt()
             Abort() ❌ Obsolete
             Suspend() ❌ Obsolete
             Resume() ❌ Obsolete
             
         Static Methods
-            Sleep()
-            Yield()
-            SpinWait()
-            MemoryBarrier()
-            GetCurrentProcessorId()
-            BeginThreadAffinity()
-            EndThreadAffinity()
+            Sleep() ✅
+            Yield() ✅
+            SpinWait() ✅
+            MemoryBarrier() ✅
+            GetCurrentProcessorId() ✅
+            BeginThreadAffinity() ✅
+            EndThreadAffinity() ✅
       */
         public void ThreadOperations()
         {
@@ -163,6 +164,110 @@ namespace EmptyProjectTesting.ParallelProgramming
             count++;
             count++;
             Console.WriteLine("Count = " + count); // result 2
+        }
+    }
+
+    class ThreadPropertyExample
+    {
+        static void Work()
+        {
+            while (true)
+            {
+                Console.WriteLine("Running...");
+                Thread.Sleep(1000);
+            }
+        }
+
+        public static void Ex1()
+        {
+            Thread t = new Thread(Work);
+
+            t.IsBackground = true;
+
+            t.Start();
+
+            Console.WriteLine("Main End");
+        }
+        public static void Ex2()
+        {
+            //OS Scheduler ko hint deta hai ki thread kitni importance rakhta hai.
+            //Lowest , BelowNormal , Normal, AboveNormal, Highest
+            Thread t = new Thread(Work);
+            t.Priority = ThreadPriority.AboveNormal; //Thread ki priority set karna
+
+            /*  Priority guarantee nahi karti ki wahi pehle chalega.
+                Ye sirf scheduler ko suggestion deti hai.
+                OS final decision leta hai.
+            */
+
+            //thread State Current thread kis state me hai uski information deta hai.
+            Console.WriteLine(t.ThreadState);
+        }
+        public static void CultureInfoExample()
+        {
+            Console.WriteLine("Current Culture" + Thread.CurrentThread.CurrentCulture.Name);
+            Console.WriteLine("Current Culture DateTime" + Thread.CurrentThread.CurrentCulture.DateTimeFormat);
+            Console.WriteLine(DateTime.Now.ToString("F"));
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Console.WriteLine("After en-US Culture set");
+            Console.WriteLine("Current Culture" + Thread.CurrentThread.CurrentCulture.Name);
+            Console.WriteLine("Current Culture DateTime" + Thread.CurrentThread.CurrentCulture.DateTimeFormat);
+            Console.WriteLine(DateTime.Now.ToString("F"));
+            Console.WriteLine(6546.56.ToString("C"));
+            /*
+             Multi-country Applications
+             Banking
+             Accounting
+             Localization
+             */
+
+            /*
+             CurrentCulture :- formating
+             CurrentUICulture :- resource file
+             */
+            Thread.CurrentThread.CurrentUICulture =
+    new CultureInfo("hi-IN"); //Resource file ke liye culture set karna Ab application Hindi resource file load karegi (agar available ho).
+            Console.WriteLine("Current UI Culture" + Thread.CurrentThread.CurrentUICulture.Name);
+        }
+
+        public static void ThreadType()
+        {
+            /*
+             Thread 2 Type ka hote hai 
+             1. Foreground Thread :- Main thread ke complete hone ke baad bhi ye thread run karte hai. Program terminate nahi hota jab tak ye thread complete nahi ho jata.
+            "Jab tak ek bhi Foreground thread chal raha hai, main application band nahi karunga."
+
+            Matlab agar Main() method khatam bhi ho jaye, lekin foreground thread chal raha ho, to program wait karega.
+            
+             */
+            //Example Foreground Thread
+            Thread t = new Thread(Work2);
+            // Default = Foreground Thread
+            t.Start();
+            Console.WriteLine("Main Finished");
+
+            /*
+             Background thread important nahi mana jata.
+             CLR bolta hai:
+             "Main thread khatam? Aur koi foreground thread nahi? Theek hai, application band karo."
+             Chahe background thread ka kaam adhoora ho.  
+             kabhi kabhi single ouput show kar sakta hai depending on thread scheduling.
+             */
+            //Example Background Thread
+            Thread ts = new Thread(Work2);
+            ts.Start();
+            ts.IsBackground = true; //Background Thread
+            Console.WriteLine("Background Thread Started and Ended without waiting for it to complete");
+
+            //Foreground threads application ko alive rakhte hain, jabki Background threads application terminate hote hi automatically stop (terminate) ho jaate hain.
+        }
+        static void Work2()
+        {
+            for (int i = 1; i <= 10; i++)
+            {
+                Console.WriteLine(i);
+                Thread.Sleep(1000);
+            }
         }
     }
 }

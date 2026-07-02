@@ -92,7 +92,7 @@ builder.Services.AddPooledDbContextFactory<AppDbContext>(options => options.UseS
         );
 
 }));
-
+//TransactionScope ?
 
 //PooledDbContextFactory use hevay traffic and high performance ka liya use hota hai ya internally 20-30 instance create kar ke rakhta hai user ki need hone par whi se object pick karta hai service complete hone ka bad wapis pool me store aise karne se bar bar creationg dispose ki problem khatam ho zati hai
 // ============================================================================
