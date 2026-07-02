@@ -11,7 +11,7 @@ namespace EmptyProjectTesting.Race_Condition
      A race condition occurs when multiple threads concurrently read and write shared data, causing the final outcome to depend entirely on the unpredictable order and timing of their execution.
     # Solution :
     1.Locks / Synchronization: Code ke uss hissa ko lock kar dena eak time par eak hi thread use kar sake
-    2.interlocked
+    2.Monitor class 
      */
     public class RaceProgram
     {
