@@ -11,6 +11,7 @@ using EmptyProjectTesting.Race_Condition;
 using EmptyProjectTesting.Repository;
 using EmptyProjectTesting.Services;
 using EmptyProjectTesting.State_Configuration;
+using EmptyProjectTesting.Thread_s;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.FileProviders;
@@ -148,7 +149,7 @@ builder.Services.AddHostedService<FlagStateWorker>(); //work as normal worker bu
 //First always prefer to register services and repository then controller
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentServices, StudentService>();
-
+builder.Services.AddScoped<ThreadPoolSample>();
 //parallelprogramming service register
 builder.Services.AddScoped<ParallelProgram>();
 

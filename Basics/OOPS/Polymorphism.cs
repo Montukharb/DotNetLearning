@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel;
+using System.Text;
 
 namespace Basics.OOPS
 {
@@ -26,39 +27,41 @@ namespace Basics.OOPS
     }
 
     //child class 1
-    internal class child1:Asset
+    internal class child1 : Asset
     {
         internal int stoc { get; set; }
     }
 
     //child class 2
 
-    internal class child2:Asset
+    internal class child2 : Asset
     {
-      internal int employe { get; set; }
+        internal int employe { get; set; }
     }
 
 
     //polymorphism runtime
-    internal class Base {
+    internal class Base
+    {
         internal virtual void displayHONK()
         {
             WriteLine("Base class method run tut tut");
         }
     }
 
-    internal class Derived:Base
+    internal class Derived : Base
     {
         internal override void displayHONK()
         {
             WriteLine("Child class method run override by derived class");
         }
     }
-     
 
 
-    public abstract class AT{
-       
+
+    public abstract class AT
+    {
+
         //static method abstract
         public static void VisBOdy()
         {
@@ -83,14 +86,14 @@ namespace Basics.OOPS
         //    WriteLine("Abstract class default constructor");
         //}
 
-        public AT(string address,int pincode,int number, string userName, int age)  :   this(number,userName,age)
+        public AT(string address, int pincode, int number, string userName, int age) : this(number, userName, age)
         {
             WriteLine($"long parameter constructor run Address = {address} pincode = {pincode}");
         }
 
         public AT(int number, string userName, int age)
         {
-           WriteLine( $"short parameter constructor run Number = {number} userName = {userName} age = {age}" );
+            WriteLine($"short parameter constructor run Number = {number} userName = {userName} age = {age}");
         }
 
     }
@@ -106,10 +109,11 @@ namespace Basics.OOPS
         public virtual void si() { }
     }
 
-    public class Working:AT2 {
+    public class Working : AT2
+    {
 
 
-        public Working():base()
+        public Working() : base()
         {
             WriteLine("Child class constructor run in end");
         }
@@ -126,7 +130,7 @@ namespace Basics.OOPS
         {
             WriteLine("Display method overide");
         }
-     public void MyDisp()
+        public void MyDisp()
         {
             base.GeneralInstruction();  //normal method jiski body abstract class me ha;
         }
@@ -141,7 +145,7 @@ namespace Basics.OOPS
 
     //An abstract class is a class that cannot be instantiated(object nahi bana sakte). It is used as a base class for other classes and can contain both abstract and non-abstract members.
     internal abstract class Abs
-     {
+    {
         //abstract class me static abstract method nahi ho sakta
         //normal static method create with implement kar sakte hai 
         //abstract class another abstract class inheride kar sakti hai;
@@ -154,8 +158,8 @@ namespace Basics.OOPS
         internal abstract int Fuel { get; set; } //we can declare abstract property but can't set value here;
 
         //abstract method
-        internal abstract void SignalerAbs(int a,int b,out int sum); //we can't create abstract method body;
-        
+        internal abstract void SignalerAbs(int a, int b, out int sum); //we can't create abstract method body;
+
         //normal constructor create in abstract class
         internal Abs() { }
 
@@ -175,13 +179,13 @@ namespace Basics.OOPS
         //public virtual void Hp() { } //work
 
 
-     }
+    }
 
     //internal abstract class Abs2
     //{
 
     //}
-    
+
     //internal class AbsDerived : Abs,Abs  //we can't derived mulitple base class
     internal class AbsDerived : Abs
     {
@@ -201,9 +205,10 @@ namespace Basics.OOPS
 
     //sealed class 
     //rule we can't inherid in child class its loacked;
-    internal sealed class Jet { 
-        
-       internal void disp()
+    internal sealed class Jet
+    {
+
+        internal void disp()
         {
             WriteLine("sealed display function can't inherited in another child class");
         }
@@ -225,20 +230,29 @@ namespace Basics.OOPS
         }
     }
 
-    internal class GovtBody:RBI
+    internal class GovtBody : RBI
     {
 
         //another child class can't override further after this override but here is a one loop hole child class override by new keyword
-        internal sealed override void BankRequirements() 
+        internal sealed override void BankRequirements()
         {
             WriteLine("Basic document and fund override by GovtBody Officers");
         }
     }
 
-    internal class LocalBank():GovtBody
+    internal class LocalBank() : GovtBody
     {
+        /*override
+    ↓
+Parent virtual method ko replace karta hai.
+Dynamic dispatch hoti hai.
 
-    //new keyword hide the method in run time only compiled access through downcasting safe method
+new
+    ↓
+Parent method ko replace nahi karta.
+Sirf hide karta hai.
+Reference type decide karega kaunsa method chalega.*/
+        //new keyword hide the method in run time only compiled access through downcasting safe method
         internal new void BankRequirements()
         {
             WriteLine("Basic document and fund override by localBank Managers and Ceo");
@@ -248,7 +262,7 @@ namespace Basics.OOPS
 
     internal static class Polymorphism
     {
-        
+
         internal static void Display(Asset holdObj)
         {
             WriteLine(holdObj.name);
@@ -272,7 +286,7 @@ namespace Basics.OOPS
             Display(ch2);
 
             //child object store in parent reference;
-            
+
             Asset as1 = ch1;
             WriteLine(as1.name);
 
@@ -303,8 +317,8 @@ namespace Basics.OOPS
             //sealed methods
             RBI rbi = new LocalBank();
             rbi.BankRequirements();
-            
-            if(rbi is LocalBank access)
+
+            if (rbi is LocalBank access)
             {
                 access.BankRequirements(); //changed success
             }
