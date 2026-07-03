@@ -124,10 +124,9 @@ namespace EmptyProjectTesting.Monitor_Lock
     {
         static object locker = new object();
         static int balance = 1000;
-
         public static void Withdraw(int amount)
-        {
-            if (Monitor.TryEnter(locker))
+        { 
+            if (Monitor.TryEnter(locker /*5000 optional*/))
             {
                 try
                 {
@@ -158,7 +157,7 @@ namespace EmptyProjectTesting.Monitor_Lock
     class MonitorProgram
     {
         private static readonly object _lockObj = new object();
-        private static bool _hasItem = false; // बक्से की स्थिति
+        private static bool _hasItem = false; 
 
         static void Main()
         {

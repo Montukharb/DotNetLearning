@@ -11,6 +11,7 @@ using EmptyProjectTesting.Race_Condition;
 using EmptyProjectTesting.Repository;
 using EmptyProjectTesting.Services;
 using EmptyProjectTesting.State_Configuration;
+using EmptyProjectTesting.Tasks_Prog;
 using EmptyProjectTesting.Thread_s;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -150,6 +151,7 @@ builder.Services.AddHostedService<FlagStateWorker>(); //work as normal worker bu
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentServices, StudentService>();
 builder.Services.AddScoped<ThreadPoolSample>();
+builder.Services.AddScoped<TaskSample>();
 //parallelprogramming service register
 builder.Services.AddScoped<ParallelProgram>();
 
@@ -328,7 +330,16 @@ builder.Services.AddScoped<FlagActionFilter>();//ServiceFilter ma Registration k
 //        context.Response.ContentType = "application/json";
 
 //builder.Services.AddControllers(); //controller register karta hai all
-
+// 1. CORS Policy Add Karein
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularAppPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") //Angular URL
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 var app = builder.Build();
 app.Use((context, next) =>
 {
@@ -494,7 +505,10 @@ app.UseWhen(
     }
 
     );
-
+// 2. CORS Middleware Use Karein (Routing ke baad aur Authorization se pehle)
+//app.UseRouting();
+app.UseCors("AngularAppPolicy");
+//app.UseAuthentication();
 app.MapControllers(); //ye route ko map karta hai controller ke action method ke sath jese ki http get post put delete etc. routes ko match karta hai sabhi controller ke app.useRouting automatic laga deta hai net 8+ version me
 app.MapGet("/", () => "Welcome to asp.net core web api " + appName); //minimal api example
 //wild card routes handled by inbuild minimal api routing feature ye internall routing system me register hota hai hamesha last ma place hoga iss se phele minimal api use kar sakte hai 
