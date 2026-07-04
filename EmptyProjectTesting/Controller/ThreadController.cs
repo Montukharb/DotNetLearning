@@ -10,11 +10,13 @@ namespace EmptyProjectTesting.Controller
     {
         private readonly ThreadPoolSample _threadPool;
         private readonly TaskSample _taskSample;
+        private readonly TaskSample2 _taskSample2;
 
-        public ThreadController(ThreadPoolSample threadpool, TaskSample task)
+        public ThreadController(ThreadPoolSample threadpool, TaskSample task, TaskSample2 task2)
         {
             _threadPool = threadpool;
             _taskSample = task;
+            _taskSample2 = task2;
         }
 
         [HttpGet]
@@ -39,6 +41,18 @@ namespace EmptyProjectTesting.Controller
         public async Task<IActionResult> GetCompleted()
         {
             var res = await _taskSample.IsCompletedEx();
+            return Ok(res);
+        }
+        [HttpGet("tasksamp2/")]
+        public async Task<IActionResult> TaskSam2Get()
+        {
+            var res = await _taskSample2.TaskEx();
+            return Ok(res);
+        }
+        [HttpGet("waitall/")]
+        public async Task<IActionResult> WaitAllGet()
+        {
+            var res = await _taskSample2.WaitAllEx();
             return Ok(res);
         }
     }

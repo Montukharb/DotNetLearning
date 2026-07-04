@@ -157,7 +157,7 @@ builder.Services.AddScoped<ParallelProgram>();
 
 //RaceConditonServices register
 builder.Services.AddScoped<RaceProgram>();
-
+builder.Services.AddScoped<TaskSample2>();
 builder.Services.AddHealthChecks();
 
 var SinkOptions = new MSSqlServerSinkOptions
