@@ -296,12 +296,66 @@ namespace EmptyProjectTesting.Tasks_Prog
             Task.WaitAll();
 
             //asyncronous whenany with index get
-            Task completedTask = await Task.WhenAny(t1, t2, t3); 
+            Task completedTask = await Task.WhenAny(t1, t2, t3);
 
             int Index = Array.IndexOf(new[] { t1, t2, t3 }, completedTask);
 
             Console.WriteLine($"First Completed Task Index = {Index}");
 
+        }
+    }
+
+    class Program420
+    {
+        static void Main()
+        {
+            // 3 Tasks ka ek array banaya
+            /*            Task[] tasks = new Task[3];
+
+                        // Har task ko assign kiya aur start kiya
+                        tasks[0] = Task.Run(() => DoWork(1, 2000));
+                        tasks[1] = Task.Run(() => DoWork(2, 1000));
+                        tasks[2] = Task.Run(() => DoWork(3, 3000));*/
+            Task[] tasks =
+            [
+                // Har task ko assign kiya aur start kiya
+                Task.Run(() => DoWork(1, 2000)),
+                Task.Run(() => DoWork(2, 1000)),
+                Task.Run(() => DoWork(3, 3000)),
+            ];
+            Console.WriteLine("Tasks start ho gaye hain. Wait kar rahe hain...");
+
+            // Task.WaitAll: Yeh main thread ko tab tak rokega jab tak saare Tasks khatam nahi ho jate
+            Task.WaitAll(tasks);
+
+            Console.WriteLine("Saare Tasks successfully complete ho gaye!");
+        }
+        public async Task ListTaskEx()
+        {
+            List<Task> taskList = new List<Task>();
+
+            for (int i = 1; i <= 5; i++)
+            {
+                int currentId = i;
+                // List mein naya task add kar rahe hain
+                taskList.Add(Task.Run(() => ProcessData(currentId)));
+            }
+
+            // List ko Array mein convert karke await kar sakte hain
+            await Task.WhenAll(taskList);
+        }
+        static async Task ProcessData(int currentId)
+        {
+            Console.WriteLine($"Task {currentId} start hua...");
+            await Task.Delay(1000);
+            Console.WriteLine($"Task {currentId} khatam hua.");
+        }
+
+        static void DoWork(int taskId, int delay)
+        {
+            Console.WriteLine($"Task {taskId} start hua...");
+            Task.Delay(delay).Wait(); // Dummy work (Delay)
+            Console.WriteLine($"Task {taskId} khatam hua.");
         }
     }
 }
