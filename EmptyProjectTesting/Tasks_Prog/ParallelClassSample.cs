@@ -43,7 +43,7 @@ namespace EmptyProjectTesting.Tasks_Prog
             ParallelOptions options2 = options;
             options2.CancellationToken = cancellationToken;
 
-            Parallel.For(0, 100, options2,(i, state) =>
+            Parallel.For(0, 100, options2, (i, state) =>
             {
                 if (i == 50)
                 {
