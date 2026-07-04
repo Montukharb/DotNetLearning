@@ -12,7 +12,7 @@ namespace EmptyProjectTesting.Tasks_Prog
         }
         public void Resize() { }
         public void Encrpyt() { }
-        public async Task RealParallelEx()
+        public async Task RealParallelEx(CancellationToken cancellationToken)
         {
             //What is Parallel Class ?
             // The parallel class provides methods for parallel execution of cpu-bound operations.
@@ -40,7 +40,10 @@ namespace EmptyProjectTesting.Tasks_Prog
                 );
             // start index 0, endindex 20, i is iterator 1 by 1 auto update not altering, state is object to controll loop [break,stop,IsStopped,LowestBreakIteration,ShouldExitCurrentIteration]
 
-            Parallel.For(0, 100, (i, state) =>
+            ParallelOptions options2 = options;
+            options2.CancellationToken = cancellationToken;
+
+            Parallel.For(0, 100, options2,(i, state) =>
             {
                 if (i == 50)
                 {
