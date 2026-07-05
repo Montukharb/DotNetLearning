@@ -12,7 +12,6 @@ Method                    |
 | `await Task.WhenAll()`  | ❌ Nahi | ✅ Haan | ❌ Nahi |
 */
 
-
 namespace EmptyProjectTesting.Tasks_Prog
 {
     /*
