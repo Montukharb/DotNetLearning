@@ -1,4 +1,6 @@
-﻿using EmptyProjectTesting.Race_Condition;
+﻿using EmptyProjectTesting._Mutex;
+using EmptyProjectTesting.Race_Condition;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmptyProjectTesting.Controller.Race_Cond_Controller
@@ -8,9 +10,11 @@ namespace EmptyProjectTesting.Controller.Race_Cond_Controller
     public class RaceCondController : ControllerBase
     {
         private readonly RaceProgram _raceProgram;
-        public RaceCondController(RaceProgram raceProgram)
+        private readonly MutexSample _mutexSample;
+        public RaceCondController(RaceProgram raceProgram, MutexSample mutex)
         {
             _raceProgram = raceProgram;
+            _mutexSample = mutex;
         }
 
         [HttpGet("creater/")]
@@ -30,6 +34,17 @@ namespace EmptyProjectTesting.Controller.Race_Cond_Controller
         {
             SolveRaceCondition.SameOsThread();
             return Ok(true);
+        }
+        [HttpGet("mutex/")]
+        public async Task<IActionResult> MutexGet()
+        {
+            var res = await _mutexSample.MutexExample();
+            //(string message, bool status) = await _mutexSample.MutexExample(); //better syntax
+            if (!res.status)
+            {
+                return BadRequest(res);
+            }
+            return Ok(res.msg + " " + res.status);
         }
     }
 }

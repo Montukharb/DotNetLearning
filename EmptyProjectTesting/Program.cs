@@ -1,5 +1,6 @@
 using Elastic.CommonSchema;
 using Elastic.Serilog.Sinks;
+using EmptyProjectTesting._Mutex;
 using EmptyProjectTesting.Background_worker;
 using EmptyProjectTesting.Background_worker.Flag_State_Worker;
 using EmptyProjectTesting.ControllerActionFilter;
@@ -155,6 +156,7 @@ builder.Services.AddScoped<TaskSample>();
 //parallelprogramming service register
 builder.Services.AddScoped<ParallelProgram>();
 
+builder.Services.AddScoped<MutexSample>();
 //RaceConditonServices register
 builder.Services.AddScoped<RaceProgram>();
 builder.Services.AddScoped<TaskSample2>();
