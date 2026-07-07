@@ -259,6 +259,9 @@ namespace EmptyProjectTesting.Controller
             //yaha normal disk file se kam method mile ga kyuki ye http request par upload hui file ka wrapper hai normal disk file nahi hai
             //normal file ka sabhi operatin karne hai phele file save karni hogi
             //Default provide methods
+            //OpenReadStream()
+            //CopyToAsync()
+
             string filePath = Path.Combine(_env.ContentRootPath, "PrivateAssets","Text_Files", singlefile.FileName);
 
             

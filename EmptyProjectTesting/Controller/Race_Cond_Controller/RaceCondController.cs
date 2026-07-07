@@ -1,4 +1,5 @@
 ﻿using EmptyProjectTesting._Mutex;
+using EmptyProjectTesting.Concurrent_Collections;
 using EmptyProjectTesting.Race_Condition;
 using EmptyProjectTesting.Reader_Writer_LockSlim;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -54,6 +55,13 @@ namespace EmptyProjectTesting.Controller.Race_Cond_Controller
         {
             var res = await _readerWriterLockSlimSample.ReadWriteLockSlimExample();
             return Ok(res);
+        }
+
+        [HttpGet("concurrentCollection/")]
+        public async Task<IActionResult> ConcurrentCollectionGet([FromServices] ConcurrentCollectionSample ccs)
+        {
+            var res = ccs.ConcurrentDictionaryExample();
+            return res ? Ok(res) : BadRequest(res);
         }
     }
 }

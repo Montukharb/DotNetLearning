@@ -3,6 +3,7 @@ using Elastic.Serilog.Sinks;
 using EmptyProjectTesting._Mutex;
 using EmptyProjectTesting.Background_worker;
 using EmptyProjectTesting.Background_worker.Flag_State_Worker;
+using EmptyProjectTesting.Concurrent_Collections;
 using EmptyProjectTesting.ControllerActionFilter;
 using EmptyProjectTesting.DbContexts;
 using EmptyProjectTesting.Endpoints;
@@ -156,6 +157,8 @@ builder.Services.AddScoped<ThreadPoolSample>();
 builder.Services.AddScoped<TaskSample>();
 //parallelprogramming service register
 builder.Services.AddScoped<ParallelProgram>();
+builder.Services.AddScoped<ConcurrentCollectionSample>();
+
 
 builder.Services.AddScoped<MutexSample>();
 //RaceConditonServices register
