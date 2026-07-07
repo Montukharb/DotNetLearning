@@ -1,5 +1,6 @@
 ﻿using EmptyProjectTesting._Mutex;
 using EmptyProjectTesting.Race_Condition;
+using EmptyProjectTesting.Reader_Writer_LockSlim;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +12,12 @@ namespace EmptyProjectTesting.Controller.Race_Cond_Controller
     {
         private readonly RaceProgram _raceProgram;
         private readonly MutexSample _mutexSample;
-        public RaceCondController(RaceProgram raceProgram, MutexSample mutex)
+        private readonly ReaderWriterLockSlimSample _readerWriterLockSlimSample;
+        public RaceCondController(RaceProgram raceProgram, MutexSample mutex, ReaderWriterLockSlimSample readerWriterLockSlimSample)
         {
             _raceProgram = raceProgram;
             _mutexSample = mutex;
+            _readerWriterLockSlimSample = readerWriterLockSlimSample;
         }
 
         [HttpGet("creater/")]
@@ -45,6 +48,12 @@ namespace EmptyProjectTesting.Controller.Race_Cond_Controller
                 return BadRequest(res);
             }
             return Ok(res.msg + " " + res.status);
+        }
+        [HttpGet("readwritelock/")]
+        public async Task<IActionResult> ReadWritelockGet()
+        {
+            var res = await _readerWriterLockSlimSample.ReadWriteLockSlimExample();
+            return Ok(res);
         }
     }
 }

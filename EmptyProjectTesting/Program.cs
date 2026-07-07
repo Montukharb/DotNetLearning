@@ -9,6 +9,7 @@ using EmptyProjectTesting.Endpoints;
 using EmptyProjectTesting.Middleware;
 using EmptyProjectTesting.ParallelProgramming;
 using EmptyProjectTesting.Race_Condition;
+using EmptyProjectTesting.Reader_Writer_LockSlim;
 using EmptyProjectTesting.Repository;
 using EmptyProjectTesting.Services;
 using EmptyProjectTesting.State_Configuration;
@@ -143,7 +144,7 @@ builder.Services.AddPooledDbContextFactory<AppDbContext>(options => options.UseS
 
 //background class register
 builder.Services.AddHostedService<Worker>(); //worker class auto managed and executed when app run and stop when app closed
-
+builder.Services.AddScoped<ReaderWriterLockSlimSample>();
 //for use custom in memory flag state handler register as singleton
 builder.Services.AddSingleton<State>();
 builder.Services.AddHostedService<FlagStateWorker>(); //work as normal worker but better control user can now process or idle in hand button.
