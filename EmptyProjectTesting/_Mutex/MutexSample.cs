@@ -78,6 +78,7 @@ namespace EmptyProjectTesting._Mutex
             {
                 Console.WriteLine("CombineWriter SuccessFull");
                 mu.ReleaseMutex();
+                mu.Dispose();//mutex object clean up alternate create mutex object under the using keyword auto dispose ex using (Mutex mu = new Mutex())
             }
         }
     }
