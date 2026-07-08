@@ -159,7 +159,6 @@ builder.Services.AddScoped<TaskSample>();
 builder.Services.AddScoped<ParallelProgram>();
 builder.Services.AddScoped<ConcurrentCollectionSample>();
 
-
 builder.Services.AddScoped<MutexSample>();
 //RaceConditonServices register
 builder.Services.AddScoped<RaceProgram>();

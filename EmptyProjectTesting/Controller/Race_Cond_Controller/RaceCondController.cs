@@ -63,5 +63,13 @@ namespace EmptyProjectTesting.Controller.Race_Cond_Controller
             var res = ccs.ConcurrentDictionaryExample();
             return res ? Ok(res) : BadRequest(res);
         }
+
+        [HttpGet("blockingqueue/")]
+        public async Task<IActionResult> BlockingQueueGet([FromServices] ConcurrentCollectionSample ccs)
+        {
+            var res = ccs.BlockingCollectionExample();
+            return res ? Ok(res) : BadRequest(res);
+
+        }
     }
 }
