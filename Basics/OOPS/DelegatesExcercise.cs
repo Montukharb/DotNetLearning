@@ -150,15 +150,14 @@ public event Action Saved;
 
 Raise:
 
-Saved?.Invoke();
+Saved?.Invoke(); //Raise Event
 
-Handler:
-
-void OnSaved()
+void OnSaved() //event Handler
 {
     Console.WriteLine("Saved");
 }
 
+Saved += OnSaved;  //subscriber
 Yahan subscriber ko sirf itna pata hai ki event hua.
 
 2. EventHandler

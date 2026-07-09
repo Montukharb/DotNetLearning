@@ -332,7 +332,7 @@ public class EmailBackgroundService : BackgroundService
 }
 
 Ye service application start hote hi background me continuously chalti rehti hai.
-
+F
 Agar exception aa jaye?
 try
 {
