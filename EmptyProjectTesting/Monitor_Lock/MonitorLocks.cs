@@ -159,7 +159,7 @@ namespace EmptyProjectTesting.Monitor_Lock
         private static readonly object _lockObj = new object();
         private static bool _hasItem = false; 
 
-        static void Main()
+        static void MainMethod()
         {
             Thread producer = new Thread(Produce);
             Thread consumer = new Thread(Consume);
