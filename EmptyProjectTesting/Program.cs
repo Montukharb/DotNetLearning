@@ -402,7 +402,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         };
     }
     );
+builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("SpecialPolicy", policy =>
+                    {
+                        policy.RequireClaim("special", "true");
+                        policy.RequireClaim("admin");
+                       
+
+                    });
+
+    });
 var app = builder.Build();
+
+
+
 app.Use((context, next) =>
 {
     //context.Response.WriteAsync("Use middleware First");
