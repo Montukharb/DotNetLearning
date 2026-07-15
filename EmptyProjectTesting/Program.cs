@@ -5,6 +5,7 @@ using EmptyProjectTesting.Background_worker;
 using EmptyProjectTesting.Background_worker.Flag_State_Worker;
 using EmptyProjectTesting.Concurrent_Collections;
 using EmptyProjectTesting.ControllerActionFilter;
+using EmptyProjectTesting.Custom_Auth;
 using EmptyProjectTesting.DbContexts;
 using EmptyProjectTesting.Endpoints;
 using EmptyProjectTesting.Middleware;
@@ -17,6 +18,7 @@ using EmptyProjectTesting.State_Configuration;
 using EmptyProjectTesting.Tasks_Prog;
 using EmptyProjectTesting.Thread_s;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.FileProviders;
@@ -182,6 +184,7 @@ builder.Services.AddScoped<MutexSample>();
 builder.Services.AddScoped<RaceProgram>();
 builder.Services.AddScoped<TaskSample2>();
 builder.Services.AddHealthChecks();
+builder.Services.AddSingleton<IAuthorizationHandler,AdminOrIndiaHandler>();
 
 var SinkOptions = new MSSqlServerSinkOptions
 {
@@ -404,14 +407,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     );
 builder.Services.AddAuthorization(options =>
     {
-        options.AddPolicy("SpecialPolicy", policy =>
+        options.AddPolicy("SpecialPolicy", policy => //SpecialPolicy is name of policy which is specified in controller attribue Policy
                     {
-                        policy.RequireClaim("special", "true");
-                        policy.RequireClaim("admin");
-                       
-
+                        policy.RequireClaim("country", ["india","sri lanka"]); //or condition |>
+                        policy.RequireClaim("department", "IT");                     //       |> >>>>>>>>>> AND CONDITION Tripple
+                        policy.RequireRole("Admin", "Manager");// or condition                |>
                     });
-
+        options.AddPolicy("AdminOrIndiaP", policy =>
+        {
+            policy.Requirements.Add(new AdminOrIndiaRequirement());
+        });
     });
 var app = builder.Build();
 

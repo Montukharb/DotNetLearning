@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace EmptyProjectTesting.Controller.AuthControllers
@@ -115,7 +116,9 @@ namespace EmptyProjectTesting.Controller.AuthControllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!));  //! means not null get key from appsettings.json in bytes
 
             //SigningCredentials is used to Digital sign the token
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            //HMACSHA256  Hash Based Message Authentication Code , Sha Security hash algorithm 
+            //var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
             //now create jwt token
             var token = new JwtSecurityToken(
@@ -131,7 +134,10 @@ namespace EmptyProjectTesting.Controller.AuthControllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin,user")] //admin,user this is or condition
+        [Authorize(Policy = "SpecialPolicy",Roles = "admin")]
+        //Multiple authorize attribue and condition
+        [Authorize(Policy = "AdminOrIndiaP")] //custom policy use
         [HttpGet("profile/")]
         public Task<IActionResult> Profile()
         {

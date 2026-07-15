@@ -1,4 +1,5 @@
 ﻿using EmptyProjectTesting.DbContexts;
+using EmptyProjectTesting.DTO.DB_DTO;
 using EmptyProjectTesting.Entites;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -12,7 +13,7 @@ namespace EmptyProjectTesting.Repository
 
         public Task<bool> DeleteByIdStudents(int Id);
         public Task<bool> AddStudent(Student student);
-        public Task<bool> UpdateStudentRecordById(int id,Student student);
+        public Task<bool> UpdateStudentRecordById(int id, Student student);
     }
     public class StudentRepository : IStudentRepository
     {
@@ -25,6 +26,12 @@ namespace EmptyProjectTesting.Repository
 
         public async Task<List<Student>> GetAllStudents()
         {
+            /*var data = await _context.Students.Select(x => new { 
+            
+             id= x.Id
+            }).ToListAsync();
+            */
+
             return await _context.Students.Include(i => i.Department).ToListAsync();
             //return await _context.Students.Include(i=>i.Department).Include(j=>j.CountryFlag).ToListAsync();
             /*
@@ -118,7 +125,7 @@ namespace EmptyProjectTesting.Repository
             int rowEffected = await _context.SaveChangesAsync();
             return rowEffected > 0;
         }
-        public async Task<bool> UpdateStudentRecordById(int id,Student student)
+        public async Task<bool> UpdateStudentRecordById(int id, Student student)
         {
             var user = await _context.Students.FindAsync(id); //ye line user object ko dbcontext ma track kar rahi hai
             /*
@@ -137,7 +144,7 @@ namespace EmptyProjectTesting.Repository
                 return (roweffect > 0);
             }
             */
-            if(user is null)
+            if (user is null)
             {
                 return false;
             }
@@ -151,6 +158,6 @@ namespace EmptyProjectTesting.Repository
             int roweffects = await _context.SaveChangesAsync();
             return (roweffects > 0);
         }
-        
+
     }
 }
