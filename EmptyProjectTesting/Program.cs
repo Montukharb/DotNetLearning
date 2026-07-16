@@ -1,6 +1,8 @@
 using Elastic.CommonSchema;
 using Elastic.Serilog.Sinks;
 using EmptyProjectTesting._Mutex;
+using EmptyProjectTesting.Authorization.Extensions;
+using EmptyProjectTesting.Authorization.Handlers;
 using EmptyProjectTesting.Background_worker;
 using EmptyProjectTesting.Background_worker.Flag_State_Worker;
 using EmptyProjectTesting.Concurrent_Collections;
@@ -185,7 +187,8 @@ builder.Services.AddScoped<RaceProgram>();
 builder.Services.AddScoped<TaskSample2>();
 builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<IAuthorizationHandler,AdminOrIndiaHandler>();
-
+builder.Services.AddSingleton<IAuthorizationHandler,MinimumAgeHandler>();
+//builder.Services.AddSingleton<IAuthorizationHandler, Admin_or_Manager_Handler>(); shift with in admin or manager extensions
 var SinkOptions = new MSSqlServerSinkOptions
 {
     TableName = "Logs",
@@ -416,8 +419,12 @@ builder.Services.AddAuthorization(options =>
         options.AddPolicy("AdminOrIndiaP", policy =>
         {
             policy.Requirements.Add(new AdminOrIndiaRequirement());
+            //policy.AddRequirements(new AdminOrIndiaRequirement());
         });
     });
+builder.Services.AdminOrManagerExtenstion(); //Custom Extension
+
+
 var app = builder.Build();
 
 

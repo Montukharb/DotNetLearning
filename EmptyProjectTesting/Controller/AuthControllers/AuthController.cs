@@ -135,10 +135,11 @@ namespace EmptyProjectTesting.Controller.AuthControllers
         }
 
         [Authorize(Roles = "admin,user")] //admin,user this is or condition
-        [Authorize(Policy = "SpecialPolicy",Roles = "admin")]
+        [Authorize(Policy = "SpecialPolicy",Roles = "admin")] //And condition but already policy bana rahe ho, to Role ko bhi policy ke andar hi rakhna better hota hai.
         //Multiple authorize attribue and condition
         [Authorize(Policy = "AdminOrIndiaP")] //custom policy use
         [HttpGet("profile/")]
+        //[AllowAnonymous] authentication or authorization both are by passed any endpoints
         public Task<IActionResult> Profile()
         {
             var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
