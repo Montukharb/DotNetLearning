@@ -10,7 +10,7 @@ namespace EmptyProjectTesting.Authorization.Handlers
             //throw new NotImplementedException();
             var role = context.User.IsInRole("Admin,Manager");
             var claim = context.User.HasClaim("Country", "Egypt");
-            if(role || claim && requirement.Country == "Egypt")
+            if (role || claim && requirement.Country == "Egypt")
             {
                 context.Succeed(requirement);
             }
@@ -18,6 +18,21 @@ namespace EmptyProjectTesting.Authorization.Handlers
             {
                 context.Fail();
             }
+            /*
+             Ek aisa Task object jo pehle se hi complete ho chuka hai.
+             Isme
+            Delay nahi
+            Thread nahi
+            Waiting nahi
+            Background work nahi
+
+            Bas ek completed task.
+            
+            CompletedTask When use in Method return type = Task
+            AND
+            Method me koi asynchronous operation nahi.
+             
+             */
             return Task.CompletedTask;
         }
     }
