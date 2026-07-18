@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EmptyProjectTesting.Controller.AuthControllers
 {
@@ -79,19 +82,28 @@ namespace EmptyProjectTesting.Controller.AuthControllers
                 {
                     Console.WriteLine("Login Success");
                     var token = GenerateToken(user);
-                    return Ok(token);
+                    var refreshToken = GenerateRefreshToken();
 
-                }
-                else if (result == PasswordVerificationResult.SuccessRehashNeeded)
-                {
-                    user.PasswordHash = passwordhasher.HashPassword(user, loginDto.Password);
+                    user.RefreshToken = refreshToken.Token;
+                    user.TokenCreated = refreshToken.Created;
+                    user.TokenExpires = refreshToken.Expires;
 
                     await _contextAuth.SaveChangesAsync();
+                    SetRefreshTokenInCookie(refreshToken.Token);
+                    return Ok(new { Token = token });
 
-                    var token = GenerateToken(user);
-
-                    return Ok(token);
                 }
+                //else if (result == PasswordVerificationResult.SuccessRehashNeeded)
+                //{
+                //    user.PasswordHash = passwordhasher.HashPassword(user, loginDto.Password);
+
+                //    await _contextAuth.SaveChangesAsync();
+
+                //    var token = GenerateToken(user);
+                //    var refreshToken = GenerateRefreshToken();
+
+                //    return Ok(token);
+                //}
                 else
                 {
                     //failed to login account 5 times
@@ -102,6 +114,28 @@ namespace EmptyProjectTesting.Controller.AuthControllers
             return Unauthorized();
         }
 
+
+        [NonAction] //Yeh line batati hai ki yeh koi API endpoint nahi hai, sirf ek internal function hai
+        private RefreshTokenDto GenerateRefreshToken()
+        {
+            //var randomNumber = new byte[32];
+            //using var rng = RandomNumberGenerator.Create();
+            //rng.GetBytes(randomNumber);
+            var randomBytes = RandomNumberGenerator.GetBytes(64);
+            var tokenString = Convert.ToBase64String(randomBytes);
+
+            var refreshToken = new RefreshTokenDto
+            {
+                Token = tokenString,
+                Created = DateTime.UtcNow,
+                Expires = DateTime.UtcNow.AddDays(7),
+            };
+
+            return refreshToken;
+        }
+
+
+        [NonAction] //Yeh line batati hai ki yeh koi API endpoint nahi hai, sirf ek internal function hai
         private string GenerateToken(User user)
         {
             //jwt token stored this type information in claims  
@@ -110,7 +144,8 @@ namespace EmptyProjectTesting.Controller.AuthControllers
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role,"user") //By default role is user only Admin can change this
+                new Claim(ClaimTypes.Role,"user"), //By default role is user only Admin can change this
+                //new Claim("Country","India")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!));  //! means not null get key from appsettings.json in bytes
@@ -135,7 +170,7 @@ namespace EmptyProjectTesting.Controller.AuthControllers
         }
 
         [Authorize(Roles = "admin,user")] //admin,user this is or condition
-        [Authorize(Policy = "SpecialPolicy",Roles = "admin")] //And condition but already policy bana rahe ho, to Role ko bhi policy ke andar hi rakhna better hota hai.
+        [Authorize(Policy = "SpecialPolicy", Roles = "admin")] //And condition but already policy bana rahe ho, to Role ko bhi policy ke andar hi rakhna better hota hai.
         //Multiple authorize attribue and condition
         [Authorize(Policy = "AdminOrIndiaP")] //custom policy use
         [HttpGet("profile/")]
@@ -148,5 +183,71 @@ namespace EmptyProjectTesting.Controller.AuthControllers
 
             return Task.FromResult<IActionResult>(Ok(new { id, Name, Email, Role = "null", Message = "Profile" }));
         }
+
+
+
+
+
+        [HttpPost("refresh-token/")]
+        public async Task<ActionResult<string>> RefreshToken()
+        {
+            // 1. Browser ki cookie se purana refresh token Find out
+            var oldTokenFromCookie = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(oldTokenFromCookie))
+            {
+                return Unauthorized("No refresh token found.");
+            }
+
+            // 2. Finding in Database ki yeh token kis user ka hai
+            var user = await _contextAuth.Users.FirstOrDefaultAsync(u => u.RefreshToken == oldTokenFromCookie);
+
+            // 3. Validation Check: Kya user mila? Aur kya token expire toh nahi hua?
+            if (user == null)
+            {
+                return Unauthorized("Invalid Refresh Token.");
+            }
+
+            //Token expire check
+            if (user.TokenExpires < DateTime.UtcNow)
+            {
+                return Unauthorized("Token Expired. Please login again.");
+            }
+
+            // 4. AGAR SAB SAHI HAI -> Toh naya Access Token Generated
+            string newAccessToken = GenerateToken(user);
+
+            // 5. Security ke liye new Refresh Token bhi Generated (Token Rotation)
+            var brandNewRefreshToken = GenerateRefreshToken();
+
+            // 6. DB mein purane token ki jagah new token updated
+            user.RefreshToken = brandNewRefreshToken.Token;
+            user.TokenCreated = brandNewRefreshToken.Created;
+            user.TokenExpires = brandNewRefreshToken.Expires;
+
+            await _contextAuth.SaveChangesAsync();
+
+            // 7. Set new cookie
+            SetRefreshTokenInCookie(brandNewRefreshToken.Token);
+
+            // 8. Send new Access Token
+            return Ok(new { Token = newAccessToken });
+        }
+
+        [NonAction] //Yeh line batati hai ki yeh koi API endpoint nahi hai, sirf ek internal function hai
+        private void SetRefreshTokenInCookie(string refreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true, //javascript isko touch nahi kar sakti security ka liya
+                Secure = true, // https ka liya hai production me run hoga localhost par false hi rakhe
+                SameSite = SameSiteMode.Strict, //csrf attack se protection 
+                Expires = DateTime.UtcNow.AddDays(7),
+
+            };
+            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+            //Iska kya matlab hai? Jab aap Response.Cookies.Append karte hain, toh .NET response ke header mein ek Set - Cookie tag laga deta hai. Browser ise dekhte hi samajh jata hai ki mujhe is refreshToken ko apne andar chhupa kar rakhna hai.
+        }
+
     }
 }

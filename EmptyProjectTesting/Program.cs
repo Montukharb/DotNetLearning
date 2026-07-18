@@ -522,7 +522,7 @@ app.UseStatusCodePages(async context =>
 */
 app.UseHttpsRedirection(); //http request convert/forworded into https
 app.UseStaticFiles();
-
+//app.UseAntiforgery();
 /*use static file me overload bhi hota hai wwwroot ma other path se data bhejna ho example*/
 app.UseStaticFiles(new StaticFileOptions
 {

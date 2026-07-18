@@ -170,11 +170,12 @@
                     return x * x;
                 })
 
-                .ForAll(result =>
+                .ForAll(result => //ForAll is a parallel method that executes the specified action on each element in the parallel. 
                 {
                     Console.WriteLine(
                         $"Square = {result} Thread = {Thread.CurrentThread.ManagedThreadId}");
                 });
+            //ForAll() ka return type void hota hai.Ye terminal operation hai—iske baad chain me aur LINQ operators(Where, Select, etc.) nahi laga sakte.
         }
 
     }

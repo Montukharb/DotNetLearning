@@ -11,5 +11,10 @@ namespace EmptyProjectTesting.Entites.Auth
         required public string Email { get; set; }
         [Required]
         required public string PasswordHash { get; set; }
+
+        //Refresh Token Properties
+        public string RefreshToken { get; set; } = string.Empty;
+        public DateTime TokenCreated { get; set; }
+        public DateTime TokenExpires { get; set; }
     }
 }
