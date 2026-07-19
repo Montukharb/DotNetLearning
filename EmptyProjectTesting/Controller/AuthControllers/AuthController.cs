@@ -153,7 +153,7 @@ namespace EmptyProjectTesting.Controller.AuthControllers
             //SigningCredentials is used to Digital sign the token
             //HMACSHA256  Hash Based Message Authentication Code , Sha Security hash algorithm 
             //var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512); //little bit slower.
 
             //now create jwt token
             var token = new JwtSecurityToken(
@@ -183,7 +183,7 @@ namespace EmptyProjectTesting.Controller.AuthControllers
 
             return Task.FromResult<IActionResult>(Ok(new { id, Name, Email, Role = "null", Message = "Profile" }));
         }
-
+        //FromResult is used to return 
 
 
 

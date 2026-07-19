@@ -28,7 +28,10 @@ namespace EmptyProjectTesting.Custom_Auth
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, MinimumAgeRequirement requirement)
         {
-            if (requirement.MinimumAge >= 18)
+            var ageClaim = context.User.FindFirst("AgeClaim")?.Value;
+            //var claims = context.User.Claims; // get all claims
+
+            if (int.TryParse(ageClaim, out int userAgeClaim) && userAgeClaim >= requirement.MinimumAge)
             {
                 context.Succeed(requirement);
                 //Succeed() controller ko immediately execute nahi kar deta.Agar policy me aur requirements hain, unka evaluation bhi hota hai.

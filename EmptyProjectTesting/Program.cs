@@ -424,6 +424,13 @@ builder.Services.AddAuthorization(options =>
     });
 builder.Services.AdminOrManagerExtenstion(); //Custom Extension
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("newPolicy", policy =>
+    {
+        policy.Requr
+    });
+});
 
 var app = builder.Build();
 
