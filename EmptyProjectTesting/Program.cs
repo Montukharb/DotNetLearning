@@ -9,7 +9,9 @@ using EmptyProjectTesting.Concurrent_Collections;
 using EmptyProjectTesting.ControllerActionFilter;
 using EmptyProjectTesting.Custom_Auth;
 using EmptyProjectTesting.DbContexts;
+using EmptyProjectTesting.DTO.IdentityDTO;
 using EmptyProjectTesting.Endpoints;
+using EmptyProjectTesting.IDENTITY;
 using EmptyProjectTesting.Middleware;
 using EmptyProjectTesting.ParallelProgramming;
 using EmptyProjectTesting.Race_Condition;
@@ -21,6 +23,7 @@ using EmptyProjectTesting.Tasks_Prog;
 using EmptyProjectTesting.Thread_s;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.FileProviders;
@@ -110,6 +113,19 @@ builder.Services.AddPooledDbContextFactory<AppDbContext>(options => options.UseS
 }));
 var authConnection = builder.Configuration.GetConnectionString("AuthConnection");
 
+builder.Services.AddDbContextPool<IdentityAppDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:IdentityConnection"], sqlOptions =>
+  sqlOptions.EnableRetryOnFailure(
+      maxRetryCount: 6,
+      maxRetryDelay: TimeSpan.FromSeconds(10),
+      errorNumbersToAdd: null
+
+      )
+));
+
+builder.Services.AddScoped<IdentityCreateUserDto>();
+builder.Services.AddScoped<IdentityUpdateDto>(); //IdentityUpdateDto
+builder.Services.AddScoped<IdentityUpdatePasswordDto>(); //IdentityUpdatePasswordDto
+
 builder.Services.AddDbContextPool<AppDbContextAuth>(options => options.UseSqlServer(authConnection, sqlOptions =>
 {
     sqlOptions.EnableRetryOnFailure(
@@ -186,8 +202,17 @@ builder.Services.AddScoped<MutexSample>();
 builder.Services.AddScoped<RaceProgram>();
 builder.Services.AddScoped<TaskSample2>();
 builder.Services.AddHealthChecks();
-builder.Services.AddSingleton<IAuthorizationHandler,AdminOrIndiaHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler,MinimumAgeHandler>();
+
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true; //by default true
+})  //Identity register
+    .AddEntityFrameworkStores<IdentityAppDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddSingleton<IAuthorizationHandler, AdminOrIndiaHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, MinimumAgeHandler>();
 //builder.Services.AddSingleton<IAuthorizationHandler, Admin_or_Manager_Handler>(); shift with in admin or manager extensions
 var SinkOptions = new MSSqlServerSinkOptions
 {
@@ -412,7 +437,7 @@ builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("SpecialPolicy", policy => //SpecialPolicy is name of policy which is specified in controller attribue Policy
                     {
-                        policy.RequireClaim("country", ["india","sri lanka"]); //or condition |>
+                        policy.RequireClaim("country", ["india", "sri lanka"]); //or condition |>
                         policy.RequireClaim("department", "IT");                     //       |> >>>>>>>>>> AND CONDITION Tripple
                         policy.RequireRole("Admin", "Manager");// or condition                |>
                     });
@@ -424,13 +449,6 @@ builder.Services.AddAuthorization(options =>
     });
 builder.Services.AdminOrManagerExtenstion(); //Custom Extension
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("newPolicy", policy =>
-    {
-        policy.Requr
-    });
-});
 
 var app = builder.Build();
 
