@@ -1,7 +1,9 @@
-﻿using EmptyProjectTesting.DTO.IdentityDTO;
+﻿using Elastic.CommonSchema;
+using EmptyProjectTesting.DTO.IdentityDTO;
 using EmptyProjectTesting.IDENTITY;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EmptyProjectTesting.Controller.IdentityControllers
 {
@@ -184,69 +186,56 @@ namespace EmptyProjectTesting.Controller.IdentityControllers
             return Ok("verifyemailsuccessful");
         }
 
-        /*
-         12. Roles
+        [HttpGet("user-role-claim-check/{email}/")]
+        public async Task<IActionResult> UserRoleClaimCheck(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user is null)
+            {
+                return NotFound(new { Message = "user not found", email });
+            }
+            //now user found check his claim
 
-        Role Add
+            //Role Add
+            await _userManager.AddToRoleAsync(user, "Admin");
 
-        await _userManager.AddToRoleAsync(user, "Admin");
+            //Remove
+            await _userManager.RemoveFromRoleAsync(user, "Admin");
 
-        Remove
+            //Check
+            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
-        await _userManager.RemoveFromRoleAsync(user, "Admin");
+            //Get All
+            var roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                Console.WriteLine(role);
+            }
 
-        Check
+            //13.Claims
 
-        bool isAdmin =
-        await _userManager.IsInRoleAsync(user, "Admin");
+            //Add
+            await _userManager.AddClaimAsync(user, new Claim("country", "India"));
 
-        Get All
+            //Remove
+            var claim = await _userManager.GetClaimsAsync(user);
+            await _userManager.RemoveClaimAsync(user, claim[0] ?? new Claim("Test", "null"));
 
-        var roles =
-        await _userManager.GetRolesAsync(user);
-        13. Claims
+            //Read
+            var claims = await _userManager.GetClaimsAsync(user);
 
-        Add
+            //14.Lock User
+            var status = await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddDays(1));
 
-        await _userManager.AddClaimAsync(
-            user,
-            new Claim("country","India"));
+            //15.Access Failed
+            //Wrong password count.
+            var result = await _userManager.AccessFailedAsync(user);
 
-        Remove
+            //Reset
+            IdentityResult res = await _userManager.ResetAccessFailedCountAsync(user);
 
-        await _userManager.RemoveClaimAsync(
-            user,
-            claim);
+            return Ok("user role claim check successful");
+        }
 
-        Read
-
-        var claims =
-        await _userManager.GetClaimsAsync(user);
-        14. Lock User
-        await _userManager.SetLockoutEndDateAsync(
-            user,
-            DateTimeOffset.UtcNow.AddDays(1));
-        15. Access Failed
-
-        Wrong password count.
-
-        await _userManager.AccessFailedAsync(user);
-
-        Reset
-
-        await _userManager.ResetAccessFailedCountAsync(user);
-        16. Password Hash
-
-        Hash
-
-        string hash =
-        _userManager.PasswordHasher.HashPassword(
-            user,
-            "Password@123");
-
-        Verify
-
-        _userManager.PasswordHasher.VerifyHashedPassword(...)
-         */
     }
 }
