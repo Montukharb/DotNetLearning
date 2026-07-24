@@ -23,10 +23,10 @@ namespace EmptyProjectTesting.Controller.IdentityControllers
             if (resultRole is not null)
             {
                 _logger.LogInformation("resultRole {RoleFind}", resultRole); //possible ouput string 
-                                                                             //update role
-                resultRole.Name = "updatedAdminRole";
-                await _roleManager.UpdateAsync(resultRole);
-               
+
+                resultRole.Name = "updatedAdminRole"; //assigne new role value in old role
+                await _roleManager.UpdateAsync(resultRole);  //update role
+
             }
 
             //read role
@@ -37,7 +37,34 @@ namespace EmptyProjectTesting.Controller.IdentityControllers
                 return BadRequest(new { Message = "Role Already Exists" });
             }
             var result = await _roleManager.CreateAsync(new IdentityRole(role)); //create role
+
             return Ok(result); //return success
+        }
+
+        //Delete role
+        [HttpDelete("delete-role/{role:alpha}")]
+        public async Task<IActionResult> DeleteRole(string role)
+        {
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                return BadRequest(new { Message = "Empty role provided" });
+            }
+
+            var result = await _roleManager.FindByNameAsync(role);
+            if (result is null)
+            {
+                return NotFound(new { Message = "Role Not Found" });
+            }
+
+            var resultRole = await _roleManager.DeleteAsync(result);
+            if (!resultRole.Succeeded)
+            {
+                return BadRequest($"Failed to delete role {resultRole}");
+            }
+            return Ok(new { Message = "Role Deleted Successfully", resultRole });
+
+
+
         }
     }
 }

@@ -146,6 +146,7 @@ namespace EmptyProjectTesting.Controller.AuthControllers
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role,"user"), //By default role is user only Admin can change this
                 //new Claim("Country","India")
+                new Claim("Country",user.)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!));  //! means not null get key from appsettings.json in bytes
@@ -180,7 +181,7 @@ namespace EmptyProjectTesting.Controller.AuthControllers
             var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var Name = User.FindFirst(ClaimTypes.Name)?.Value;
             var Email = User.FindFirst(ClaimTypes.Email)?.Value;
-
+            //var country = User.FindFirst("country")?.Value; custom claim get
             return Task.FromResult<IActionResult>(Ok(new { id, Name, Email, Role = "null", Message = "Profile" }));
         }
         //FromResult is used to return 
