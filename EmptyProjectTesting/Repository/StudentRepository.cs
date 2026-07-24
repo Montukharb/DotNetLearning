@@ -31,9 +31,32 @@ namespace EmptyProjectTesting.Repository
              id= x.Id
             }).ToListAsync();
             */
+            var stu = await _context.Students.Select(x => new
+            {
+                x.Id,
+                x.Name,
+                x.Email,
+                x.Age,
+                x.Gender,
+                x.Created,
+                x.CountryCode,
+                countryflag = x.CountryFlag != null ? x.CountryFlag.Code : "",
+            }).ToListAsync(); 
 
             return await _context.Students.Include(i => i.Department).ToListAsync();
             //return await _context.Students.Include(i=>i.Department).Include(j=>j.CountryFlag).ToListAsync();
+
+            /*var students = await _context.Students
+    .Join(
+        _context.CountryFlags,
+        s => s.CountryCode,
+        c => c.Code,
+        (s, c) => new
+        {
+            s.Name,
+            c.CountryName
+        })
+    .ToListAsync();*/
             /*
              include ka use relationship entity ka data show karne ka liya use hota hai 
              for example one to one , one to many, many to one , many to many etc
