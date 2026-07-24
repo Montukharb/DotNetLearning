@@ -197,7 +197,7 @@ namespace EmptyProjectTesting.Controller.IdentityControllers
             //now user found check his claim
 
             //Role Add
-            await _userManager.AddToRoleAsync(user, "Admin");
+            await _userManager.AddToRoleAsync(user, "Admin"); //Note add karne se phele aspNetRoles table ma admin available hona chaiya
 
             //Remove
             await _userManager.RemoveFromRoleAsync(user, "Admin");
@@ -219,7 +219,7 @@ namespace EmptyProjectTesting.Controller.IdentityControllers
 
             //Remove
             var claim = await _userManager.GetClaimsAsync(user);
-            await _userManager.RemoveClaimAsync(user, claim[0] ?? new Claim("Test", "null"));
+            await _userManager.RemoveClaimAsync(user, claim[0]);
 
             //Read
             var claims = await _userManager.GetClaimsAsync(user);

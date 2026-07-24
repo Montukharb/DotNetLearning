@@ -146,7 +146,7 @@ namespace EmptyProjectTesting.Controller.AuthControllers
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role,"user"), //By default role is user only Admin can change this
                 //new Claim("Country","India")
-                new Claim("Country",user.)
+                //new Claim("Country",user.)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!));  //! means not null get key from appsettings.json in bytes

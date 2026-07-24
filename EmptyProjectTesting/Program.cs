@@ -8,6 +8,7 @@ using EmptyProjectTesting.Background_worker.Flag_State_Worker;
 using EmptyProjectTesting.Concurrent_Collections;
 using EmptyProjectTesting.ControllerActionFilter;
 using EmptyProjectTesting.Custom_Auth;
+using EmptyProjectTesting.Data;
 using EmptyProjectTesting.DbContexts;
 using EmptyProjectTesting.DTO.IdentityDTO;
 using EmptyProjectTesting.Endpoints;
@@ -643,6 +644,35 @@ Agar valid hai to HttpContext.User fill karta hai.*/
 
 app.UseAuthorization();
 //Ye check karta hai ki authenticated user ko requested resource access karne ki permission hai ya nahi.
+
+
+
+/*
+ Role seeding app.Build() se pehle kyu nahi kar sakte ?
+ RoleManager aur baaki services Dependency Injection (DI) container se milti hain. DI container tab fully ready hota hai jab builder.Build() call ho jata hai. Isliye RoleManager ko use karne ke liye pehle app.Build() zaroori hai.
+ */
+
+//Note This method run perfect but not good practice write login code in program.cs file use separate file and call it in program.cs file go to 2nd way
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    //create role if not exist seed data when app start Like Admin,User,SuperAdmin,Manager,Employee.
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+    if (!await roleManager.RoleExistsAsync("User"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("User"));
+    }
+}
+
+using(var scope = app.Services.CreateScope())
+{
+    await IdentitySeeder.IdentitySeedAsync(scope.ServiceProvider);
+}
+
 app.MapControllers(); //ye route ko map karta hai controller ke action method ke sath jese ki http get post put delete etc. routes ko match karta hai sabhi controller ke app.useRouting automatic laga deta hai net 8+ version me
 app.MapGet("/", () => "Welcome to asp.net core web api " + appName); //minimal api example
                                                                      //wild card routes handled by inbuild minimal api routing feature ye internall routing system me register hota hai hamesha last ma place hoga iss se phele minimal api use kar sakte hai 
