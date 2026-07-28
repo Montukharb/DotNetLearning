@@ -208,6 +208,8 @@ builder.Services.AddHealthChecks();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = true; //by default true
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 })  //Identity register
     .AddEntityFrameworkStores<IdentityAppDbContext>()
     .AddDefaultTokenProviders();

@@ -246,8 +246,36 @@ namespace EmptyProjectTesting.Controller.AuthControllers
                 Expires = DateTime.UtcNow.AddDays(7),
 
             };
-            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+            Response.Cookies.Append("RefreshToken", refreshToken, cookieOptions);
             //Iska kya matlab hai? Jab aap Response.Cookies.Append karte hain, toh .NET response ke header mein ek Set - Cookie tag laga deta hai. Browser ise dekhte hi samajh jata hai ki mujhe is refreshToken ko apne andar chhupa kar rakhna hai.
+        }
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            //current user email id
+            var emailId = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (emailId is null)
+            {
+                return Unauthorized();
+            }
+
+            var user = await _contextAuth.Users.FirstOrDefaultAsync(u => u.Email == emailId);
+            if (user is null)
+            {
+                return Unauthorized();
+            }
+            user.RefreshToken = "";
+            user.TokenExpires = DateTime.UtcNow;
+            var result = await _contextAuth.SaveChangesAsync();
+            if (result <= 0)
+            {
+                return BadRequest("Something went wrong");
+            }
+
+            Response.Cookies.Delete("RefreshToken");
+
+            //browser se cookie delete hoga and variable access token null set kar de
+            return Ok(new { Message = "Logout successfully" });
         }
 
     }

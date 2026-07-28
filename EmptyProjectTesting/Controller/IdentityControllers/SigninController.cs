@@ -2,6 +2,7 @@
 using EmptyProjectTesting.IDENTITY;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Principal;
 
 namespace EmptyProjectTesting.Controller.IdentityControllers
 {
@@ -68,36 +69,65 @@ namespace EmptyProjectTesting.Controller.IdentityControllers
 
 
         //Automatic handle user login authentication
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            // 1. User Find
+            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+            if (user == null)
+                return Unauthorized("Invalid Email");
+
+            // 2. Check Lockout
+            bool isLocked = await _userManager.IsLockedOutAsync(user);
+
+            if (isLocked)
+            {
+                return BadRequest("Account Locked");
+            }
+
+            // 3. Check Password
+            bool passwordValid =
+                await _userManager.CheckPasswordAsync(user, loginDto.Password);
+
+            if (!passwordValid)
+            {
+                // 4. Increase Failed Count
+                var failedResult = await _userManager.AccessFailedAsync(user);
+
+                if (!failedResult.Succeeded)
+                {
+                    return StatusCode(500, failedResult.Errors);
+                }
+
+                // 5. Check Again
+                if (await _userManager.IsLockedOutAsync(user))
+                {
+                    return BadRequest("Account Locked");
+                }
+
+                // Optional: Current Failed Count
+                int count = await _userManager.GetAccessFailedCountAsync(user);
+
+                return BadRequest($"Invalid Password. Failed Attempts : {count}");
+            }
+
+            // Password Correct
+
+            // 6. Reset Failed Count
+            var resetResult =  await _userManager.ResetAccessFailedCountAsync(user);
+
+            if (!resetResult.Succeeded)
+            {
+                return StatusCode(500, resetResult.Errors);
+            }
+
+            // 7. Generate JWT
+
+            return Ok("JWT Token Here");
+        }
+
         /*
-          [HttpPost]
-          public async Task<IActionResult> Login(LoginDto loginDto)
-          {
-              var user = await _userManager.FindByEmailAsync(loginDto.Email);
-
-              if (user == null)
-                  return Unauthorized();
-              //bool password_valid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
-
-              var result = await _signInManager.CheckPasswordSignInAsync(
-                  user,
-                  loginDto.Password,
-                  lockoutOnFailure: true);
-
-              if (result.IsLockedOut)
-              {
-                  return BadRequest("Account Locked");
-              }
-
-              if (!result.Succeeded)
-              {
-                  return Unauthorized("Invalid Credentials");
-              }
-
-              // Password correct hai
-              // Ab JWT Generate karo
-              return Ok();
-          }
-
           Identity ki Methods
 
   Ab dekho Identity ne ye sab kaam methods me de diya.
