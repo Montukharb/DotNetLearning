@@ -35,6 +35,7 @@ namespace EmptyProjectTesting.Controller.IdentityControllers
                 PhoneNumber = userDto.PhoneNumber
                 //passwordhash is a property that is used to store the hashed password of the user isko createasync me pass karte hai
             };
+            //auto check duplicate username and email address
             var result = await _userManager.CreateAsync(user, userDto.Password); //automatic password converts to hashed password.
 
             if (!result.Succeeded)

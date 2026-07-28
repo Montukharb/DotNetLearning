@@ -1,19 +1,41 @@
 ﻿namespace EmptyProjectTesting.Middleware
 {
-    public class GlobalErrorHandlingMiddleware
+    public class GlobalErrorHandlingMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
+        //private readonly RequestDelegate _next;
 
-        public GlobalErrorHandlingMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
+        //public GlobalErrorHandlingMiddleware(RequestDelegate next)
+        //{
+        //    _next = next;
+        //}
 
-        public async Task Invoke(HttpContext context)
+        //public async Task Invoke(HttpContext context)
+        //{
+        //    try
+        //    {
+        //        await _next(context);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        context.Response.StatusCode = 500;
+        //        context.Response.ContentType = "application/json";
+        //        await context.Response.WriteAsJsonAsync(
+        //             new
+        //             {
+        //                 message = ex.Message,
+        //                 innerException = ex?.InnerException?.Message,
+        //                 detailMessage = ex?.StackTrace
+        //             }
+        //            );
+        //    }
+        //}
+
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+
             try
             {
-                await _next(context);
+                await next(context);
             }
             catch (Exception ex)
             {
@@ -28,6 +50,7 @@
                      }
                     );
             }
+
         }
     }
 }

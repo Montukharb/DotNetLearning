@@ -667,7 +667,6 @@ using (var scope = app.Services.CreateScope())
         await roleManager.CreateAsync(new IdentityRole("User"));
     }
 }
-
 using(var scope = app.Services.CreateScope())
 {
     await IdentitySeeder.IdentitySeedAsync(scope.ServiceProvider);
