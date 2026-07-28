@@ -450,7 +450,11 @@ builder.Services.AddAuthorization(options =>
     });
 builder.Services.AdminOrManagerExtenstion(); //Custom Extension
 
-
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+//    options.Limits.MaxConcurrentConnections = 50000;
+//    options.Limits.MaxConcurrentUpgradedConnections = 10000;
+//});
 var app = builder.Build();
 
 
